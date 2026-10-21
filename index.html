@@ -183,15 +183,15 @@ function snd(type,k){
 function home(){
   clearInterval(tick);$('#ov').classList.remove('show');
   $('#app').innerHTML=`<h1>Tabuada de Encaixe</h1><p class="sub">Escolha a área.</p>`+musUI()+
-  `<button class="m" style="--h:250" onclick="menu()"><b style="font-size:22px">Matemática</b><small>Tabuadas, unidades, regras e fórmulas</small></button><button class="m" style="--h:150" onclick="chemMenu()"><b style="font-size:22px">Química</b><small>Ciclo do carbono e estrutura da célula</small></button>`;
+  `<button class="m" style="--h:250" onclick="menu()"><b style="font-size:22px">Matemática</b><small>Tabuadas, unidades, regras e fórmulas</small></button><button class="m" style="--h:150" onclick="chemMenu()"><b style="font-size:22px">Química</b><small>Ciclo do carbono e estrutura da célula</small></button><button class="m" style="--h:300" onclick="phMenu()"><b style="font-size:22px">Filosofia</b><small>Arché, filósofos, escolas e áreas</small></button><button class="m" style="--h:40" onclick="hisMenu()"><b style="font-size:22px">História</b><small>Linha do tempo: ordem e duração (Enem)</small></button><button class="m" style="--h:0" onclick="vfFrom='h';vfMenu()"><b style="font-size:22px">Verdadeiro ou falso</b><small>Matemática, Química, Filosofia e História</small></button>`;
 }
 function menu(){
   clearInterval(tick);$('#ov').classList.remove('show');
-  const M=[['lin','Em sequência','Do 3 ao 9, uma tabuada de cada vez',210],['pick','Escolher tabuada','Monte a que você quiser, na hora',150],['clash','Clash','Contas de 3 a 5 tabuadas misturadas',340],['cores','Liga das cores','Conta e resultado com a mesma cor se encaixam',28],['unid','Unidades de medida','Tabelas de comprimento, área, volume, massa e capacidade (litros)',270],['corr','Correlações','Volume, litros e quilos: 1 dm³ = 1 L = 1 kg (na água)',250],['regras','Regras','Expoente e o mover da vírgula: monte cada regra em blocos',95],['form','Fórmulas','Monte cada fórmula peça por peça e, no final, ligue os nomes',175]];
+  const M=[['lin','Em sequência','Do 3 ao 9, uma tabuada de cada vez',210],['pick','Escolher tabuada','Monte a que você quiser, na hora',150],['clash','Clash','Contas de 3 a 5 tabuadas misturadas',340],['cores','Liga das cores','Conta e resultado com a mesma cor se encaixam',28],['unid','Unidades de medida','Tabelas de comprimento, área, volume, massa e capacidade (litros)',270],['corr','Correlações','Volume, litros e quilos: 1 dm³ = 1 L = 1 kg (na água)',250],['regras','Regras','Expoente, mover da vírgula e regra de 3: monte cada regra em blocos',95],['geo','Figuras e ângulos','Triângulos, polígonos (até 12 lados), quadriláteros e ângulos',200],['vf','Verdadeiro ou falso','Uma afirmação por vez: está certa ou errada?',0],['form','Fórmulas','Monte cada fórmula peça por peça e, no final, ligue os nomes',175]];
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Matemática</div></div><p class="sub">Escolha como quer jogar.</p>`+M.map(m=>`<button class="m" style="--h:${m[3]}" onclick="go('${m[0]}')"><b>${m[1]}</b><small>${m[2]}${store.best[m[0]]?' · Melhor '+fmt(store.best[m[0]]):''}</small></button>`).join('');
 }
-function go(m){if(m==='regras')return rulesMenu();if(m==='form')return formMenu();if(m==='corr')return startC();if(m==='unid')return unitsMenu();if(m==='clash')return startClash();if(m==='cores')return startCores();mode=m;tabs()}
-function back(){kind==='rule'?(rk==='r'?rulesMenu():chemMenu()):kind==='tab'?tabs():kind==='unit'?unitsMenu():kind==='form'?fSection(fType):menu()}
+function go(m){if(m==='geo')return geoMenu();if(m==='vf'){vfFrom='m';return vfMenu()}if(m==='regras')return rulesMenu();if(m==='form')return formMenu();if(m==='corr')return startC();if(m==='unid')return unitsMenu();if(m==='clash')return startClash();if(m==='cores')return startCores();mode=m;tabs()}
+function back(){kind==='rule'?(rk==='r'?rulesMenu():rk==='g'?geoMenu():rk==='p'?phMenu():rk==='h'?hisMenu():chemMenu()):kind==='tab'?tabs():kind==='unit'?unitsMenu():kind==='form'?fSection(fType):menu()}
 function again(){kind==='rule'?startR(rIdx):kind==='tab'?start(cur):kind==='unit'?startU(uType):kind==='corr'?startC():kind==='form'?(fMode==='build'?startB(fType,fIdx):startF(fType)):kind==='clash'?startClash():startCores()}
 function tabs(){
   clearInterval(tick);$('#ov').classList.remove('show');
@@ -245,10 +245,10 @@ function phaseK(){
   trayC(CR.map(r=>r[2]),'k');
 }
 const FM={
-g:{n:'Geometria plana',s:'Áreas, perímetro e Pitágoras',h:170,f:[['Área do quadrado','A = l²'],['Área do retângulo','A = b × h'],['Área do triângulo','A = (b × h) ÷ 2'],['Área do trapézio','A = (B + b) × h ÷ 2'],['Área do losango','A = (D × d) ÷ 2'],['Área do círculo','A = π × r²'],['Comprimento da circunferência','C = 2 × π × r'],['Teorema de Pitágoras','a² = b² + c²']]},
+g:{n:'Geometria plana',s:'Áreas, polígonos e Pitágoras',h:170,f:[['Área do quadrado','A = l²'],['Área do retângulo','A = b × h'],['Área do triângulo','A = (b × h) ÷ 2'],['Área do trapézio','A = (B + b) × h ÷ 2'],['Área do losango','A = (D × d) ÷ 2'],['Área do círculo','A = π × r²'],['Comprimento da circunferência','C = 2 × π × r'],['Teorema de Pitágoras','a² = b² + c²'],['Soma dos ângulos internos','Si = (n − 2) × 180°'],['Número de diagonais','D = n × (n − 3) ÷ 2'],['Ângulo interno do polígono regular','ai = (n − 2) × 180° ÷ n']]},
 e:{n:'Geometria espacial',s:'Volumes e superfície',h:300,f:[['Cubo','V = a³'],['Paralelepípedo','V = a × b × c'],['Prisma','V = Ab × h'],['Cilindro','V = π × r² × h'],['Cone','V = π × r² × h ÷ 3'],['Pirâmide','V = Ab × h ÷ 3'],['Esfera','V = 4 × π × r³ ÷ 3'],['Superfície da esfera','A = 4 × π × r²']]},
 f:{n:'Física',s:'Sorvete, velocidade, Ohm...',h:20,f:[['Sorvete (posição no MU)','S = S₀ + v × t'],['Velocidade média','Vm = ΔS ÷ Δt'],['Densidade','d = m ÷ V'],['Pressão','p = F ÷ A'],['2ª Lei de Newton','F = m × a'],['1ª Lei de Ohm','U = R × i'],['Potência elétrica','P = U × i'],['Energia elétrica consumida','E = P × Δt'],['Calor sensível','Q = m × c × ΔT']]},
-m:{n:'Matemática',s:'Bhaskara, juros, PA, PG...',h:230,f:[['Fórmula de Bhaskara','x = (−b ± √Δ) ÷ (2 × a)'],['Delta (discriminante)','Δ = b² − 4 × a × c'],['Probabilidade','P = favoráveis ÷ possíveis'],['Escala','E = desenho ÷ real'],['Juros simples','J = C × i × t'],['Juros compostos','M = C × (1 + i)^t'],['Termo geral da PA','an = a1 + (n − 1) × r'],['Termo geral da PG','an = a1 × q^(n − 1)'],['Combinação','C = n! ÷ (p! × (n − p)!)']]}};
+m:{n:'Matemática',s:'Bhaskara, juros, PA, PG...',h:230,f:[['Fórmula de Bhaskara','x = (−b ± √Δ) ÷ (2 × a)'],['Delta (discriminante)','Δ = b² − 4 × a × c'],['Probabilidade','P = favoráveis ÷ possíveis'],['Escala','E = desenho ÷ real'],['Juros simples','J = C × i × t'],['Juros compostos','M = C × (1 + i)^t'],['Termo geral da PA','an = a1 + (n − 1) × r'],['Termo geral da PG','an = a1 × q^(n − 1)'],['Combinação','C = n! ÷ (p! × (n − p)!)'],['Regra de 3 direta','x = b × c ÷ a'],['Regra de 3 inversa','x = a × b ÷ c']]}};
 function formMenu(){
   clearInterval(tick);$('#ov').classList.remove('show');kind='form';
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Fórmulas</div></div><div class="grid">`+Object.keys(FM).map(k=>`<button class="t" style="--h:${FM[k].h}" onclick="fSection('${k}')"><b style="font-size:22px">${FM[k].n}</b><small>${(store.fb[k]||[]).length}/${FM[k].f.length} montadas · ${FM[k].s}</small></button>`).join('')+'</div>';
@@ -354,7 +354,7 @@ function chemMenu(){
 }
 function rulesMenu(){
   clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=RU;rk='r';const dn=store.rd||[];
-  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Regras</div></div><p class="sub">Expoente e o mover da vírgula</p>`+RU.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${i+1}. ${r.n}</b><small>${store.best['r'+i]?'Melhor '+fmt(store.best['r'+i]):r.s}</small></button>`).join('');
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Regras</div></div><p class="sub">Expoente, vírgula e regra de 3</p>`+RU.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${i+1}. ${r.n}</b><small>${store.best['r'+i]?'Melhor '+fmt(store.best['r'+i]):r.s}</small></button>`).join('');
 }
 function startR(i){
   kind='rule';rIdx=i;bk=rk+i;const Q=RS[i];ttl=Q.n;rcum=[];let c=0;Q.b.forEach(b=>{c+=b.q.length;rcum.push(c)});rb=0;
@@ -377,13 +377,13 @@ function fSection(k){
   clearInterval(tick);$('#ov').classList.remove('show');kind='form';fType=k;fMode='menu';
   const T=FM[k],dn=store.fb[k]||[],all=dn.length===T.f.length;
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="formMenu()" aria-label="Voltar">←</button><div class="ttl">${T.n}</div></div><p class="sub">Escolha qual fórmula montar.</p>`
-  +T.f.map((f,i)=>`<button class="m" style="--h:${T.h}" onclick="startB('${k}',${i})"><b>${dn.includes(i)?'✓ ':''}${f[0]}</b><small>${store.best['fb'+k+i]?'Melhor '+fmt(store.best['fb'+k+i]):'Monte com as peças'}</small></button>`).join('')
+  +T.f.map((f,i)=>`<button class="m" style="--h:${T.h}" onclick="startB('${k}',${i})"><b>${dn.includes(i)?'✓ ':''}${f[0]}</b><small>${store.best['fb'+k+i]?'Melhor '+fmt(store.best['fb'+k+i]):'Monte e ligue as letras'}</small></button>`).join('')
   +`<button class="m ${all?'':'lock'}" style="--h:20;margin-top:18px" ${all?'':'disabled'} onclick="startF('${k}')"><b>${all?'':'🔒 '}Ligar nomes e fórmulas</b><small>${all?(store.best['f'+k]?'Melhor '+fmt(store.best['f'+k]):'Desafio final: encaixe cada nome na fórmula'):'Monte as '+(T.f.length-dn.length)+' fórmula'+(T.f.length-dn.length>1?'s':'')+' que faltam'}</small></button>`;
 }
 function startB(k,i){
   kind='form';fType=k;fIdx=i;fMode='build';const T=FM[k],f=T.f[i];bk='fb'+k+i;ttl=f[0];
   const tk=f[1].split(/(\s+|[()=×÷+−±^])/).filter(x=>x&&!/^\s+$/.test(x));
-  placed=0;miss=0;t0=0;sel=null;total=tk.length;clearInterval(tick);$('#ov').classList.remove('show');
+  placed=0;miss=0;t0=0;sel=null;total=tk.length+(SY[f[0]]||[]).length;fTk=tk.length;clearInterval(tick);$('#ov').classList.remove('show');
   $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${T.n}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
   <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez nesta fórmula'}</div><div class="board"><div class="fh" style="--h:${T.h}">${f[0]}</div><p class="sub" style="margin:2px 0">Monte a fórmula com as peças.</p>
   <div class="eqw">${tk.map(v=>`<div class="sl tk" style="--h:${T.h}" data-t="q" data-v="${v}"></div>`).join('')}</div></div>
@@ -479,8 +479,11 @@ const FW={
 'Área do triângulo':'Dois triângulos iguais formam um retângulo b × h, então um só é a metade.',
 'Área do trapézio':'Dois trapézios iguais formam um paralelogramo de base (B + b) e altura h; um é a metade.',
 'Área do losango':'O losango cabe num retângulo D × d e ocupa exatamente metade dele.',
-'Área do círculo':'O quadrado do raio cabe cerca de π (3,14) vezes dentro do círculo.',
+'Área do círculo':'O quadrado do raio cabe cerca de π (3,14) vezes dentro do círculo. Calcule r² primeiro (r × r) e só depois multiplique por π.',
 'Comprimento da circunferência':'A volta toda mede π vezes o diâmetro, e o diâmetro é 2 × r.',
+'Soma dos ângulos internos':'Do mesmo vértice, o polígono se divide em (n − 2) triângulos, e cada um soma 180°.',
+'Número de diagonais':'Cada vértice liga em n − 3 outros (não liga em si nem nos 2 vizinhos); cada diagonal tem 2 pontas, por isso ÷ 2.',
+'Ângulo interno do polígono regular':'Todos os ângulos são iguais: a soma dos internos dividida por n.',
 'Teorema de Pitágoras':'No triângulo retângulo, o quadrado da hipotenusa (a) é a soma dos quadrados dos catetos.',
 'Cubo':'Três medidas iguais: a × a × a.',
 'Paralelepípedo':'Comprimento × largura × altura: camadas de cubinhos.',
@@ -507,6 +510,8 @@ const FW={
 'Juros compostos':'A cada período o montante é multiplicado por (1 + i); em t períodos, vira a potência t.',
 'Termo geral da PA':'Do 1º ao n-ésimo termo, somou-se r exatamente (n − 1) vezes.',
 'Termo geral da PG':'Do 1º ao n-ésimo termo, multiplicou-se por q exatamente (n − 1) vezes.',
+'Regra de 3 direta':'Monte a tabela (a → b, c → x). Se as duas grandezas crescem juntas, a razão é a mesma: a ÷ c = b ÷ x. Multiplicando em cruz, a × x = b × c, e daí x = b × c ÷ a.',
+'Regra de 3 inversa':'Se uma grandeza sobe e a outra desce (como velocidade e tempo), o produto se mantém: a × b = c × x, e daí x = a × b ÷ c.',
 'Combinação':'n! ordena todos; divide-se pelas ordens que não importam: p! e (n − p)!.'
 };
 const PFX=['quilo: 1.000 vezes a unidade base','hecto: 100 vezes a unidade base','deca: 10 vezes a unidade base','é a própria unidade base','deci: a décima parte da base','centi: a centésima parte da base','mili: a milésima parte da base'];
@@ -551,8 +556,8 @@ function hint(){
     const T=FM[fType];hh=T.h;
     if(fMode==='build'){
       const f=T.f[fIdx];
-      intro=`<b>${f[0]}:</b> monte as peças nesta ordem.`;
-      rows=hrow(f[1],FW[f[0]]||'',false);
+      if(placed>=fTk&&SY[f[0]]){intro=`<b>${f[0]}:</b> o que cada letra significa.`;rows=SY[f[0]].map(x=>hrow(x[0],x[1],isOk('s',x[1]))).join('')}
+      else{intro=`<b>${f[0]}:</b> monte as peças nesta ordem.`;rows=hrow(f[1],FW[f[0]]||'',false)}
     }else{
       intro=`<b>${T.n}:</b> entender de onde a fórmula vem ajuda a lembrar dela.`;
       rows=T.f.map(f=>hrow(`${f[1]}`,`<span style="color:var(--ink);font-weight:800">${f[0]}.</span> ${FW[f[0]]||''}`,isOk('f',f[1]))).join('');
@@ -616,6 +621,7 @@ function tryPlace(p,s){
     if(kind==='unit'){const nx={[uN]:phaseN,[2*uN]:phaseE,[3*uN]:phase2}[placed];if(nx){nx();return}}
     if(kind==='corr'&&placed===5){phaseK();return}
     if(kind==='rule'&&placed<total&&placed===rcum[rb]){rb++;showB();return}
+    if(kind==='form'&&fMode==='build'&&placed===fTk&&placed<total){phaseS();return}
     if(placed===total)done();
   }else{
     miss++;snd('bad');s.classList.remove('bad');void s.offsetWidth;s.classList.add('bad');
@@ -644,6 +650,275 @@ function done(){
   },350);
 }
 addEventListener('pointerdown',()=>{if(mus!=='off'&&!mTimer)musicStart()});
+RU.push({n:'O expoente vem primeiro',s:'4² = 4 × 4, e antes de multiplicar o resto',h:25,b:[
+{t:'O expoente diz <b>quantas vezes a base se multiplica por ela mesma</b>. Então <b>4²</b> não é 4 × 2: são dois 4 multiplicados.',v:'4² = 4 × 4 = 16',q:['4²','=','4','×','4','=','16']},
+{t:'Numa conta, o expoente é resolvido <b>antes</b> da multiplicação. Só o número colado nele se multiplica por si mesmo. Em <b>3 × 4²</b>, primeiro 4² = 16, depois 3 × 16.',v:'3 × 4² → 3 × 16 = 48',q:['3','×','4²','=','3','×','16','=','48']},
+{t:'Nas fórmulas é igual. Em <b>A = π × r²</b>, com r = 3, primeiro 3² = 9, depois multiplica por π.',v:'π × 3² = π × 9',q:['π','×','3²','=','π','×','9']},
+{t:'Cuidado: o expoente só vale para o que está colado nele. Com parênteses, a conta muda.',v:'3 × 4² = 48 · (3 × 4)² = 144',q:['3','×','4²','=','48','e','(3','×','4)²','=','144']}]});
+const PK=a=>a[ri(a.length)],nf=x=>(+x.toFixed(6)).toLocaleString('pt-BR',{maximumFractionDigits:6});
+
+let fTk=0;
+const PI='pi (≈ 3,14)',AR='área',AH='altura',SY={
+'Área do quadrado':[['A',AR],['l','lado']],
+'Área do retângulo':[['A',AR],['b','base'],['h',AH]],
+'Área do triângulo':[['A',AR],['b','base'],['h',AH]],
+'Área do trapézio':[['A',AR],['B','base maior'],['b','base menor'],['h',AH]],
+'Área do losango':[['A',AR],['D','diagonal maior'],['d','diagonal menor']],
+'Área do círculo':[['A',AR],['π',PI],['r','raio']],
+'Comprimento da circunferência':[['C','comprimento'],['π',PI],['r','raio']],
+'Teorema de Pitágoras':[['a','hipotenusa'],['b','cateto'],['c','cateto']],
+'Cubo':[['V','volume'],['a','aresta']],
+'Paralelepípedo':[['V','volume'],['a','uma das dimensões'],['b','uma das dimensões'],['c','uma das dimensões']],
+'Prisma':[['V','volume'],['Ab','área da base'],['h',AH]],
+'Cilindro':[['V','volume'],['π',PI],['r','raio da base'],['h',AH]],
+'Cone':[['V','volume'],['π',PI],['r','raio da base'],['h',AH]],
+'Pirâmide':[['V','volume'],['Ab','área da base'],['h',AH]],
+'Esfera':[['V','volume'],['π',PI],['r','raio']],
+'Superfície da esfera':[['A','área da superfície'],['π',PI],['r','raio']],
+'Sorvete (posição no MU)':[['S','posição final'],['S₀','posição inicial'],['v','velocidade'],['t','tempo']],
+'Velocidade média':[['Vm','velocidade média'],['ΔS','distância percorrida'],['Δt','tempo gasto']],
+'Densidade':[['d','densidade'],['m','massa'],['V','volume']],
+'Pressão':[['p','pressão'],['F','força'],['A',AR]],
+'2ª Lei de Newton':[['F','força'],['m','massa'],['a','aceleração']],
+'1ª Lei de Ohm':[['U','tensão'],['R','resistência'],['i','corrente']],
+'Potência elétrica':[['P','potência'],['U','tensão'],['i','corrente']],
+'Energia elétrica consumida':[['E','energia'],['P','potência'],['Δt','tempo']],
+'Calor sensível':[['Q','calor'],['m','massa'],['c','calor específico'],['ΔT','variação de temperatura']],
+'Fórmula de Bhaskara':[['x','raiz (solução)'],['Δ','delta'],['a','coeficiente de x²'],['b','coeficiente de x']],
+'Delta (discriminante)':[['Δ','delta'],['a','coeficiente de x²'],['b','coeficiente de x'],['c','termo independente']],
+'Probabilidade':[['P','probabilidade'],['favoráveis','casos que você quer'],['possíveis','todos os casos']],
+'Escala':[['E','escala'],['desenho','medida no desenho'],['real','medida real']],
+'Juros simples':[['J','juros'],['C','capital'],['i','taxa'],['t','tempo']],
+'Juros compostos':[['M','montante'],['C','capital'],['i','taxa'],['t','tempo']],
+'Termo geral da PA':[['an','termo que você quer'],['a1','primeiro termo'],['n','posição do termo'],['r','razão']],
+'Termo geral da PG':[['an','termo que você quer'],['a1','primeiro termo'],['q','razão'],['n','posição do termo']],
+'Soma dos ângulos internos':[['Si','soma dos ângulos internos'],['n','número de lados']],
+'Número de diagonais':[['D','número de diagonais'],['n','número de lados']],
+'Ângulo interno do polígono regular':[['ai','ângulo interno'],['n','número de lados']],
+'Regra de 3 direta':[['x','valor que falta'],['a','1ª linha, 1ª grandeza'],['b','1ª linha, 2ª grandeza'],['c','2ª linha, 1ª grandeza']],
+'Regra de 3 inversa':[['x','valor que falta'],['a','1ª linha, 1ª grandeza'],['b','1ª linha, 2ª grandeza'],['c','2ª linha, 1ª grandeza']],
+'Combinação':[['C','número de combinações'],['n','total de elementos'],['p','elementos escolhidos']]};
+function phaseS(){
+  const T=FM[fType],S=SY[T.f[fIdx][0]];
+  $('.board').insertAdjacentHTML('beforeend',`<div id="ar"><p class="sub" style="margin-top:22px">Agora o que cada letra significa.</p><div style="display:grid;gap:10px">${S.map(x=>`<div class="row" style="--h:${T.h}"><div class="ex ux" style="flex:.6;font-size:20px">${x[0]}</div><div class="sl nm" style="--h:${T.h}" data-t="s" data-v="${x[1]}"></div></div>`).join('')}</div></div>`);
+  $('.tray').innerHTML=rnd(S.map(x=>x[1])).map(v=>`<div class="pc pt" style="--h:${T.h}" data-t="s" data-v="${v}">${v}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  $('#ar').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+const gtx=(x,y,t,z)=>`<text x="${f1(x)}" y="${f1(y)}" text-anchor="middle" font-size="${z||13}" font-weight="800" fill="currentColor">${t}</text>`;
+const gpoly=(P,h)=>`<polygon points="${P.map(q=>f1(q[0])+','+f1(q[1])).join(' ')}" fill="hsl(${h||200} 60% 55% / .2)" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>`;
+const greg=(n,r)=>[...Array(n)].map((_,i)=>{const a=(-90+360*i/n)*Math.PI/180;return[r*Math.cos(a),r*Math.sin(a)]});
+const grow=(it,h)=>{const c=300/it.length;let o='';it.forEach((x,i)=>{const cx=c*(i+.5);o+=gpoly(x.p.map(q=>[cx+q[0],52+q[1]]),h)+gtx(cx,112,x.t)});return SV('0 0 300 126','Figuras')+o+'</svg>'};
+const gtri=(P,L,A,h,ra)=>{const c=[(P[0][0]+P[1][0]+P[2][0])/3,(P[0][1]+P[1][1]+P[2][1])/3];let o=gpoly(P,h);
+  [[0,1],[1,2],[2,0]].forEach(([i,j],k)=>{const m=[(P[i][0]+P[j][0])/2,(P[i][1]+P[j][1])/2],d=[m[0]-c[0],m[1]-c[1]],n=Math.hypot(...d);o+=gtx(m[0]+d[0]/n*14,m[1]+d[1]/n*14+4,L[k])});
+  if(A)P.forEach((q,i)=>{const d=[c[0]-q[0],c[1]-q[1]],n=Math.hypot(...d);o+=gtx(q[0]+d[0]/n*30,q[1]+d[1]/n*30+4,A[i],12)});
+  return SV('0 0 300 170','Triângulo')+o+(ra||'')+'</svg>'};
+const QD={quadrado:[[-30,-30],[30,-30],[30,30],[-30,30]],retângulo:[[-42,-24],[42,-24],[42,24],[-42,24]],losango:[[0,-36],[36,0],[0,36],[-36,0]],paralelogramo:[[-26,-26],[44,-26],[26,26],[-44,26]],trapézio:[[-20,-26],[20,-26],[44,26],[-44,26]]};
+const qd=a=>a.map(n=>({p:QD[n],t:n[0].toUpperCase()+n.slice(1)}));
+const PN=[[3,'triângulo'],[4,'quadrilátero'],[5,'pentágono'],[6,'hexágono'],[7,'heptágono'],[8,'octógono'],[9,'eneágono'],[10,'decágono'],[11,'undecágono'],[12,'dodecágono']];
+const pg=a=>grow(a.map(n=>({p:greg(n,36),t:n+' lados'})),30);
+const GE=[
+{n:'Triângulos pelos lados',s:'Equilátero, isósceles e escaleno',h:200,b:[
+{t:'Triângulo <b>equilátero</b>: os <b>3 lados são iguais</b>. (equi = igual, látero = lado)',v:gtri([[85,145],[215,145],[150,32]],['4','4','4'],null,200),q:['3','lados','iguais','=','Equilátero']},
+{t:'Triângulo <b>isósceles</b>: tem <b>2 lados iguais</b> e o terceiro é diferente.',v:gtri([[100,145],[200,145],[150,35]],['4','6','6'],null,200),q:['2','lados','iguais','=','Isósceles']},
+{t:'Triângulo <b>escaleno</b>: os <b>3 lados são diferentes</b>.',v:gtri([[60,145],[230,145],[120,40]],['7','6','5'],null,200),q:['3','lados','diferentes','=','Escaleno']}]},
+{n:'Triângulos pelos ângulos',s:'Retângulo, acutângulo e obtusângulo',h:160,b:[
+{t:'Triângulo <b>retângulo</b>: tem <b>1 ângulo reto</b> (90°). É nele que vale o teorema de Pitágoras.',v:gtri([[70,140],[70,35],[220,140]],['','',''],['90°','56°','34°'],160,'<path d="M70 124h16v16" fill="none" stroke="currentColor" stroke-width="2"/>'),q:['1','ângulo','de','90°','=','Retângulo']},
+{t:'Triângulo <b>acutângulo</b>: os <b>3 ângulos são agudos</b>, todos menores que 90°.',v:gtri([[70,145],[230,145],[150,35]],['','',''],['54°','54°','72°'],160),q:['3','ângulos','menores','que','90°','=','Acutângulo']},
+{t:'Triângulo <b>obtusângulo</b>: tem <b>1 ângulo obtuso</b>, maior que 90°.',v:gtri([[40,145],[250,145],[100,65]],['','',''],['53°','28°','99°'],160),q:['1','ângulo','maior','que','90°','=','Obtusângulo']},
+{t:'Em <b>qualquer triângulo</b>, os 3 ângulos somam <b>180°</b>.',v:'54° + 54° + 72° = 180°',q:['A','+','B','+','C','=','180°']},
+{t:'Um triângulo pode ter <b>dois nomes</b>: um pelos lados e outro pelos ângulos. Exemplo: um triângulo pode ser retângulo e escaleno.',v:'lados + ângulos',q:['Retângulo','+','Escaleno','=','dois','nomes']}]},
+{n:'Polígonos pelo número de lados',s:'Do triângulo ao dodecágono (12 lados)',h:30,b:[
+{t:'Polígono é uma figura fechada de lados retos. O nome vem do <b>número de lados</b>. Começando em 3.',v:pg([3,4,5]),q:['3','=','triângulo','4','=','quadrilátero','5','=','pentágono']},
+{t:'Continuando: 6, 7 e 8 lados.',v:pg([6,7,8]),q:['6','=','hexágono','7','=','heptágono','8','=','octógono']},
+{t:'9 e 10 lados. Os polígonos até o decágono são os mais comuns em questões.',v:pg([9,10]),q:['9','=','eneágono','10','=','decágono']},
+{t:'11 e 12 lados. O dodecágono (12) também aparece de vez em quando.',v:pg([11,12]),q:['11','=','undecágono','12','=','dodecágono']},
+{t:'Truque: o nome vem de um prefixo grego. <b>penta</b> = 5, <b>hexa</b> = 6, <b>hepta</b> = 7, <b>octo</b> = 8.',v:'penta · hexa · hepta · octo',q:['penta','=','5','hexa','=','6','hepta','=','7','octo','=','8']},
+{t:'Polígono <b>regular</b>: todos os lados e todos os ângulos são iguais.',v:pg([6]),q:['Polígono','regular','=','lados','e','ângulos','iguais']}]},
+{n:'Quadriláteros',s:'Quadrado, retângulo, losango, paralelogramo e trapézio',h:260,b:[
+{t:'<b>Quadrado</b>: 4 lados iguais e 4 ângulos retos. <b>Retângulo</b>: 4 ângulos retos e lados opostos iguais.',v:grow(qd(['quadrado','retângulo']),260),q:['Quadrado','=','4','lados','iguais','Retângulo','=','4','ângulos','retos']},
+{t:'<b>Losango</b>: 4 lados iguais. <b>Paralelogramo</b>: lados opostos paralelos.',v:grow(qd(['losango','paralelogramo']),260),q:['Losango','=','4','lados','iguais','Paralelogramo','=','lados','opostos','paralelos']},
+{t:'<b>Trapézio</b>: tem só <b>1 par de lados paralelos</b>, chamados bases (a maior e a menor).',v:grow(qd(['trapézio']),260),q:['Trapézio','=','1','par','de','lados','paralelos']},
+{t:'O quadrado é um caso especial: é ao mesmo tempo retângulo e losango.',v:'Quadrado = retângulo + losango',q:['Quadrado','=','Retângulo','+','Losango']}]},
+{n:'Ângulos',s:'Agudo, reto, obtuso, raso, complementares',h:320,b:[
+{t:'Pelo tamanho: <b>agudo</b> é menor que 90° e <b>reto</b> é exatamente 90°.',v:'agudo 40° · reto 90°',q:['Agudo','=','menor','que','90°','Reto','=','90°']},
+{t:'<b>Obtuso</b> fica entre 90° e 180°. <b>Raso</b> é exatamente 180° (uma linha reta).',v:'obtuso 120° · raso 180°',q:['Obtuso','=','entre','90°','e','180°','Raso','=','180°']},
+{t:'Ângulos <b>complementares</b> somam <b>90°</b>.',v:'30° + 60° = 90°',q:['30°','+','60°','=','90°','complementares']},
+{t:'Ângulos <b>suplementares</b> somam <b>180°</b>.',v:'110° + 70° = 180°',q:['110°','+','70°','=','180°','suplementares']},
+{t:'Quando duas retas se cruzam, os ângulos <b>opostos pelo vértice</b> são iguais.',v:'✕ opostos = iguais',q:['Opostos','pelo','vértice','=','iguais']}]}];
+function geoMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=GE;rk='g';const dn=store.gd||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Figuras e ângulos</div></div><p class="sub">Escolha um módulo.</p>`+GE.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${r.n}</b><small>${store.best['g'+i]?'Melhor '+fmt(store.best['g'+i]):r.s}</small></button>`).join('');
+}
+const GF=[
+['Triângulos pelos lados','Um triângulo que {d} é {n}.',[['tem os 3 lados iguais','equilátero',['escaleno']],['tem exatamente 2 lados iguais','isósceles',['equilátero','escaleno']],['tem os 3 lados diferentes','escaleno',['equilátero','isósceles']]]],
+['Triângulos pelos ângulos','Um triângulo que {d} é {n}.',[['tem um ângulo de 90°','retângulo',['acutângulo','obtusângulo']],['tem os 3 ângulos menores que 90°','acutângulo',['retângulo','obtusângulo']],['tem um ângulo maior que 90°','obtusângulo',['retângulo','acutângulo']]]],
+['Polígonos pelo número de lados','Um polígono que {d} é um {n}.',PN.map(([k,m])=>[`tem ${k} lados`,m,PN.filter(x=>x[0]!==k).map(x=>x[1])])],
+['Quadriláteros','Um quadrilátero que {d} é um {n}.',[['tem exatamente 1 par de lados paralelos','trapézio',['losango','retângulo','quadrado']],['tem os 4 lados iguais e os 4 ângulos retos','quadrado',['trapézio']],['tem os 4 lados iguais, mas ângulos não retos','losango',['retângulo','trapézio']],['tem os 4 ângulos retos, mas lados vizinhos diferentes','retângulo',['losango','trapézio']]]],
+['Ângulos','Um ângulo que {d} é {n}.',[['mede menos de 90°','agudo',['reto','obtuso','raso']],['mede exatamente 90°','reto',['agudo','obtuso','raso']],['mede mais de 90° e menos de 180°','obtuso',['agudo','reto','raso']],['mede exatamente 180°','raso',['agudo','reto','obtuso']]]]];
+const vfG=()=>rnd(GF.flatMap(g=>g[2].map(x=>[g,x]))).slice(0,10).map(([g,x])=>{const t=Math.random()<.5;
+  return{c:g[0],q:'Esta classificação está certa?',s:g[1].replace('{d}',x[0]).replace('{n}',t?x[1]:PK(x[2])),v:t,w:g[1].replace('{d}',x[0]).replace('{n}',x[1])}});
+
+RU.push({n:'Regra de 3 simples',s:'Duas grandezas que crescem juntas (direta)',h:60,b:[
+{t:'A regra de 3 serve quando você sabe <b>3 valores</b> e quer achar o <b>4º</b>. Primeiro monte a <b>tabela</b>: uma coluna para cada grandeza, e o que falta vira <b>x</b>. Exemplo: 2 kg custam R$ 6; quanto custam 5 kg?',v:'2 kg → R$ 6 · 5 kg → x',q:['2 kg','=','R$ 6','5 kg','=','x']},
+{t:'Descubra se é <b>direta</b>: se uma grandeza <b>aumenta</b> e a outra também aumenta, é direta. Mais quilos, mais reais.',v:'↑ kg → ↑ reais',q:['Mais','kg','=','mais','reais','=','Direta']},
+{t:'Na direta, <b>multiplique em cruz</b>: o 2 com o x, e o 6 com o 5.',v:'2 × x = 6 × 5',q:['2','×','x','=','6','×','5']},
+{t:'Agora <b>isole o x</b>: o 2 está multiplicando, então passa dividindo.',v:'x = 6 × 5 ÷ 2 = 15',q:['x','=','6','×','5','÷','2','=','15']},
+{t:'A <b>fórmula</b> geral. Na tabela, a e b ficam na 1ª linha e c na 2ª. O x fica na diagonal do a, então a <b>divide</b>, e b e c <b>se multiplicam</b>.',v:'x = b × c ÷ a',q:['x','=','b','×','c','÷','a']},
+{t:'Mais um exemplo: 3 canetas custam R$ 12. Quanto custam 5 canetas?',v:'3 → 12 · 5 → x',q:['x','=','12','×','5','÷','3','=','20']}]});
+RU.push({n:'Regra de 3 com tempo',s:'Uma sobe, a outra desce (inversa)',h:340,b:[
+{t:'Com <b>tempo</b>, as grandezas costumam ser <b>inversas</b>: se uma <b>aumenta</b>, a outra <b>diminui</b>. Mais velocidade, menos tempo.',v:'↑ velocidade → ↓ tempo',q:['Mais','velocidade','=','menos','tempo','=','Inversa']},
+{t:'Exemplo: um carro a 60 km/h leva 4 h. A 80 km/h, quanto tempo leva? Monte a tabela.',v:'60 km/h → 4 h · 80 km/h → x',q:['60 km/h','=','4 h','80 km/h','=','x']},
+{t:'Na inversa <b>não se multiplica em cruz</b>: multiplica-se <b>na mesma linha</b>. O produto de cada linha é igual.',v:'60 × 4 = 80 × x',q:['60','×','4','=','80','×','x']},
+{t:'Isole o x: o 80 passa dividindo.',v:'x = 60 × 4 ÷ 80 = 3 h',q:['x','=','60','×','4','÷','80','=','3']},
+{t:'Outro exemplo: 3 operários fazem uma obra em 12 dias. Com 6 operários, em quantos dias? Mais operários, <b>menos</b> dias: inversa.',v:'3 × 12 = 6 × x',q:['Mais','operários','=','menos','dias','x','=','3','×','12','÷','6','=','6']},
+{t:'A <b>fórmula</b> da inversa. Compare com a direta: o que muda é <b>quem divide</b>.',v:'direta: ÷ a · inversa: ÷ c',q:['Direta','=','b','×','c','÷','a','Inversa','=','a','×','b','÷','c']}]});
+let VQ=[],vi=0,vok=0,vid='';
+const VN={tm:'Tabuadas misturadas',u:'Unidades de medida',c:'Correlações',f:'Fórmulas',r:'Expoente e vírgula',g:'Figuras e ângulos',q:'Química',p:'Filosofia',h:'História'};
+const vfT=a=>rnd([...Array(10)].map((_,i)=>i+1)).map(b=>{const A=a||3+ri(7),p=A*b,t=Math.random()<.5,w=PK([p-A,p+A,p+1,p-1,p+10,p-10].filter(x=>x>0&&x!==p));return{c:a?'Tabuada do '+a:'Tabuada de multiplicação',q:'Esta conta está certa?',s:`${A} × ${b} = ${t?p:w}`,v:t,w:`${A} × ${b} = ${p}. `+mulWhy(A,b)}});
+const vfU=()=>{const R=[];while(R.length<10){const k=PK(Object.keys(UT)),T=UT[k],X=UX[k],i=PK([0,1,2,4,5,6]),j=PK([0,1,2,3,4,5,6].filter(x=>x!==i)),t=Math.random()<.5;
+  if(Math.random()<.5)R.push({c:'Unidades de '+T.n.toLowerCase(),q:'Esta equivalência está certa?',s:`1 ${T.u[i]} = ${X.eq[t?i:j]} ${T.u[3]}`,v:t,w:`1 ${T.u[i]} = ${X.eq[i]} ${T.u[3]}. ${PFX[i]}.`});
+  else R.push({c:'Unidades de '+T.n.toLowerCase(),q:'Este nome corresponde à sigla?',s:`A sigla ${T.u[i]} significa ${nmOf(k)[t?i:j]}`,v:t,w:`${T.u[i]} é o ${nmOf(k)[i]}. ${PFX[i]}.`})}return R};
+const vfC=()=>rnd(CR.flatMap((r,i)=>[1,2].map(c=>{const t=Math.random()<.5,o=PK(CR.filter((_,x)=>x!==i))[c];return{c:c===2?'Na água, volume e massa':'Volume e litros',q:'Esta correlação está certa?',s:`${r[0]}${c===2?' de água':''} ${c===2?'pesa':'='} ${t?r[c]:o}`,v:t,w:c===1?CRW[i]:CRK[i]}})));
+const vfF=()=>rnd(Object.values(FM).flatMap(T=>T.f.map(f=>[T,f]))).slice(0,10).map(([T,f])=>{const t=Math.random()<.5,o=PK(T.f.filter(x=>x!==f)),y=SY[f[0]];if(y&&Math.random()<.4){const x=PK(y),z=PK(y.filter(u=>u[1]!==x[1]));return{c:`${T.n}: fórmula de ${f[0]}, ${f[1]}`,q:'O significado desta letra está certo?',s:`${x[0]} significa ${t?x[1]:z[1]}`,v:t,w:`Em ${f[1]}: ${x[0]} = ${x[1]}.`}}return{c:`${T.n}: ${f[0]}`,q:'Esta é a fórmula correta?',s:`${t?f[1]:o[1]}`,v:t,w:`${f[0]}: ${f[1]}. ${FW[f[0]]||''}`}});
+const vfR=()=>{const R=[],S=['','','²','³'];for(let i=0;i<10;i++){const t=Math.random()<.5,b=2+ri(8),k=2+ri(8),c=i%3;
+  if(c===0){const B=b===2?3:b;R.push({c:'Expoente: a base se multiplica por ela mesma',q:'Este resultado está certo?',s:`${B}² = ${t?B*B:B*2}`,v:t,w:`${B}² = ${B} × ${B} = ${B*B}. O expoente diz quantas vezes multiplicar a base por ela mesma, não é ${B} × 2.`})}
+  else if(c===1)R.push({c:'Expoente dentro de uma conta (ele vem primeiro)',q:'Este resultado está certo?',s:`${k} × ${b}² = ${t?k*b*b:(k*b)**2}`,v:t,w:`O expoente vem primeiro: ${b}² = ${b*b}. Depois ${k} × ${b*b} = ${k*b*b}. Só o ${b} recebe o expoente.`});
+  else{const d=PK([1.5,2.5,3.5,4.2,7.5]),n=2+ri(2),ng=Math.random()<.5,r=ng?d/10**n:d*10**n,o=ng?d*10**n:d/10**n;
+    R.push({c:'Multiplicar por uma potência de 10 (a vírgula anda)',q:'Este resultado está certo?',s:`${nf(d)} × 10${ng?'⁻':''}${S[n]} = ${nf(t?r:o)}`,v:t,w:`Expoente ${ng?'negativo (−): a vírgula anda '+n+' casas para a esquerda':'positivo (+): a vírgula anda '+n+' casas para a direita'}. Resultado: ${nf(r)}.`})}}
+  return rnd(R)};
+function vfMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='vf';
+  const B=(id,n,sb,h)=>`<button class="m" style="--h:${h}" onclick="vfStart('${id}')"><b>${n}</b><small>${sb}</small></button>`;
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="vfFrom==='h'?home():menu()" aria-label="Voltar">←</button><div class="ttl">Verdadeiro ou falso</div></div><p class="sub">Aparece uma afirmação. Ela está certa ou errada? Escolha o assunto.</p><div class="grid">`
+  +[3,4,5,6,7,8,9].map(n=>`<button class="t" style="--h:${hue(n)}" onclick="vfStart('t${n}')"><b>${n}</b><small>Tabuada</small></button>`).join('')+`</div><div style="margin-top:14px">`
+  +B('tm','Tabuadas misturadas','Contas de todas as tabuadas',340)+B('u','Unidades de medida','Valores e nomes das unidades',270)+B('c','Correlações','Volume, litros e quilos',250)+B('f','Fórmulas','Nome e fórmula combinam?',175)+B('g','Figuras e ângulos','Triângulos, polígonos e ângulos',200)+B('r','Expoente e vírgula','Regras de potência e de mover a vírgula',25)+B('q','Química','Ciclo do carbono, célula e DNA',150)+B('p','Filosofia','Arché, ideias, áreas e períodos',300)+B('h','História','Ordem, duração e datas do Enem',40)+`</div>`;
+}
+function vfStart(id){vid=id;VQ=({tm:()=>vfT(0),u:vfU,c:vfC,f:vfF,r:vfR,g:vfG,q:vfQ,p:vfP,h:vfH}[id]||(()=>vfT(+id.slice(1))))();vi=0;vok=0;vfShow()}
+function vfShow(){
+  const q=VQ[vi],h=/^t\d$/.test(vid)?hue(+vid[1]):VN[vid]?({tm:340,u:270,c:250,f:175,r:25,g:200,q:150,p:300,h:40})[vid]:250;
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="vfMenu()" aria-label="Voltar">←</button><div class="ttl">${VN[vid]||'Tabuada do '+vid[1]}</div><div class="tm">${vi+1}/${VQ.length}</div></div>
+  <div class="rb" style="--h:${h}"><div class="rt"><b>${q.c||VN[vid]||''}</b><br>${q.q||'Está certo ou errado?'}</div><div class="rv" id="vs" style="font-size:24px">${q.s}</div><div id="vx"></div></div>
+  <div id="vb" style="display:flex;gap:12px;margin-top:14px"><button class="m" style="--h:150;margin:0;flex:1;text-align:center" onclick="vfAns(true)"><b>Verdadeiro</b></button><button class="m" style="--h:5;margin:0;flex:1;text-align:center" onclick="vfAns(false)"><b>Falso</b></button></div>`;
+  window.scrollTo(0,0);
+}
+function vfAns(x){
+  const q=VQ[vi],ok=x===q.v;vok+=ok;snd(ok?'ok':'bad',vok);
+  $('#vb').style.display='none';$('#vs').style.color=ok?'#1e9e5a':'#e5484d';
+  $('#vx').innerHTML=`<p class="hx"><b>${ok?'Certo!':'Errado.'}</b> A afirmação é <b>${q.v?'verdadeira':'falsa'}</b>. ${q.w}</p><button class="btn" style="--h:${ok?150:5}" onclick="vfNext()">${vi+1<VQ.length?'Próxima':'Ver resultado'}</button>`;
+}
+function vfNext(){
+  if(++vi<VQ.length)return vfShow();
+  const n=VQ.length,st=vok===n?3:vok>=n*.7?2:1;snd('win');$('#box').style.setProperty('--h',250);
+  $('#box').innerHTML=`<div class="stars">${'★'.repeat(st)}${'☆'.repeat(3-st)}</div><h2>${vok} de ${n} certas</h2><button class="btn" onclick="vfStart(vid)">Jogar de novo</button><button class="btn alt" onclick="vfMenu()">Voltar</button>`;
+  $('#ov').classList.add('show');
+}
+/* ===== FILOSOFIA ===== */
+let vfFrom='m';
+const PHL=[
+{n:'Arché: o princípio de tudo',s:'Cada filósofo e a sua substância original',h:280,b:[
+{t:'<b>Arché</b> é a palavra grega para <b>princípio</b>: aquilo de que tudo é feito. Os primeiros filósofos, de <b>Mileto</b>, procuraram uma só substância da natureza.',v:'💧 Tales',q:['Tales','→','água']},
+{t:'Os três de <b>Mileto</b>. Tales viu a <b>água</b>, Anaxímenes o <b>ar</b>, e Anaximandro algo sem limites e sem forma: o <b>ápeiron</b>.',v:'💧 · 🌬️ · ∞',q:['Tales','→','água','Anaxímenes','→','ar','Anaximandro','→','ápeiron']},
+{t:'<b>Heráclito</b> via o mundo sempre mudando, como as chamas: o arché é o <b>fogo</b>. <b>Pitágoras</b> disse que a base de tudo é o <b>número</b>.',v:'🔥 · 🔢',q:['Heráclito','→','fogo','Pitágoras','→','número']},
+{t:'<b>Empédocles</b> juntou <b>quatro elementos</b>: terra, água, ar e fogo. <b>Demócrito</b> disse que tudo é feito de <b>átomos</b> no vazio.',v:'🌍💧🌬️🔥 · ⚛️',q:['Empédocles','→','4 elementos','Demócrito','→','átomos']},
+{t:'Dois que fogem do padrão. Para <b>Parmênides</b>, o que existe é o <b>Ser</b>, único e imutável. Para <b>Anaxágoras</b>, uma inteligência, o <b>Nous</b>, ordena a matéria.',v:'Ser · Nous',q:['Parmênides','→','Ser','Anaxágoras','→','Nous']}]},
+{n:'Mudança ou permanência',s:'Heráclito contra Parmênides',h:20,b:[
+{t:'<b>Heráclito</b>: tudo flui, nada permanece igual, nem um rio em que você entra duas vezes. A realidade é <b>mudança</b>.',v:'🌊 devir',q:['Heráclito','→','tudo muda']},
+{t:'<b>Parmênides</b> pensava o contrário: a mudança é só aparência dos sentidos. O que existe de verdade é o <b>Ser</b>, que não muda.',v:'🪨 o Ser é imutável',q:['Parmênides','→','nada muda']},
+{t:'Juntando as duas posições.',v:'🌊 × 🪨',q:['Heráclito','→','tudo muda','Parmênides','→','nada muda']}]},
+{n:'Sócrates, Platão e Aristóteles',s:'Mestre, discípulo e o discípulo do discípulo',h:215,b:[
+{t:'A <b>linha dos mestres</b>: Sócrates ensinou Platão, Platão ensinou Aristóteles, e Aristóteles foi professor de Alexandre, o Grande.',v:'Sócrates → Platão → Aristóteles → Alexandre',q:['Sócrates','→','Platão','→','Aristóteles','→','Alexandre']},
+{t:'<b>Sócrates</b> não escreveu livros. Fazia perguntas até a pessoa perceber o que não sabia: é a <b>maiêutica</b>, o parto das ideias.',v:'❓ perguntar',q:['Sócrates','→','maiêutica']},
+{t:'<b>Platão</b> separou o mundo em dois: o dos sentidos e o <b>mundo das ideias</b>, perfeito e eterno. A <b>caverna</b> é a imagem disso.',v:'🕳️ caverna',q:['Platão','→','mundo das ideias','→','caverna']},
+{t:'<b>Aristóteles</b> partiu da observação da natureza e criou a <b>lógica</b>. Dizia que o ser humano é um <b>animal político</b>.',v:'🔎 observar',q:['Aristóteles','→','lógica','→','animal político']}]},
+{n:'Escolas helenísticas',s:'Estoicismo, epicurismo, ceticismo e cinismo',h:175,b:[
+{t:'O <b>estoicismo</b>, de <b>Zenão de Cítio</b>, ensina a viver conforme a razão, com <b>virtude</b> e controle das emoções.',v:'🏛️ Estoicismo',q:['Zenão de Cítio','→','virtude']},
+{t:'<b>Epicuro</b> buscava o <b>prazer</b> sereno: sem dor no corpo e sem perturbação na alma. Não é viver de excessos.',v:'🌿 Epicurismo',q:['Epicuro','→','prazer sereno']},
+{t:'<b>Pirro</b> e o <b>ceticismo</b>: diante de opiniões opostas, o melhor é <b>suspender o juízo</b>. E <b>Diógenes</b>, o cínico, defendia a <b>vida simples</b>.',v:'🤔 · 🛢️',q:['Pirro','→','suspender o juízo','Diógenes','→','vida simples']}]},
+{n:'Moderna: razão e experiência',s:'Descartes, Locke, Hume e Kant',h:340,b:[
+{t:'<b>Descartes</b> duvidou de tudo e achou uma certeza: se ele pensa, ele existe. É o <b>cogito</b>.',v:'💭 cogito',q:['Descartes','→','Penso, logo existo']},
+{t:'Duas fontes do conhecimento. Os <b>racionalistas</b> (Descartes) confiam na <b>razão</b>. Os <b>empiristas</b> (Locke e Hume) confiam na <b>experiência</b>.',v:'razão × experiência',q:['Descartes','→','razão','Locke','→','experiência','Hume','→','experiência']},
+{t:'Para <b>Locke</b>, a mente nasce como uma <b>tábula rasa</b>, uma folha em branco que a experiência preenche. <b>Kant</b> juntou razão e experiência e criou o <b>imperativo categórico</b>, na ética.',v:'📄 · ⚖️',q:['Locke','→','tábula rasa','Kant','→','imperativo categórico']}]},
+{n:'Política e sociedade',s:'Hobbes, Rousseau, Montesquieu e Marx',h:35,b:[
+{t:'<b>Hobbes</b> via o ser humano em guerra de todos contra todos, e defendeu um Estado forte, o <b>Leviatã</b>.',v:'🐉 Leviatã',q:['Hobbes','→','Leviatã']},
+{t:'<b>Rousseau</b> escreveu sobre o <b>contrato social</b>: as pessoas combinam viver juntas sob a vontade geral. <b>Montesquieu</b> propôs a <b>separação dos poderes</b>.',v:'📜 · 🔱',q:['Rousseau','→','contrato social','Montesquieu','→','separação dos poderes']},
+{t:'<b>Marx</b> analisou a história pela <b>luta de classes</b>, entre quem tem os meios de produção e quem trabalha.',v:'⚙️ classes',q:['Marx','→','luta de classes']}]},
+{n:'Contemporânea',s:'Nietzsche, Sartre, Beauvoir, Foucault e Arendt',h:260,b:[
+{t:'<b>Nietzsche</b> disse que os antigos valores perderam a força (<b>Deus está morto</b>) e falou do <b>além-do-homem</b>, quem cria os próprios valores.',v:'⚡ valores',q:['Nietzsche','→','Deus está morto']},
+{t:'<b>Sartre</b>, existencialista: primeiro a pessoa existe, depois se define pelas escolhas. <b>A existência precede a essência</b>.',v:'🚪 escolher',q:['Sartre','→','existência precede essência']},
+{t:'<b>Beauvoir</b>: <b>não se nasce mulher, torna-se</b>. <b>Foucault</b> estudou a ligação entre <b>poder e saber</b>. <b>Arendt</b> falou da <b>banalidade do mal</b>.',v:'📚',q:['Beauvoir','→','torna-se mulher','Foucault','→','poder e saber','Arendt','→','banalidade do mal']}]},
+{n:'Áreas da filosofia',s:'Ética, lógica, metafísica e mais',h:150,b:[
+{t:'Cada área faz uma pergunta diferente. <b>Ética</b>: como agir bem? <b>Lógica</b>: como raciocinar sem erro?',v:'⚖️ · 🧩',q:['Ética','→','agir bem','Lógica','→','raciocinar bem']},
+{t:'<b>Metafísica</b>: o que é o ser? <b>Epistemologia</b>: como conhecemos? <b>Estética</b>: o que é belo? <b>Política</b>: como organizar o poder?',v:'❓',q:['Metafísica','→','o ser','Epistemologia','→','o conhecimento','Estética','→','o belo','Política','→','o poder']}]},
+{n:'Períodos da filosofia',s:'Antiga, medieval, moderna e contemporânea',h:200,b:[
+{t:'A história se divide em quatro períodos. Em cada um, um nome conhecido.',v:'🕰️',q:['Antiga','→','Platão','Medieval','→','Tomás de Aquino','Moderna','→','Descartes','Contemporânea','→','Sartre']},
+{t:'<b>Agostinho</b> e <b>Tomás de Aquino</b> uniram fé e razão. Agostinho usou Platão e Tomás usou <b>Aristóteles</b>.',v:'⛪ fé + razão',q:['Agostinho','→','Platão','Tomás de Aquino','→','Aristóteles']}]}
+];
+function phMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=PHL;rk='p';const dn=store.pd||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Filosofia</div></div><p class="sub">Escolha um módulo.</p>`+PHL.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${r.n}</b><small>${store.best['p'+i]?'Melhor '+fmt(store.best['p'+i]):r.s}</small></button>`).join('');
+}
+/* V/F: filosofia e química */
+const PHA=[['Tales de Mileto','a água'],['Anaxímenes','o ar'],['Anaximandro','o ápeiron (o ilimitado)'],['Heráclito','o fogo'],['Pitágoras','o número'],['Demócrito','os átomos'],['Empédocles','os quatro elementos']];
+const PHI=[['Descartes','«Penso, logo existo»'],['Locke','a mente é uma tábula rasa'],['Kant','o imperativo categórico'],['Hobbes','o Estado forte, o Leviatã'],['Rousseau','o contrato social'],['Montesquieu','a separação dos poderes'],['Marx','a luta de classes'],['Nietzsche','«Deus está morto»'],['Sartre','a existência precede a essência'],['Beauvoir','não se nasce mulher, torna-se'],['Arendt','a banalidade do mal'],['Sócrates','a maiêutica'],['Platão','o mundo das ideias'],['Aristóteles','a lógica e o animal político'],['Epicuro','o prazer sereno'],['Pirro','suspender o juízo']];
+const PHR=[['A ética','como agir bem'],['A lógica','o raciocínio correto'],['A metafísica','o ser e a realidade'],['A epistemologia','a origem e os limites do conhecimento'],['A estética','o belo e a arte'],['A política','o poder e a vida em sociedade']];
+const PHP=[['Platão','antiga'],['Aristóteles','antiga'],['Agostinho','medieval'],['Tomás de Aquino','medieval'],['Descartes','moderna'],['Kant','moderna'],['Nietzsche','contemporânea'],['Sartre','contemporânea']];
+const vfMk=(c,q,L,f)=>L.map(([a,b,w])=>{const t=Math.random()<.5,o=PK(L.filter(x=>x[1]!==b));return{c,q,s:f(a,t?b:o[1]),v:t,w:w||f(a,b)+'.'}});
+const vfP=()=>rnd([...vfMk('Arché','O arché é o princípio de tudo. Está certo?',PHA,(a,b)=>`Para ${a}, o arché é ${b}`),...vfMk('Ideias dos filósofos','Esta ideia é deste filósofo?',PHI,(a,b)=>`${a}: ${b}`),...vfMk('Áreas da filosofia','Esta área estuda isso mesmo?',PHR,(a,b)=>`${a} estuda ${b}`),...vfMk('Períodos','Este filósofo está neste período?',PHP,(a,b)=>`${a} pertence à filosofia ${b}`)]).slice(0,10);
+const QF=[['A fotossíntese absorve {x}','CO₂ e água, com luz',['O₂ e glicose','só oxigênio'],'As plantas pegam CO₂ e água e fazem glicose, liberando O₂.'],['A mitocôndria produz {x}','ATP, a energia da célula',['proteínas','DNA'],'A mitocôndria faz a respiração celular.'],['O núcleo guarda {x}','o DNA',['o ATP','a glicose'],'O DNA tem as instruções da célula.'],['O lisossomo faz {x}','a digestão de resíduos',['a fotossíntese','a guarda do DNA'],'O lisossomo limpa resíduos e partes velhas.'],['O ribossomo {x}','fabrica proteínas',['digere resíduos','faz a fotossíntese'],'Depois o retículo transporta e o Golgi embala e envia.'],['O cloroplasto existe {x}','só na célula vegetal',['só na célula animal','em toda célula'],'É ele que faz a fotossíntese.'],['O vacúolo guarda {x}','água e reservas',['o DNA','o ATP'],'É típico da célula vegetal.'],['A parede celular {x}','dá forma e proteção à célula vegetal',['produz ATP','fabrica proteínas'],'Fica fora da membrana, só nas plantas.'],['O símbolo C representa {x}','o carbono',['o cálcio','o oxigênio'],'C é carbono; O é oxigênio; H é hidrogênio; Ca é cálcio.'],['No DNA, a base A pareia com {x}','T',['G','C'],'A pareia com T (2 pontes de hidrogênio) e G com C (3).'],['No DNA, a base G pareia com {x}','C',['A','T'],'G pareia com C, com 3 pontes de hidrogênio.']];
+const vfQ=()=>rnd(QF.slice()).slice(0,10).map(([m,c,w,y])=>{const t=Math.random()<.5;return{c:'Química e célula',q:'Esta afirmação está certa?',s:m.replace('{x}',t?c:PK(w)),v:t,w:m.replace('{x}',c)+'. '+y}});
+
+/* ===== HISTÓRIA ===== */
+const hb=(o,tO,d,tD,ex)=>[{t:tO,v:ex||'🕰️ ordem',q:o},{t:tD,v:'📅 duração',q:d}];
+const HIS=[
+{n:'Pré-História',s:'Paleolítico, Neolítico e Idade dos Metais',h:30,b:[
+{t:'<b>Primeiro a ordem.</b> A Pré-História vai até a invenção da escrita. Começa com a pedra lascada, depois a pedra polida e por fim os metais.',v:'🪨 → 🌾 → ⚒️',q:['Paleolítico','→','Neolítico','→','Idade dos Metais']},
+{t:'<b>Agora a duração</b> (datas aproximadas). O Paleolítico é longuíssimo: nômades, caça e coleta. No Neolítico surgem a agricultura e a vida em aldeias. Na Idade dos Metais, cobre, bronze e ferro.',v:'📅 aprox.',q:['Paleolítico','→','2,5 milhões – 10.000 a.C.','Neolítico','→','10.000 – 5.000 a.C.','Idade dos Metais','→','5.000 – 4.000 a.C.']}]},
+{n:'As grandes eras',s:'Antiguidade, Média, Moderna e Contemporânea',h:200,b:[
+{t:'<b>Primeiro a ordem.</b> Depois da Pré-História, a história escrita se divide em quatro grandes eras.',v:'📜 → 🏰 → 🧭 → 🏭',q:['Antiguidade','→','Idade Média','→','Idade Moderna','→','Idade Contemporânea']},
+{t:'<b>Agora a duração.</b> Cada era termina em um marco: a queda de Roma (476), a queda de Constantinopla (1453) e a Revolução Francesa (1789).',v:'476 · 1453 · 1789',q:['Antiguidade','→','4.000 a.C. – 476 d.C.','Idade Média','→','476 – 1453','Idade Moderna','→','1453 – 1789','Idade Contemporânea','→','1789 – hoje']}]},
+{n:'Egito e Grécia',s:'Do Nilo à Grécia Antiga',h:55,b:[
+{t:'<b>Primeiro a ordem na Grécia.</b> Do período dos poemas de Homero até as conquistas de Alexandre e seus herdeiros.',v:'🏺',q:['Homérico','→','Arcaico','→','Clássico','→','Helenístico']},
+{t:'<b>Agora a duração</b> (aprox.). No Clássico há Atenas, a democracia e Péricles. O Helenístico mistura a cultura grega com a do Oriente depois de Alexandre.',v:'📅',q:['Homérico','→','1200 – 800 a.C.','Arcaico','→','800 – 500 a.C.','Clássico','→','500 – 323 a.C.','Helenístico','→','323 – 146 a.C.']},
+{t:'<b>Egito Antigo</b>: das primeiras dinastias unificadas até a conquista romana. O Nilo e a religião politeísta marcam essa civilização.',v:'🔺 Egito',q:['Egito Antigo','→','3100 – 30 a.C.']}]},
+{n:'Roma',s:'Monarquia, República e Império',h:5,b:[
+{t:'<b>Primeiro a ordem.</b> Roma passou por três formas de governo.',v:'👑 → 🏛️ → 🦅',q:['Monarquia','→','República','→','Império']},
+{t:'<b>Agora a duração.</b> Começa em 753 a.C. (fundação). A República vem com a queda dos reis (509 a.C.). Com Otávio Augusto, em 27 a.C., começa o Império, que no Ocidente cai em 476 d.C.',v:'753 · 509 · 27 · 476',q:['Monarquia','→','753 – 509 a.C.','República','→','509 – 27 a.C.','Império','→','27 a.C. – 476 d.C.']}]},
+{n:'Idade Média',s:'Feudalismo, Cruzadas e Peste Negra',h:270,b:[
+{t:'<b>Primeiro a ordem.</b> A Idade Média se divide em Alta (feudos e reinos bárbaros) e Baixa (cidades, comércio, Cruzadas e crise).',v:'🏰 → 🏙️',q:['Alta Idade Média','→','Baixa Idade Média']},
+{t:'<b>Agora a duração.</b> Alta: séculos V ao X. Baixa: séculos XI ao XV. A Baixa Idade Média traz o renascimento comercial e urbano.',v:'📅',q:['Alta Idade Média','→','476 – 1000','Baixa Idade Média','→','1000 – 1453']},
+{t:'<b>Eventos do Enem</b>, em ordem: as Cruzadas (guerras religiosas contra os muçulmanos), a Guerra dos Cem Anos e a Peste Negra.',v:'⚔️ · 🐀',q:['Cruzadas','→','1096 – 1291','Peste Negra','→','1347 – 1351','Guerra dos Cem Anos','→','1337 – 1453']}]},
+{n:'Idade Moderna',s:'Navegações, Reforma e Iluminismo',h:340,b:[
+{t:'<b>Primeiro a ordem.</b> Os marcos de abertura da modernidade: a Reforma Protestante, as Grandes Navegações e depois a independência dos EUA.',v:'1453 → 1776',q:['Tomada de Constantinopla','→','Chegada à América','→','Reforma Protestante','→','Independência dos EUA']},
+{t:'<b>Agora o ano de cada um.</b> Em 1500 Cabral chega ao Brasil, no meio das navegações.',v:'📅',q:['Tomada de Constantinopla','→','1453','Chegada à América','→','1492','Reforma Protestante','→','1517','Independência dos EUA','→','1776']},
+{t:'<b>Movimentos da modernidade</b> e o período de cada um: o Renascimento, o Absolutismo e o Iluminismo (a era das luzes).',v:'🎨 · 👑 · 💡',q:['Renascimento','→','séc. XIV – XVI','Absolutismo','→','séc. XVI – XVIII','Iluminismo','→','séc. XVIII']}]},
+{n:'Revoluções',s:'Industrial, Americana e Francesa',h:20,b:[
+{t:'<b>Primeiro a ordem.</b> As revoluções que mudaram o mundo, da fábrica à guilhotina e ao Império de Napoleão.',v:'🏭 → 🇺🇸 → 🇫🇷 → 🎩',q:['Revolução Industrial','→','Independência dos EUA','→','Revolução Francesa','→','Era Napoleônica']},
+{t:'<b>Agora a duração.</b> A Revolução Industrial começa na Inglaterra (1ª fase). A Francesa vai da Queda da Bastilha ao golpe de Napoleão. A Era Napoleônica termina em Waterloo.',v:'📅',q:['Revolução Industrial','→','1760 – 1840','Independência dos EUA','→','1776','Revolução Francesa','→','1789 – 1799','Era Napoleônica','→','1799 – 1815']}]},
+{n:'Século XX',s:'Guerras, crise e Guerra Fria',h:230,b:[
+{t:'<b>Primeiro a ordem.</b> Os grandes marcos do século XX.',v:'💣',q:['Primeira Guerra','→','Revolução Russa','→','Crise de 1929','→','Segunda Guerra','→','Guerra Fria']},
+{t:'<b>Agora os anos.</b> A Primeira Guerra dura quatro anos; a Revolução Russa foi em 1917 (durante a guerra). A Segunda Guerra termina com as bombas atômicas.',v:'📅',q:['Primeira Guerra','→','1914 – 1918','Revolução Russa','→','1917','Crise de 1929','→','1929','Segunda Guerra','→','1939 – 1945']},
+{t:'<b>Guerra Fria</b>: disputa entre EUA (capitalismo) e URSS (socialismo), sem confronto direto. Termina com o fim da URSS.',v:'🇺🇸 × 🇷🇺',q:['Guerra Fria','→','1947 – 1991','Queda do Muro de Berlim','→','1989']}]},
+{n:'Brasil: Colônia e Império',s:'De 1500 a 1889',h:130,b:[
+{t:'<b>Primeiro a ordem.</b> O Brasil Colônia, depois a Independência e o Império com seus três períodos.',v:'🇧🇷',q:['Brasil Colônia','→','Primeiro Reinado','→','Regências','→','Segundo Reinado']},
+{t:'<b>Agora a duração.</b> Colônia: de Cabral à Independência (1822). Primeiro Reinado: Dom Pedro I. Regências: crise e revoltas. Segundo Reinado: Dom Pedro II, até a Proclamação da República.',v:'📅',q:['Brasil Colônia','→','1500 – 1822','Primeiro Reinado','→','1822 – 1831','Regências','→','1831 – 1840','Segundo Reinado','→','1840 – 1889']}]},
+{n:'Brasil República',s:'De 1889 até hoje',h:150,b:[
+{t:'<b>Primeiro a ordem.</b> Da República Velha à Nova República.',v:'🗳️',q:['República Velha','→','Era Vargas','→','República Populista','→','Ditadura Militar','→','Nova República']},
+{t:'<b>Agora a duração.</b> República Velha: café com leite e coronelismo. Era Vargas: inclui o Estado Novo (1937–1945). República Populista: de Dutra a Jango. Ditadura: do golpe à redemocratização.',v:'📅',q:['República Velha','→','1889 – 1930','Era Vargas','→','1930 – 1945','República Populista','→','1945 – 1964','Ditadura Militar','→','1964 – 1985']},
+{t:'<b>Nova República</b>: começa com o fim da ditadura (1985), a Constituição de 1988 e vai até hoje.',v:'📜 1988',q:['Nova República','→','1985 – hoje','Constituição Cidadã','→','1988']}]}
+];
+function hisMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=HIS;rk='h';const dn=store.hd||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">História</div></div><p class="sub">Do mais antigo ao mais recente. Em cada módulo: primeiro a ordem, depois a duração.</p>`+HIS.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${i+1}. ${r.n}</b><small>${store.best['h'+i]?'Melhor '+fmt(store.best['h'+i]):r.s}</small></button>`).join('');
+}
+const HDU=[['A Paleolítico','c. 2,5 milhões – 10.000 a.C.'],['O Neolítico','c. 10.000 – 5.000 a.C.'],['A Antiguidade','4.000 a.C. – 476 d.C.'],['A Idade Média','476 – 1453'],['A Idade Moderna','1453 – 1789'],['A República romana','509 – 27 a.C.'],['O Império Romano (Ocidente)','27 a.C. – 476 d.C.'],['As Cruzadas','1096 – 1291'],['A Peste Negra','1347 – 1351'],['A Revolução Francesa','1789 – 1799'],['A Era Napoleônica','1799 – 1815'],['A Primeira Guerra','1914 – 1918'],['A Segunda Guerra','1939 – 1945'],['A Guerra Fria','1947 – 1991'],['O Brasil Colônia','1500 – 1822'],['O Segundo Reinado','1840 – 1889'],['A República Velha','1889 – 1930'],['A Era Vargas','1930 – 1945'],['A Ditadura Militar','1964 – 1985']].map(([a,b])=>[a.replace('A Paleolítico','O Paleolítico'),b]);
+const HEV=[['A Reforma Protestante','1517'],['A chegada de Cabral ao Brasil','1500'],['A Independência dos EUA','1776'],['A Revolução Russa','1917'],['A Crise de 1929','1929'],['A queda do Muro de Berlim','1989'],['A queda de Constantinopla','1453'],['A queda do Império Romano do Ocidente','476 d.C.'],['A Independência do Brasil','1822'],['A Proclamação da República','1889'],['A Constituição Cidadã','1988'],['A chegada de Colombo à América','1492']];
+const HOR=[['A Pré-História vem','antes da Antiguidade'],['A Idade Média vem','depois da Antiguidade e antes da Moderna'],['A Idade Moderna vem','depois da Idade Média e antes da Contemporânea'],['O Neolítico vem','depois do Paleolítico'],['A Era Vargas vem','depois da República Velha'],['A Ditadura Militar vem','depois da República Populista'],['O Segundo Reinado vem','depois das Regências']];
+const vfH=()=>rnd([...vfMk('Duração','Este período durou esse intervalo?',HDU,(a,b)=>`${a}: ${b}`),...vfMk('Datas do Enem','Este fato aconteceu nesse ano?',HEV,(a,b)=>`${a} foi em ${b}`),...vfMk('Ordem na história','Esta ordem está certa?',HOR,(a,b)=>`${a} ${b}`)]).slice(0,10);
+
 home();
 </script>
 </body>
