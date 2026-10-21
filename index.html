@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tabuada de Encaixe</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--ink:#1b2233;--mute:#6b7488;--line:#dde2ec;--sh:0 6px 18px rgba(30,40,70,.10);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12161f;--card:#1c2230;--ink:#eef1f8;--mute:#98a2b8;--line:#2d3649;--sh:0 6px 18px rgba(0,0,0,.4)}}
+:root[data-theme="dark"]{--bg:#12161f;--card:#1c2230;--ink:#eef1f8;--mute:#98a2b8;--line:#2d3649;--sh:0 6px 18px rgba(0,0,0,.4)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito","Trebuchet MS",system-ui,sans-serif;min-height:100vh;display:flex;justify-content:center}
+.app{width:100%;max-width:520px;padding:16px 16px 28px}
+h1{font-size:28px;margin:8px 0 2px;letter-spacing:-.5px}
+.sub{color:var(--mute);margin:0 0 18px;font-size:15px}
+.seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:16px}
+.seg button{flex:1;border:0;background:none;color:var(--mute);font:inherit;font-weight:800;padding:11px 4px;border-radius:10px;cursor:pointer}
+.seg button.on{background:var(--ink);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.t{position:relative;border:0;text-align:left;font:inherit;color:#fff;border-radius:18px;padding:16px;min-height:104px;cursor:pointer;background:hsl(var(--h) 62% 50%);box-shadow:var(--sh);transition:transform .15s}
+.t:active,.m:active{transform:scale(.97)}
+.t b{font-size:38px;line-height:1;display:block}
+.t small{display:block;margin-top:8px;opacity:.92;font-weight:700}
+.t.lock{background:var(--line);color:var(--mute);cursor:not-allowed;box-shadow:none}
+.t .ck{position:absolute;right:12px;top:10px;font-size:18px}
+.m{display:block;width:100%;border:0;text-align:left;font:inherit;color:#fff;border-radius:20px;padding:18px 20px;margin-bottom:12px;cursor:pointer;background:hsl(var(--h) 62% 50%);box-shadow:var(--sh);transition:transform .15s}
+.m b{font-size:22px;display:block}
+.m small{display:block;margin-top:4px;opacity:.92;font-weight:700;font-size:14px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.ib{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;width:42px;height:42px;font-size:18px;cursor:pointer}
+.ttl{flex:1;font-weight:900;font-size:20px}
+.tm{font-variant-numeric:tabular-nums;font-weight:900;font-size:20px;padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);min-width:96px;text-align:center}
+.tm.g{color:#1e9e5a}.tm.o{color:#e07a1f}
+.best{color:var(--mute);font-size:13px;margin:-4px 0 10px;text-align:right}
+.board{display:grid;gap:10px}
+.row{display:flex;align-items:center}
+.ex{position:relative;flex:1.1;height:56px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;color:#fff;background:hsl(var(--h) 62% 50%);border-radius:12px 0 0 12px}
+.sl{position:relative;flex:.9;height:56px;border:2px dashed var(--line);border-left:0;background:var(--card);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:26px;color:#fff;padding-left:12px;cursor:pointer}
+.sl.rs{flex:1.2;border-radius:0 12px 12px 0}
+.rs::before{content:"=";margin-right:6px;color:var(--mute)}
+.sl.ok{border:0;background:hsl(var(--h) 62% 40%);animation:pop .35s}
+.sl.ok.rs::before{color:#fff;opacity:.7}
+.sl.bad{animation:shake .35s;border-color:#e5484d}
+.kn{position:absolute;right:-12px;top:var(--y);width:24px;height:24px;margin-top:-12px;background:inherit;z-index:3}
+.s0{border-radius:50%}.s1{border-radius:3px}.s2{border-radius:3px;transform:rotate(45deg)}.s3{border-radius:50% 50% 3px 3px}
+.tray{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:520px;z-index:20;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:14px 12px calc(14px + env(safe-area-inset-bottom,0px));border-radius:20px 20px 0 0;background:var(--card);border:1px solid var(--line);border-bottom:0;box-shadow:0 -8px 24px rgba(0,0,0,.14)}
+.pc{position:relative;overflow:hidden;height:56px;border-radius:12px;background:hsl(var(--h) 62% 40%);color:#fff;font-weight:900;font-size:26px;display:flex;align-items:center;justify-content:center;cursor:grab;user-select:none;touch-action:none;box-shadow:0 3px 0 rgba(0,0,0,.18)}
+.ho{position:absolute;left:-12px;top:var(--y);width:24px;height:24px;margin-top:-12px;background:var(--card)}
+.ut{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.sl.us{flex:none;height:64px;border:2px dashed var(--line);border-radius:12px;padding:0;font-size:15px}
+.sl.us.ok{border:0}
+.pc.pu{width:56px;height:56px;font-size:17px}
+.pc.po{width:80px;font-size:22px}
+.ux{flex:.6;font-size:20px;border-radius:12px 0 0 12px}
+.sl.nm{flex:1.8;font-size:15px;border-radius:0;padding-left:8px}
+.sl.eq{flex:1.4;font-size:15px}
+.pc.pt{width:auto;min-width:56px;padding:0 10px;height:46px;font-size:14px}
+.ex.fn{flex:1;font-size:14px;line-height:1.15;padding:0 8px;text-align:center}
+.sl.fs{flex:1.5;font-size:15px;line-height:1.15;padding:0 6px;text-align:center;border-radius:0 12px 12px 0}
+.pc.pf2{font-size:13px;min-width:0;padding:0 9px;height:42px}
+.az{display:flex;align-items:center;gap:12px;margin:12px 0}
+.az .sl{flex:none;width:92px;height:48px;font-size:20px}
+.az.off{opacity:.3}
+.al{flex:1;position:relative;height:5px;border-radius:3px;background:hsl(var(--h) 62% 50%)}
+.al.r::after{content:"";position:absolute;right:-3px;top:-8px;border:10px solid transparent;border-left:16px solid hsl(var(--h) 62% 50%);border-right:0}
+.al.l::after{content:"";position:absolute;left:-3px;top:-8px;border:10px solid transparent;border-right:16px solid hsl(var(--h) 62% 50%);border-left:0}
+.ar{display:flex;gap:14px;margin-top:22px}
+.ac{flex:1;text-align:center}
+.ac .sl{width:100%;font-size:22px}
+.ah{font-size:46px;line-height:1;color:hsl(var(--h) 62% 50%);font-weight:900;margin-top:4px}
+.pf{width:48px}.pr{width:62px}
+.fh{display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;font-size:20px;color:#fff;background:hsl(var(--h) 62% 50%);border-radius:14px;padding:14px}
+.eqw{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px}
+.sl.tk{flex:none;min-width:46px;height:52px;border:2px dashed var(--line);border-radius:10px;padding:0 8px;font-size:22px}
+.sl.tk.ok{border:0}
+.pc.tp{min-width:46px;height:50px;padding:0 10px;font-size:22px}
+.m.lock{background:var(--line);color:var(--mute);cursor:not-allowed;box-shadow:none}
+.rb{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;box-shadow:var(--sh)}
+.rt{font-size:16px;line-height:1.45;margin-bottom:8px}
+.rt b{color:hsl(var(--h) 62% 55%)}
+.rv{font-size:22px;font-weight:900;text-align:center;padding:10px;margin-bottom:10px;border-radius:12px;background:var(--bg);color:hsl(var(--h) 62% 55%)}
+.lad{display:grid;gap:6px;justify-content:center}
+.lr{display:flex;align-items:center;gap:8px}
+.bs{width:46px;height:46px;border-radius:10px;color:#fff;font-weight:900;font-size:22px;display:flex;align-items:center;justify-content:center}
+.bd{color:var(--mute);font-size:22px;width:32px;text-align:center}
+.rv.sv{background:var(--card);border:1px solid var(--line);color:var(--ink);font-weight:400;padding:8px}
+.pc.neu{background:#59627a}.pc.same{background:hsl(var(--h) 62% 50%)}
+.pc.sel{outline:3px solid var(--ink);outline-offset:2px}
+.pc.drag{z-index:50;cursor:grabbing;box-shadow:0 12px 24px rgba(0,0,0,.3)}
+.ov{position:fixed;inset:0;background:rgba(10,14,25,.6);display:none;align-items:center;justify-content:center;padding:20px;z-index:99}
+.ov.show{display:flex}
+.box{background:var(--card);border-radius:24px;padding:26px 22px;width:100%;max-width:360px;text-align:center;animation:pop .4s}
+.stars{font-size:38px;letter-spacing:6px}
+.box h2{margin:6px 0 4px}.box p{margin:4px 0;color:var(--mute)}
+.big{font-size:42px;font-weight:900;color:var(--ink);font-variant-numeric:tabular-nums}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px;font:inherit;font-weight:900;font-size:16px;cursor:pointer;margin-top:10px;background:hsl(var(--h) 62% 46%);color:#fff}
+.btn.alt{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+@keyframes pop{0%{transform:scale(.8)}60%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.hb{display:flex;align-items:center;justify-content:center;padding:0}
+.bulb{width:26px;height:26px;display:block;overflow:visible}
+.hl{text-align:left;max-height:55vh;overflow:auto;margin:12px 0 4px}
+.hr{padding:9px 2px;border-bottom:1px solid var(--line);color:var(--ink);font-size:16px}
+.hr:last-child{border-bottom:0}
+.hr b{font-weight:900}
+.hr small{display:block;color:var(--mute);font-size:13px;margin-top:3px;line-height:1.35}
+.hr.dn{opacity:.5}
+.hx{text-align:left;color:var(--mute);font-size:14px;line-height:1.4;margin:6px 0 0}
+.hx b{color:var(--ink)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="ov" id="ov"><div class="box" id="box"></div></div>
+<script>
+const $=s=>document.querySelector(s);
+const rnd=a=>a.sort(()=>Math.random()-.5);
+const ri=n=>Math.floor(Math.random()*n);
+let mode='lin',kind='tab',bk=0,total=20,ttl='',cur=0,placed=0,miss=0,t0=0,tick=null,sel=null,AC=null;
+let store={done:[],best:{}};
+try{const s=localStorage.getItem('tabuada2');if(s)store=JSON.parse(s)}catch(e){}
+store.fb=store.fb||{};
+const save=()=>{try{localStorage.setItem('tabuada2',JSON.stringify(store))}catch(e){}};
+const hue=n=>({3:200,4:150,5:35,6:280,7:340,8:12,9:230})[n];
+const fmt=ms=>{const s=ms/1000,m=Math.floor(s/60);return m+':'+(s%60).toFixed(1).padStart(4,'0')};
+const K=()=>({s:ri(4),y:[28,50,72][ri(3)]});
+let uType='c',uN=7,fType='g',fMode='match',fIdx=0,rIdx=0,rb=0,rcum=[],RS=null,rk='r';
+let mus='off',mTimer=null;
+try{mus=localStorage.getItem('tabuada_mus')||'off'}catch(e){}
+function musicStop(){clearInterval(mTimer);mTimer=null}
+function musicStart(){
+  musicStop();if(mus==='off')return;
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(e){return}
+  const F=m=>440*Math.pow(2,m/12),calm=mus==='calm',step=calm?1.1:.29;
+  const tone=(f,t,d,ty,v)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=ty;o.frequency.value=f;o.connect(g);g.connect(AC.destination);
+    g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v,t+(calm?.4:.012));g.gain.exponentialRampToValueAtTime(.0001,t+d);o.start(t);o.stop(t+d+.05)};
+  const ch=[[0,[0,3,7]],[-4,[0,4,7]],[-9,[0,4,7]],[-2,[0,4,7]]];
+  let nt=AC.currentTime+.1,i=0;
+  const sched=(t,i)=>{
+    const c=ch[Math.floor(i/(calm?4:8))%4],r=c[0],iv=c[1];
+    if(calm){
+      if(i%4===0)iv.forEach(x=>tone(F(r+x-12),t,5,'triangle',.03));
+      if(Math.random()<.8)tone(F(r+iv[Math.floor(Math.random()*3)]+12*(Math.random()<.5?1:0)),t,3.2,'sine',.05);
+    }else{
+      const p=[0,1,2,1,0,1,2,1][i%8];tone(F(r+iv[p]+12),t,.26,'triangle',.05);
+      if(i%4===0)tone(F(r-24),t,.55,'sine',.12);
+    }
+  };
+  mTimer=setInterval(()=>{while(nt<AC.currentTime+.3){sched(nt,i++);nt+=step}},60);
+}
+function setMus(v){mus=v;try{localStorage.setItem('tabuada_mus',v)}catch(e){}musicStart();home()}
+function cycleMus(b){mus=mus==='off'?'calm':mus==='calm'?'focus':'off';try{localStorage.setItem('tabuada_mus',mus)}catch(e){}musicStart();b.textContent=musIc()}
+const musIc=()=>mus==='off'?'🔇':mus==='calm'?'🌿':'🎯';
+const musUI=()=>`<div class="seg">${[['off','Sem música'],['calm','🌿 Calma'],['focus','🎯 Foco']].map(m=>`<button class="${mus===m[0]?'on':''}" onclick="setMus('${m[0]}')">${m[1]}</button>`).join('')}</div>`;
+const kh=k=>`<i class="kn s${k.s}" style="--y:${k.y}%"></i>`;
+
+function snd(type,k){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const t=AC.currentTime,o=AC.createOscillator(),g=AC.createGain();
+    o.connect(g);g.connect(AC.destination);
+    if(type==='ok'){
+      const sc=[0,2,4,7,9,12,14,16,19,21],f=392*Math.pow(2,sc[k%10]/12);
+      o.type='triangle';o.frequency.setValueAtTime(f*0.7,t);o.frequency.exponentialRampToValueAtTime(f,t+.05);
+      g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.35,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+.28);
+      o.start(t);o.stop(t+.3);
+      const c=AC.createOscillator(),h=AC.createGain();c.type='square';c.frequency.setValueAtTime(180,t);c.frequency.exponentialRampToValueAtTime(60,t+.05);
+      c.connect(h);h.connect(AC.destination);h.gain.setValueAtTime(.3,t);h.gain.exponentialRampToValueAtTime(.0001,t+.07);c.start(t);c.stop(t+.08);
+    }else if(type==='bad'){
+      o.type='sawtooth';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(90,t+.18);
+      g.gain.setValueAtTime(.18,t);g.gain.exponentialRampToValueAtTime(.0001,t+.2);o.start(t);o.stop(t+.22);
+    }else{
+      [523,659,784,1047].forEach((f,i)=>{const a=AC.createOscillator(),b=AC.createGain();a.type='triangle';a.frequency.value=f;
+      a.connect(b);b.connect(AC.destination);const s=t+i*.12;b.gain.setValueAtTime(.0001,s);b.gain.exponentialRampToValueAtTime(.3,s+.02);b.gain.exponentialRampToValueAtTime(.0001,s+.4);a.start(s);a.stop(s+.45)});
+    }
+  }catch(e){}
+}
+
+function home(){
+  clearInterval(tick);$('#ov').classList.remove('show');
+  $('#app').innerHTML=`<h1>Tabuada de Encaixe</h1><p class="sub">Escolha a área.</p>`+musUI()+
+  `<button class="m" style="--h:250" onclick="menu()"><b style="font-size:22px">Matemática</b><small>Tabuadas, unidades, regras e fórmulas</small></button><button class="m" style="--h:150" onclick="chemMenu()"><b style="font-size:22px">Química</b><small>Ciclo do carbono e estrutura da célula</small></button>`;
+}
+function menu(){
+  clearInterval(tick);$('#ov').classList.remove('show');
+  const M=[['lin','Em sequência','Do 3 ao 9, uma tabuada de cada vez',210],['pick','Escolher tabuada','Monte a que você quiser, na hora',150],['clash','Clash','Contas de 3 a 5 tabuadas misturadas',340],['cores','Liga das cores','Conta e resultado com a mesma cor se encaixam',28],['unid','Unidades de medida','Tabelas de comprimento, área, volume, massa e capacidade (litros)',270],['corr','Correlações','Volume, litros e quilos: 1 dm³ = 1 L = 1 kg (na água)',250],['regras','Regras','Expoente e o mover da vírgula: monte cada regra em blocos',95],['form','Fórmulas','Monte cada fórmula peça por peça e, no final, ligue os nomes',175]];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Matemática</div></div><p class="sub">Escolha como quer jogar.</p>`+M.map(m=>`<button class="m" style="--h:${m[3]}" onclick="go('${m[0]}')"><b>${m[1]}</b><small>${m[2]}${store.best[m[0]]?' · Melhor '+fmt(store.best[m[0]]):''}</small></button>`).join('');
+}
+function go(m){if(m==='regras')return rulesMenu();if(m==='form')return formMenu();if(m==='corr')return startC();if(m==='unid')return unitsMenu();if(m==='clash')return startClash();if(m==='cores')return startCores();mode=m;tabs()}
+function back(){kind==='rule'?(rk==='r'?rulesMenu():chemMenu()):kind==='tab'?tabs():kind==='unit'?unitsMenu():kind==='form'?fSection(fType):menu()}
+function again(){kind==='rule'?startR(rIdx):kind==='tab'?start(cur):kind==='unit'?startU(uType):kind==='corr'?startC():kind==='form'?(fMode==='build'?startB(fType,fIdx):startF(fType)):kind==='clash'?startClash():startCores()}
+function tabs(){
+  clearInterval(tick);$('#ov').classList.remove('show');
+  let h=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">${mode==='lin'?'Em sequência':'Escolher tabuada'}</div></div><div class="grid">`;
+  for(let n=3;n<=9;n++){
+    const lock=mode==='lin'&&n>3&&!store.done.includes(n-1),b=store.best[n],d=store.done.includes(n);
+    h+=`<button class="t ${lock?'lock':''}" style="--h:${hue(n)}" ${lock?'disabled':''} onclick="start(${n})">${d?'<span class="ck">✓</span>':''}${lock?'<span class="ck">🔒</span>':''}<b>${n}</b><small>${lock?'Termine a do '+(n-1):b?'Melhor '+fmt(b):'Ainda sem tempo'}</small></button>`;
+  }
+  $('#app').innerHTML=h+'</div>';
+}
+
+function start(n){kind='tab';cur=n;bk=n;ttl='Tabuada do '+n;build([...Array(10)].map((_,i)=>({a:n,b:i+1,h:hue(n)})))}
+function startClash(){
+  kind='clash';bk='clash';
+  const ts=rnd([3,4,5,6,7,8,9]).slice(0,3+ri(3)),used=new Set(),rows=[];
+  const add=(a,b)=>{if(used.has(a*b))return false;used.add(a*b);rows.push({a,b,h:hue(a)});return true};
+  ts.forEach(t=>{while(!add(t,1+ri(10)));});
+  for(const [a,b] of rnd(ts.flatMap(t=>[...Array(10)].map((_,i)=>[t,i+1])))){if(rows.length>=10)break;add(a,b)}
+  ttl='Clash '+ts.sort().join('·');build(rnd(rows));
+}
+function startCores(){
+  kind='cores';bk='cores';ttl='Liga das cores';
+  const hs=rnd([0,25,145,180,215,265,300,335]),used=new Set(),rows=[];
+  while(rows.length<8){const a=3+ri(7),b=2+ri(9);if(used.has(a*b))continue;used.add(a*b);rows.push({a,b,h:hs[rows.length]})}
+  build(rows);
+}
+
+const UT={c:{n:'Comprimento',s:'Perimetro e distâncias',u:['km','hm','dam','m','dm','cm','mm'],f:10,h:200},a:{n:'Área',s:'Superfícies',u:['km²','hm²','dam²','m²','dm²','cm²','mm²'],f:100,h:150},v:{n:'Volume',s:'Espaço ocupado',u:['km³','hm³','dam³','m³','dm³','cm³','mm³'],f:1000,h:280},m:{n:'Massa',s:'Peso',u:['kg','hg','dag','g','dg','cg','mg'],f:10,h:28},l:{n:'Capacidade',s:'Litros, para líquidos',u:['kL','hL','daL','L','dL','cL','mL'],f:10,h:330}};
+const UX={c:{b:'metros (m)',suf:'',nb:['quilômetro','hectômetro','decâmetro','metro','decímetro','centímetro','milímetro'],eq:['1.000','100','10','1','0,1','0,01','0,001']},
+a:{b:'metros quadrados (m²)',suf:' quadrado',nb:['quilômetro','hectômetro','decâmetro','metro','decímetro','centímetro','milímetro'],eq:['1.000.000','10.000','100','1','0,01','0,0001','0,000001']},
+v:{b:'metros cúbicos (m³)',suf:' cúbico',nb:['quilômetro','hectômetro','decâmetro','metro','decímetro','centímetro','milímetro'],eq:['1.000.000.000','1.000.000','1.000','1','0,001','0,000001','0,000000001']},
+m:{b:'gramas (g)',suf:'',nb:['quilograma','hectograma','decagrama','grama','decigrama','centigrama','miligrama'],eq:['1.000','100','10','1','0,1','0,01','0,001']},l:{b:'litros (L)',suf:'',nb:['quilolitro','hectolitro','decalitro','litro','decilitro','centilitro','mililitro'],eq:['1.000','100','10','1','0,1','0,01','0,001']}};
+const CR=[['1 dam³','1.000.000 L','1.000.000 kg'],['1 m³','1.000 L','1.000 kg'],['1 dm³','1 L','1 kg'],['1 cm³','1 mL','1 g'],['1 mm³','0,001 mL','0,001 g']];
+function trayC(arr,t){
+  $('.tray').innerHTML=rnd(arr.slice()).map(v=>`<div class="pc pt" style="--h:250" data-t="${t}" data-v="${v}">${v}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+}
+function startC(){
+  kind='corr';bk='corr';ttl='Correlações';placed=0;miss=0;t0=0;sel=null;total=10;clearInterval(tick);$('#ov').classList.remove('show');
+  $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${ttl}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
+  <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez neste modo'}</div><div class="board"><p class="sub" id="cs">Quanto cada volume vale em litros?</p>
+  <div style="display:grid;gap:10px">${CR.map(r=>`<div class="row" style="--h:250"><div class="ex ux" style="flex:.9">${r[0]}</div><div class="sl nm" style="--h:250" data-t="l" data-v="${r[1]}"></div></div>`).join('')}</div></div>
+  <div class="tray"></div></div>`;
+  trayC(CR.map(r=>r[1]),'l');
+}
+function phaseK(){
+  $('#cs').textContent='Na água, quanto pesa? (1 L de água pesa cerca de 1 kg)';
+  document.querySelectorAll('.board .row').forEach((r,i)=>r.insertAdjacentHTML('beforeend',`<div class="sl rs eq" style="--h:250" data-t="k" data-v="${CR[i][2]}"></div>`));
+  trayC(CR.map(r=>r[2]),'k');
+}
+const FM={
+g:{n:'Geometria plana',s:'Áreas, perímetro e Pitágoras',h:170,f:[['Área do quadrado','A = l²'],['Área do retângulo','A = b × h'],['Área do triângulo','A = (b × h) ÷ 2'],['Área do trapézio','A = (B + b) × h ÷ 2'],['Área do losango','A = (D × d) ÷ 2'],['Área do círculo','A = π × r²'],['Comprimento da circunferência','C = 2 × π × r'],['Teorema de Pitágoras','a² = b² + c²']]},
+e:{n:'Geometria espacial',s:'Volumes e superfície',h:300,f:[['Cubo','V = a³'],['Paralelepípedo','V = a × b × c'],['Prisma','V = Ab × h'],['Cilindro','V = π × r² × h'],['Cone','V = π × r² × h ÷ 3'],['Pirâmide','V = Ab × h ÷ 3'],['Esfera','V = 4 × π × r³ ÷ 3'],['Superfície da esfera','A = 4 × π × r²']]},
+f:{n:'Física',s:'Sorvete, velocidade, Ohm...',h:20,f:[['Sorvete (posição no MU)','S = S₀ + v × t'],['Velocidade média','Vm = ΔS ÷ Δt'],['Densidade','d = m ÷ V'],['Pressão','p = F ÷ A'],['2ª Lei de Newton','F = m × a'],['1ª Lei de Ohm','U = R × i'],['Potência elétrica','P = U × i'],['Energia elétrica consumida','E = P × Δt'],['Calor sensível','Q = m × c × ΔT']]},
+m:{n:'Matemática',s:'Bhaskara, juros, PA, PG...',h:230,f:[['Fórmula de Bhaskara','x = (−b ± √Δ) ÷ (2 × a)'],['Delta (discriminante)','Δ = b² − 4 × a × c'],['Probabilidade','P = favoráveis ÷ possíveis'],['Escala','E = desenho ÷ real'],['Juros simples','J = C × i × t'],['Juros compostos','M = C × (1 + i)^t'],['Termo geral da PA','an = a1 + (n − 1) × r'],['Termo geral da PG','an = a1 × q^(n − 1)'],['Combinação','C = n! ÷ (p! × (n − p)!)']]}};
+function formMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='form';
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Fórmulas</div></div><div class="grid">`+Object.keys(FM).map(k=>`<button class="t" style="--h:${FM[k].h}" onclick="fSection('${k}')"><b style="font-size:22px">${FM[k].n}</b><small>${(store.fb[k]||[]).length}/${FM[k].f.length} montadas · ${FM[k].s}</small></button>`).join('')+'</div>';
+}
+const RU=[
+{n:'O expoente conta os zeros',s:'10² = 100: dois zeros',h:95,b:[
+{t:'O expoente do 10 diz <b>quantos zeros</b> vêm depois do 1. Em <b>10²</b> o expoente é 2: dois zeros.',v:'10² → 1 + 2 zeros',q:['10²','=','1','0','0']},
+{t:'Cuidado: <b>100 tem 2 zeros, mas 3 algarismos</b>. O 3 é o lugar do número (centena), não a quantidade de zeros. Algarismos = zeros + 1.',v:'1 0 0 = centena',q:['2','zeros','+','1','=','3','algarismos']},
+{t:'Mesma ideia: <b>10³</b> tem 3 zeros (milhar). O 1 pode aparecer multiplicando.',v:'1 × 10³ = 1000',q:['1','×','10³','=','1','0','0','0']},
+{t:'Expoente <b>zero</b>: não há zeros para colocar, sobra só o 1.',v:'10⁰ = 1',q:['10⁰','=','1','e','0','zeros']}]},
+{n:'O sinal manda a vírgula',s:'+ direita, − esquerda, em saltos',h:95,b:[
+{t:'Expoente <b>positivo (+)</b>: a vírgula anda para a <b>direita</b>, um salto para cada unidade do expoente.',v:'→ → direita',q:['3,5','×','10²','=','350']},
+{t:'Expoente <b>negativo (−)</b>: a vírgula anda para a <b>esquerda</b>.',v:'← ← esquerda',q:['3,5','×','10⁻²','=','0,035']},
+{t:'Os saltos <b>partem de onde a vírgula está</b>: o 1º salto sai da posição atual, para o lado do sinal. Em 10³ são 3 saltos. Casas vazias viram zero.',v:'4,2 →1→ 42 →2→ 420 →3→ 4200',q:['4,2','→','42','→','420','→','4200']},
+{t:'Para a esquerda é igual. Em <b>52 × 10⁻²</b> a vírgula está no fim do 52. 1º salto: 5,2. 2º salto: 0,52.',v:'52 ←1← 5,2 ←2← 0,52',q:['52','←','5,2','←','0,52']},
+{t:'<b>Dividir</b> por 10ⁿ é o mesmo que expoente negativo: a vírgula anda para a <b>esquerda</b>.',v:'7,5 ÷ 10² ← ←',q:['7,5','÷','10²','=','0,075']}]}];
+const BC={A:'hsl(145 62% 40%)',T:'hsl(5 62% 45%)',G:'hsl(40 80% 42%)',C:'hsl(215 62% 48%)'},CP={A:'T',T:'A',G:'C',C:'G'},BH={A:145,T:5,G:40,C:215};
+const lad=s=>({r:s,q:[...s].map(c=>CP[c])});
+const f1=n=>(+n).toFixed(1),ad=(p,v)=>[p[0]+v[0],p[1]+v[1]];
+const ln=(a,b,w)=>`<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" stroke="currentColor" stroke-width="${w||2}" stroke-linecap="round"/>`;
+const lb=(p,t,pts)=>{const w=8+7*t.replace(/[₂₃]/g,'').length;pts.push(p);return`<rect x="${f1(p[0]-w/2)}" y="${f1(p[1]-9)}" width="${w}" height="18" rx="5" fill="var(--card)"/><text x="${f1(p[0])}" y="${f1(p[1]+4.5)}" text-anchor="middle" font-size="13" font-weight="800" fill="currentColor">${t}</text>`};
+const H6=k=>{const a=(-90+60*k)*Math.PI/180;return[Math.cos(a),Math.sin(a)]},X0=-.866;
+const PUR=(c6,n1,c2,n3,c4,c5)=>({C6:c6,N1:n1,C2:c2,N3:n3,C4:c4,C5:c5,N7:[X0-.951,-.809],C8:[X0-1.539,0],N9:[X0-.951,.809]});
+const RP=[['C6','N1'],['N1','C2'],['C2','N3'],['N3','C4'],['C4','C5'],['C5','C6'],['C5','N7'],['N7','C8'],['C8','N9'],['N9','C4']];
+const RY=[['N1','C2'],['C2','N3'],['N3','C4'],['C4','C5'],['C5','C6'],['C6','N1']];
+const pa=PUR(H6(0),H6(1),H6(2),H6(3),H6(4),H6(5)),py={N1:H6(4),C2:H6(3),N3:H6(2),C4:H6(1),C5:H6(0),C6:H6(5)},cP=[[0,0],[-1.554,0]];
+const BM={
+A:{at:'N9',rot:72,cn:cP,a:{...pa,N6:ad(pa.C6,[0,-1])},b:[...RP,['C6','N6']],d:[['C6','N1'],['C2','N3'],['C4','C5'],['N7','C8']],l:{N1:'N',N3:'N',N7:'N',N9:'N',N6:'NH₂'}},
+G:{at:'N9',rot:72,cn:cP,a:{...pa,O6:ad(pa.C6,[0,-1]),N2:ad(pa.C2,[.866,.5])},b:[...RP,['C6','O6'],['C2','N2']],d:[['C6','O6'],['C2','N3'],['C4','C5'],['N7','C8']],l:{N1:'NH',N3:'N',N7:'N',N9:'N',O6:'O',N2:'NH₂'}},
+C:{at:'N1',rot:30,cn:[[0,0]],a:{...py,O2:ad(py.C2,[0,1]),N4:ad(py.C4,[.866,-.5])},b:[...RY,['C2','O2'],['C4','N4']],d:[['C2','O2'],['N3','C4'],['C5','C6']],l:{N1:'N',N3:'N',O2:'O',N4:'NH₂'}},
+T:{at:'N1',rot:30,cn:[[0,0]],a:{...py,O2:ad(py.C2,[0,1]),O4:ad(py.C4,[.866,-.5]),C7:ad(py.C5,[0,-1])},b:[...RY,['C2','O2'],['C4','O4'],['C5','C7']],d:[['C2','O2'],['C4','O4'],['C5','C6']],l:{N1:'N',N3:'NH',O2:'O',O4:'O',C7:'CH₃'}}};
+BM.A.l.N1='N';
+function baseG(k,R,ox,oy,pts){
+  const M=BM[k],dl=M.rot*Math.PI/180,c=Math.cos(dl),s=Math.sin(dl),q=p=>[p[0]*c-p[1]*s,p[0]*s+p[1]*c],A0=q(M.a[M.at]);
+  const T=p=>{const z=q(p);return[ox+(z[0]-A0[0])*R,oy+(z[1]-A0[1])*R]},P=n=>T(M.a[n]),cen=M.cn.map(T);let o='';
+  M.b.forEach(([a,b])=>o+=ln(P(a),P(b)));
+  M.d.forEach(([a,b])=>{const A=P(a),B=P(b),m=[(A[0]+B[0])/2,(A[1]+B[1])/2],e=[B[0]-A[0],B[1]-A[1]],L=Math.hypot(...e),n=[-e[1]/L,e[0]/L],ct=cen.reduce((u,v)=>Math.hypot(v[0]-m[0],v[1]-m[1])<Math.hypot(u[0]-m[0],u[1]-m[1])?v:u),sg=((ct[0]-m[0])*n[0]+(ct[1]-m[1])*n[1])>0?1:-1,d=.2*R*sg;
+    o+=ln([A[0]+n[0]*d+e[0]*.14,A[1]+n[1]*d+e[1]*.14],[B[0]+n[0]*d-e[0]*.14,B[1]+n[1]*d-e[1]*.14],1.6)});
+  Object.keys(M.a).forEach(n=>{const p=P(n);pts.push(p);if(M.l[n])o+=lb(p,M.l[n],pts)});
+  return o;
+}
+function vb(pts,pad){const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),x=Math.min(...xs)-pad,y=Math.min(...ys)-pad;return`${f1(x)} ${f1(y)} ${f1(Math.max(...xs)+pad-x)} ${f1(Math.max(...ys)+pad-y)}`}
+const SV=(v,l)=>`<svg viewBox="${v}" role="img" aria-label="${l}" style="display:block;margin:auto;width:100%;max-width:340px;height:auto;color:var(--ink)">`;
+function nucSVG(k){
+  const r=26,Rr=.851*r,Cs=[-Rr,0],pts=[],an=d=>[Cs[0]+Rr*Math.cos(d*Math.PI/180),Cs[1]+Rr*Math.sin(d*Math.PI/180)],[c1,c2,c3,c4,o4]=[0,72,144,216,288].map(an);
+  const c5=[c4[0]-.5*r,c4[1]-.866*r],o5=[c5[0]-.866*r,c5[1]+.5*r],p=[o5[0]-.866*r,o5[1]-.5*r],oh=[c3[0]-.809*r,c3[1]+.588*r],h2=[c2[0]+.309*r,c2[1]+.951*r],pO=[p[0],p[1]-r],pM=[p[0]-r,p[1]],pH=[p[0],p[1]+r],bp=[];
+  const bs=baseG(k,r,r,0,bp);
+  let o=[[c1,c2],[c2,c3],[c3,c4],[c4,o4],[o4,c1],[c4,c5],[c5,o5],[o5,p],[p,pO],[p,pM],[p,pH],[c3,oh],[c2,h2],[c1,[r,0]]].map(([a,b])=>ln(a,b)).join('')+ln([pO[0]+4,pO[1]+2],[p[0]+4,p[1]-2])+bs;
+  [[o4,'O'],[o5,'O'],[p,'P'],[pO,'O'],[pM,'O⁻'],[pH,'OH'],[oh,'OH'],[h2,'H']].forEach(([a,t])=>o+=lb(a,t,pts));
+  [[c1,'1′'],[c2,'2′'],[c3,'3′'],[c4,'4′']].forEach(([a,t])=>{const u=[(Cs[0]-a[0])*.55,(Cs[1]-a[1])*.55];o+=`<text x="${f1(a[0]+u[0])}" y="${f1(a[1]+u[1]+3)}" text-anchor="middle" font-size="9" fill="var(--mute)">${t}</text>`});
+  o+=`<text x="${f1(c5[0]+10)}" y="${f1(c5[1]-4)}" font-size="10" fill="var(--mute)">5′</text>`;pts.push(c5,...bp);
+  const bx=bp.map(a=>a[0]),by=bp.map(a=>a[1]),x1=Math.min(...bx)-12,y1=Math.min(...by)-12,x2=Math.max(...bx)+12,y2=Math.max(...by)+12;
+  const ty=Math.max(y2,h2[1])+26,hal=`<rect x="${f1(x1)}" y="${f1(y1)}" width="${f1(x2-x1)}" height="${f1(y2-y1)}" rx="16" fill="hsl(145 60% 45% / .16)"/><circle cx="${f1(p[0])}" cy="${f1(p[1])}" r="42" fill="hsl(5 70% 55% / .16)"/><circle cx="${f1(Cs[0])}" cy="${f1(Cs[1])}" r="50" fill="hsl(215 70% 55% / .16)"/>`;
+  const tx=(x,y,t)=>{pts.push([x-50,y],[x+50,y]);return`<text x="${f1(x)}" y="${f1(y)}" text-anchor="middle" font-size="12" font-weight="800" fill="currentColor">${t}</text>`};
+  o+=tx(p[0],p[1]-r-16,'Fosfato')+tx(Cs[0],ty,'Desoxirribose')+tx((x1+x2)/2,y2+16,'Base nitrogenada');pts.push([0,y2+16]);
+  return SV(vb(pts,10),'Nucleotídeo de DNA')+hal+o+'</svg>';
+}
+function bases4(){
+  const pts=[],R=20;let o='';
+  [['A',40,40],['G',250,40],['C',40,205],['T',250,205]].forEach(([k,x,y])=>{const bp=[];o+=baseG(k,R,x,y,bp);pts.push(...bp);const mx=(Math.min(...bp.map(a=>a[0]))+Math.max(...bp.map(a=>a[0])))/2,my=Math.max(...bp.map(a=>a[1]))+24;o+=`<circle cx="${f1(mx)}" cy="${f1(my)}" r="13" fill="${BC[k]}"/><text x="${f1(mx)}" y="${f1(my+5)}" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">${k}</text>`;pts.push([mx,my+16])});
+  return SV(vb(pts,8),'As quatro bases nitrogenadas')+o+'</svg>';
+}
+function helixSVG(seq,full){
+  const n=seq.length,A=70,cx=150,dy=26,st=Math.PI/5,y0=24,T=y=>(y-y0)/dy*st+Math.PI/4,yE=y0+(n-1)*dy,H=yE+78;let bk='',ft='',rg='';
+  for(let y=y0-12;y<yE+12;y+=3)for(const s of[1,-1]){const t1=T(y),t2=T(y+3),z=s*Math.cos((t1+t2)/2),l=`<line x1="${f1(cx+s*A*Math.sin(t1))}" y1="${y}" x2="${f1(cx+s*A*Math.sin(t2))}" y2="${y+3}" stroke="${s>0?'hsl(265 45% 55%)':'hsl(325 50% 58%)'}" stroke-width="${z>=0?7:3.5}" stroke-linecap="round"${z>=0?'':' opacity=".6"'}/>`;z>=0?ft+=l:bk+=l}
+  for(let i=0;i<n;i++){const y=y0+i*dy,x=A*Math.sin(T(y)),c=seq[i];rg+=`<line x1="${f1(cx+x)}" y1="${y}" x2="${cx}" y2="${y}" stroke="${BC[c]}" stroke-width="6"/><line x1="${cx}" y1="${y}" x2="${f1(cx-x)}" y2="${y}" stroke="${full?BC[CP[c]]:'hsl(220 10% 60%)'}" stroke-width="6"${full?'':' stroke-dasharray="3 3"'}/>`}
+  const tx=(x,y,t,a)=>`<text x="${x}" y="${y}" text-anchor="${a}" font-size="13" font-weight="800" fill="currentColor">${t}</text>`,lg=['A','T','G','C'].map((k,i)=>`<circle cx="${75+i*50}" cy="${H-16}" r="11" fill="${BC[k]}"/><text x="${75+i*50}" y="${H-11.5}" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">${k}</text>`).join('');
+  return SV(`0 0 300 ${H}`,'Dupla hélice de DNA')+bk+rg+ft+tx(6,16,'5′','start')+tx(294,16,'3′','end')+tx(6,yE+26,'3′','start')+tx(294,yE+26,'5′','end')+lg+'</svg>';
+}
+const DNA1={n:'DNA: escala 1 (dupla hélice)',s:'Fitas, pares de bases e sentido 5′→3′',h:200,dna:1,b:[
+{t:'O DNA é uma <b>dupla hélice</b>: duas fitas enroladas uma na outra. Por fora fica o <b>esqueleto</b>, feito de açúcar e fosfato. Por dentro ficam os <b>pares de bases</b>, como degraus de uma escada torcida.',v:helixSVG('ATGCGTACCG',true),q:['açúcar','+','fosfato','=','esqueleto']},
+{t:'Cada degrau é um par de bases: <b>A só pareia com T</b> (2 pontes de hidrogênio) e <b>G só pareia com C</b> (3 pontes). Complete a fita da direita.',v:helixSVG('ATGCCATG',false),...lad('ATGCCATG')},
+{t:'Mais um trecho. A regra não muda: <b>A–T</b> e <b>G–C</b>.',v:'A = T · G ≡ C',...lad('CGTACTGA')},
+{t:'As fitas são <b>antiparalelas</b>: uma corre de 5′ para 3′ e a outra de 3′ para 5′.',v:'5′ → 3′<br>3′ ← 5′',q:['5′','→','3′','e','3′','→','5′']},
+{t:'<b>Medidas</b>: a hélice completa uma volta a cada 10 pares de bases (≈ 3,4 nm) e tem cerca de 2 nm de largura.',v:'10 pares = 1 volta',q:['10','pares','por','volta']}]};
+const DNA2={n:'DNA: micro escala (nucleotídeo)',s:'Fosfato, desoxirribose e as 4 bases',h:260,dna:1,b:[
+{t:'O DNA é feito de <b>nucleotídeos</b>. Cada um tem 3 partes: <b>fosfato</b> (liga um nucleotídeo ao outro), <b>desoxirribose</b> (açúcar com carbonos numerados de 1′ a 5′) e <b>base nitrogenada</b>. No carbono 2′ só há H, por isso é <b>desoxi</b>rribose. Aqui a base é a adenina.',v:nucSVG('A'),q:['Fosfato','+','Desoxirribose','+','Base nitrogenada']},
+{t:'As <b>4 bases</b> nitrogenadas. Cada uma tem um símbolo e um nome.',v:bases4(),q:['A','=','Adenina','G','=','Guanina','C','=','Citosina','T','=','Timina']},
+{t:'<b>Purinas</b> têm 2 anéis (A e G). <b>Pirimidinas</b> têm 1 anel (C e T).',v:'A G: 2 anéis · C T: 1 anel',q:['A','G','=','purinas','C','T','=','pirimidinas']},
+{t:'O pareamento junta sempre uma purina com uma pirimidina: <b>A–T</b> com 2 pontes de hidrogênio e <b>G–C</b> com 3.',v:'A = T · G ≡ C',q:['A','=','T','2','pontes','G','≡','C','3','pontes']},
+{t:'Os nucleotídeos se unem: o <b>fosfato do 5′</b> de um liga ao <b>OH do 3′</b> do outro. Essa é a <b>ligação fosfodiéster</b>, que forma a fita.',v:'5′ fosfato — OH 3′',q:['Fosfato 5′','+','OH 3′','→','ligação fosfodiéster']}]};
+const CU=[
+{n:'Ciclo do carbono',s:'CO₂, glicose, O₂: monte as reações',h:150,b:[
+{t:'Primeiro, os <b>símbolos</b> que aparecem no ciclo. Cada letra é um elemento químico.',v:'C · H · O · Ca',q:['C','=','carbono','H','=','hidrogênio','O','=','oxigênio']},
+{t:'<b>Fotossíntese</b>: as plantas pegam <b>CO₂</b> do ar e água e, com luz, fazem glicose. Sobra <b>O₂</b>.',v:'🌱 luz + plantas',q:['6CO₂','+','6H₂O','→','C₆H₁₂O₆','+','6O₂']},
+{t:'O carbono da glicose <b>passa adiante</b> quando um ser vivo come o outro.',v:'🌱 → 🐛 → 🦊',q:['Planta','→','Herbívoro','→','Carnívoro']},
+{t:'<b>Respiração</b>: os seres vivos usam a glicose e o O₂ para ter energia e devolvem <b>CO₂</b> ao ar. É o contrário da fotossíntese.',v:'🫁 energia + CO₂',q:['C₆H₁₂O₆','+','6O₂','→','6CO₂','+','6H₂O']},
+{t:'<b>Decomposição</b>: fungos e bactérias consomem restos de seres mortos e liberam CO₂.',v:'🍄 restos → ar',q:['Restos','→','Decompositores','→','CO₂']},
+{t:'<b>Queima</b> de combustíveis e florestas devolve ao ar o carbono guardado. Exemplo, o gás metano (CH₄).',v:'🔥 combustão',q:['CH₄','+','2O₂','→','CO₂','+','2H₂O']},
+{t:'No <b>oceano</b>, o CO₂ vira carbonato de cálcio (<b>CaCO₃</b>) em conchas e corais. No fundo, forma calcário.',v:'🐚 mar → rocha',q:['CO₂','→','CaCO₃','→','Calcário']},
+{t:'<b>Fechando o ciclo</b>: o carbono sai do ar, passa pelos seres vivos e volta ao ar.',v:'Ar → vida → Ar',q:['CO₂ no ar','→','Planta','→','Animal','→','CO₂ no ar']}]},
+{n:'Estrutura da célula',s:'Cada organela, uma fase, uma explicação',h:320,b:[
+{t:'<b>Fase 1, a fronteira</b>: a membrana plasmática envolve a célula e controla o que entra e sai. Dentro dela fica o citoplasma, um gel de água onde estão as organelas.',v:'⭕ Membrana → 💧 Citoplasma',q:['Membrana','→','Citoplasma']},
+{t:'<b>Fase 2, o comando</b>: o núcleo guarda o DNA, que contém as instruções da célula.',v:'🧬 Núcleo',q:['Núcleo','→','DNA']},
+{t:'<b>Fase 3, a energia</b>: a mitocôndria faz a respiração celular (a mesma reação do ciclo do carbono) e produz ATP.',v:'⚡ Mitocôndria',q:['Mitocôndria','→','ATP']},
+{t:'<b>Fase 4, as proteínas</b>: o ribossomo fabrica, o retículo transporta e o complexo de Golgi embala e envia.',v:'🏭 produzir → 📦 enviar',q:['Ribossomo','→','Retículo','→','Golgi']},
+{t:'<b>Fase 5, a limpeza</b>: o lisossomo digere resíduos e partes velhas.',v:'🧹 Lisossomo',q:['Lisossomo','→','digestão']},
+{t:'<b>Fase 6, só na célula vegetal</b>: o cloroplasto faz a fotossíntese e produz glicose.',v:'🌿 Cloroplasto',q:['Cloroplasto','→','Fotossíntese','→','Glicose']},
+{t:'<b>Fase 7, sustento vegetal</b>: a parede celular dá forma e proteção, e o vacúolo guarda água e reservas.',v:'🧱 Parede · 🫧 Vacúolo',q:['Parede celular','→','sustenta','Vacúolo','→','reserva']}]},DNA1,DNA2];
+function chemMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=CU;rk='c';const dn=store.cd||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Química</div></div><p class="sub">Escolha um módulo.</p>`+CU.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${r.n}</b><small>${store.best['c'+i]?'Melhor '+fmt(store.best['c'+i]):r.s}</small></button>`).join('');
+}
+function rulesMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=RU;rk='r';const dn=store.rd||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Regras</div></div><p class="sub">Expoente e o mover da vírgula</p>`+RU.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${i+1}. ${r.n}</b><small>${store.best['r'+i]?'Melhor '+fmt(store.best['r'+i]):r.s}</small></button>`).join('');
+}
+function startR(i){
+  kind='rule';rIdx=i;bk=rk+i;const Q=RS[i];ttl=Q.n;rcum=[];let c=0;Q.b.forEach(b=>{c+=b.q.length;rcum.push(c)});rb=0;
+  placed=0;miss=0;t0=0;sel=null;total=c;clearInterval(tick);$('#ov').classList.remove('show');
+  $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${rk==='r'?'Regra '+(i+1):Q.n}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
+  <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez neste módulo'}</div><div class="board" id="rbd" style="--h:${Q.h}"></div><div class="tray"></div></div>`;
+  showB();
+}
+function showB(){
+  const Q=RS[rIdx],b=Q.b[rb],bh=v=>Q.dna&&BH[v]!==undefined?BH[v]:Q.h,sl=v=>`<div class="sl tk" style="--h:${bh(v)}" data-t="q" data-v="${v}"></div>`;
+  const body=b.r?`<div class="lad">${[...b.r].map(c=>`<div class="lr"><span class="bs" style="background:${BC[c]}">${c}</span><span class="bd">${'AT'.includes(c)?'=':'≡'}</span>${sl(CP[c])}</div>`).join('')}</div>`:`<div class="eqw">${b.q.map(sl).join('')}</div>`;
+  $('#rbd').insertAdjacentHTML('beforeend',`<div class="rb" style="--h:${Q.h}"><div class="rt">${b.t}</div><div class="rv${b.v.startsWith('<svg')?' sv':''}">${b.v}</div>${body}</div>`);
+  $('.tray').innerHTML=rnd(b.q.slice()).map(v=>`<div class="pc tp" style="--h:${bh(v)}" data-t="q" data-v="${v}">${v}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  $('#rbd').lastElementChild.scrollIntoView({behavior:'smooth',block:'start'});
+}
+function fSection(k){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='form';fType=k;fMode='menu';
+  const T=FM[k],dn=store.fb[k]||[],all=dn.length===T.f.length;
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="formMenu()" aria-label="Voltar">←</button><div class="ttl">${T.n}</div></div><p class="sub">Escolha qual fórmula montar.</p>`
+  +T.f.map((f,i)=>`<button class="m" style="--h:${T.h}" onclick="startB('${k}',${i})"><b>${dn.includes(i)?'✓ ':''}${f[0]}</b><small>${store.best['fb'+k+i]?'Melhor '+fmt(store.best['fb'+k+i]):'Monte com as peças'}</small></button>`).join('')
+  +`<button class="m ${all?'':'lock'}" style="--h:20;margin-top:18px" ${all?'':'disabled'} onclick="startF('${k}')"><b>${all?'':'🔒 '}Ligar nomes e fórmulas</b><small>${all?(store.best['f'+k]?'Melhor '+fmt(store.best['f'+k]):'Desafio final: encaixe cada nome na fórmula'):'Monte as '+(T.f.length-dn.length)+' fórmula'+(T.f.length-dn.length>1?'s':'')+' que faltam'}</small></button>`;
+}
+function startB(k,i){
+  kind='form';fType=k;fIdx=i;fMode='build';const T=FM[k],f=T.f[i];bk='fb'+k+i;ttl=f[0];
+  const tk=f[1].split(/(\s+|[()=×÷+−±^])/).filter(x=>x&&!/^\s+$/.test(x));
+  placed=0;miss=0;t0=0;sel=null;total=tk.length;clearInterval(tick);$('#ov').classList.remove('show');
+  $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${T.n}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
+  <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez nesta fórmula'}</div><div class="board"><div class="fh" style="--h:${T.h}">${f[0]}</div><p class="sub" style="margin:2px 0">Monte a fórmula com as peças.</p>
+  <div class="eqw">${tk.map(v=>`<div class="sl tk" style="--h:${T.h}" data-t="q" data-v="${v}"></div>`).join('')}</div></div>
+  <div class="tray">${rnd(tk.slice()).map(v=>`<div class="pc tp" style="--h:${T.h}" data-t="q" data-v="${v}">${v}</div>`).join('')}</div></div>`;
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  document.querySelectorAll('.pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+}
+function startF(k){
+  kind='form';fType=k;fMode='match';bk='f'+k;const T=FM[k];ttl=T.n;
+  placed=0;miss=0;t0=0;sel=null;total=T.f.length;clearInterval(tick);$('#ov').classList.remove('show');
+  $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${ttl}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
+  <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez neste modo'}</div><div class="board"><p class="sub">Desafio final: encaixe cada fórmula no nome certo.</p>
+  <div style="display:grid;gap:10px">${rnd(T.f.slice()).map(f=>`<div class="row" style="--h:${T.h}"><div class="ex fn">${f[0]}</div><div class="sl fs" data-t="f" data-v="${f[1]}"></div></div>`).join('')}</div></div>
+  <div class="tray">${rnd(T.f.map(f=>f[1])).map(v=>`<div class="pc pt pf2" style="--h:${T.h}" data-t="f" data-v="${v}">${v}</div>`).join('')}</div></div>`;
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  document.querySelectorAll('.pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+}
+const nmOf=k=>UX[k].nb.map(n=>n+UX[k].suf);
+function fillTray(arr,t){
+  const T=UT[uType];
+  $('.tray').innerHTML=rnd(arr.slice()).map(v=>`<div class="pc pt" style="--h:${T.h}" data-t="${t}" data-v="${v}">${v}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('#ar .sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+}
+function phaseN(){
+  const T=UT[uType],N=nmOf(uType);
+  $('#ar').innerHTML=`<p class="sub" style="margin-top:22px">Agora o nome de cada sigla.</p><div id="nt" style="display:grid;gap:10px">${T.u.map((u,i)=>`<div class="row" style="--h:${T.h}"><div class="ex ux">${u}</div><div class="sl nm" data-t="n" data-v="${N[i]}"></div></div>`).join('')}</div>`;
+  fillTray(N,'n');
+  $('#ar').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function phaseE(){
+  const T=UT[uType],X=UX[uType];
+  $('#ar .sub').textContent='Agora o valor de cada unidade em '+X.b+'.';
+  document.querySelectorAll('#nt .row').forEach((r,i)=>r.insertAdjacentHTML('beforeend',`<div class="sl rs eq" data-t="e" data-v="${X.eq[i]}"></div>`));
+  fillTray(X.eq,'e');
+}
+function unitsMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='unit';
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Unidades de medida</div></div><div class="grid">`+Object.keys(UT).map(k=>`<button class="t" style="--h:${UT[k].h}" onclick="startU('${k}')"><b style="font-size:24px">${UT[k].n}</b><small>${store.best['u'+k]?'Melhor '+fmt(store.best['u'+k]):UT[k].s}</small></button>`).join('')+'</div>';
+}
+function startU(k){
+  kind='unit';uType=k;bk='u'+k;const T=UT[k];ttl=T.n;uN=T.u.length;
+  placed=0;miss=0;t0=0;sel=null;total=3*uN+2;clearInterval(tick);$('#ov').classList.remove('show');
+  $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${ttl}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
+  <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez neste modo'}</div><div class="board"><p class="sub">Monte a tabela na ordem certa.</p>
+  <div id="sg" style="--h:${T.h}"><div class="az off"><div class="sl us off" data-t="o" data-v="×${T.f}"></div><div class="al r"></div></div><div class="ut">${T.u.map(u=>`<div class="sl us" style="--h:${T.h}" data-t="u" data-v="${u}"></div>`).join('')}</div><div class="az off"><div class="al l"></div><div class="sl us off" data-t="o" data-v="÷${T.f}"></div></div></div><div id="ar"></div></div>
+  <div class="tray">${rnd(T.u.slice()).map(u=>`<div class="pc pu" style="--h:${T.h}" data-t="u" data-v="${u}">${u}</div>`).join('')}</div></div>`;
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  document.querySelectorAll('.pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+}
+function phase2(){
+  const T=UT[uType],f=T.f;
+  document.querySelectorAll('#sg .off').forEach(e=>e.classList.remove('off'));$('.board>.sub').textContent='Agora as setas: o que fazer indo para cada lado?';window.scrollTo({top:0,behavior:'smooth'});
+  $('.tray').innerHTML=rnd(['×10','÷10','×100','÷100','×1000','÷1000']).map(o=>`<div class="pc po" style="--h:${T.h}" data-t="o" data-v="${o}">${o}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('#ar .sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+}
+function build(rows){
+  curRows=rows;placed=0;miss=0;t0=0;sel=null;total=rows.length;clearInterval(tick);$('#ov').classList.remove('show');
+  const ps=[];
+  rows.forEach(r=>{r.k1=K();ps.push({t:'r',v:r.a*r.b,r})});
+  rnd(ps);
+  const cls=kind==='tab'?'':kind==='cores'?'same':'neu';
+  let h=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${ttl}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
+  <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez neste modo'}</div><div class="board">`;
+  rows.forEach(r=>h+=`<div class="row" style="--h:${r.h}"><div class="ex">${r.a} × ${r.b}${kh(r.k1)}</div><div class="sl rs" data-t="r" data-v="${r.a*r.b}"></div></div>`);
+  h+=`</div><div class="tray">${ps.map(p=>`<div class="pc ${p.t==='f'?'pf':'pr'} ${cls}" style="--h:${p.r.h}" data-t="${p.t}" data-v="${p.v}">${p.v}<i class="ho s${p.r.k1.s}" style="--y:${p.r.k1.y}%"></i></div>`).join('')}</div></div>`;
+  $('#app').innerHTML=h;
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  document.querySelectorAll('.pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+}
+
+let curRows=[],hintOpen=false,hintT=0;
+const bulb=()=>`<svg class="bulb" viewBox="0 0 24 24" aria-hidden="true"><g stroke="#f5a300" stroke-width="1.4" stroke-linecap="round"><path d="M12 .8v1.4M3.6 4.2l1 1M20.4 4.2l-1 1M1.4 10.6h1.4M21.2 10.6h1.4"/></g><path d="M12 3.2a6.3 6.3 0 0 0-3.8 11.3c.6.5.9 1 .9 1.7v.6h5.8v-.6c0-.7.3-1.2.9-1.7A6.3 6.3 0 0 0 12 3.2z" fill="#ffd84a" stroke="#c98a00" stroke-width="1.2" stroke-linejoin="round"/><path d="M9.6 9.2l1.2 2.6 1.2-1.6 1.2 1.6 1.2-2.6" fill="none" stroke="#c98a00" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.6 7.2a3.6 3.6 0 0 1 2-2" fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.3" stroke-linecap="round"/><rect x="9" y="17.4" width="6" height="2.1" rx=".9" fill="#a3acbd" stroke="#6f7a90" stroke-width=".8"/><rect x="9.9" y="19.9" width="4.2" height="1.9" rx=".9" fill="#7d879c" stroke="#5d6780" stroke-width=".8"/></svg>`;
+const hintBtn=()=>`<button class="ib hb" onclick="hint()" aria-label="Dica: ver a solução">${bulb()}</button>`;
+const hrow=(h,w,dn)=>`<div class="hr${dn?' dn':''}"><b>${h}</b>${dn?' ✓':''}<small>${w}</small></div>`;
+const isOk=(t,v)=>!!document.querySelector(`.sl.ok[data-t="${t}"][data-v="${v}"]`);
+function mulWhy(a,b){
+  if(b===1)return `Qualquer número vezes 1 é ele mesmo.`;
+  if(b===2)return `Vezes 2 é o dobro: ${a} + ${a} = ${a*2}.`;
+  if(b===10)return `Vezes 10: é só colocar um zero à direita de ${a}.`;
+  return `${a} × ${b-1} = ${a*(b-1)}; somando mais ${a}, dá ${a*b}.`;
+}
+const FW={
+'Área do quadrado':'Cabem l fileiras com l quadradinhos em cada: l × l.',
+'Área do retângulo':'São h fileiras de b quadradinhos: base vezes altura.',
+'Área do triângulo':'Dois triângulos iguais formam um retângulo b × h, então um só é a metade.',
+'Área do trapézio':'Dois trapézios iguais formam um paralelogramo de base (B + b) e altura h; um é a metade.',
+'Área do losango':'O losango cabe num retângulo D × d e ocupa exatamente metade dele.',
+'Área do círculo':'O quadrado do raio cabe cerca de π (3,14) vezes dentro do círculo.',
+'Comprimento da circunferência':'A volta toda mede π vezes o diâmetro, e o diâmetro é 2 × r.',
+'Teorema de Pitágoras':'No triângulo retângulo, o quadrado da hipotenusa (a) é a soma dos quadrados dos catetos.',
+'Cubo':'Três medidas iguais: a × a × a.',
+'Paralelepípedo':'Comprimento × largura × altura: camadas de cubinhos.',
+'Prisma':'Empilhar h camadas iguais à base: área da base vezes a altura.',
+'Cilindro':'É um prisma de base redonda: a base vale π × r², vezes a altura.',
+'Cone':'Cabem 3 cones num cilindro de mesma base e altura; por isso é 1/3.',
+'Pirâmide':'Cabem 3 pirâmides num prisma de mesma base e altura; por isso é 1/3.',
+'Esfera':'Arquimedes: a esfera é 2/3 do cilindro que a envolve (π × r² × 2r), o que dá 4πr³ ÷ 3.',
+'Superfície da esfera':'É exatamente 4 vezes a área de um círculo de mesmo raio.',
+'Sorvete (posição no MU)':'Você começa em S₀ e anda v a cada unidade de tempo; depois de t, somou v × t.',
+'Velocidade média':'Quanto andou (ΔS) dividido pelo tempo gasto (Δt).',
+'Densidade':'Quanta massa cabe em cada unidade de volume.',
+'Pressão':'Força espalhada numa área: a mesma força em área menor pressiona mais.',
+'2ª Lei de Newton':'Mais força, mais aceleração; mais massa, mais difícil de acelerar.',
+'1ª Lei de Ohm':'A tensão empurra a corrente, e a resistência atrapalha: U = R × i.',
+'Potência elétrica':'Potência é energia por segundo: tensão vezes a corrente.',
+'Energia elétrica consumida':'Quanto gasta por segundo (P) vezes quantos segundos ou horas (Δt).',
+'Calor sensível':'Precisa de mais calor com mais massa, material mais difícil de esquentar (c) e variação maior de temperatura.',
+'Fórmula de Bhaskara':'Resolve ax² + bx + c = 0; vem de completar o quadrado da equação.',
+'Delta (discriminante)':'Se Δ > 0 há duas raízes; se Δ = 0, uma; se Δ < 0, nenhuma real.',
+'Probabilidade':'Os casos que você quer, divididos por todos os casos possíveis.',
+'Escala':'Quanto o desenho mede para cada medida real (na mesma unidade).',
+'Juros simples':'Rende sempre sobre o capital inicial: C × i por período, vezes t períodos.',
+'Juros compostos':'A cada período o montante é multiplicado por (1 + i); em t períodos, vira a potência t.',
+'Termo geral da PA':'Do 1º ao n-ésimo termo, somou-se r exatamente (n − 1) vezes.',
+'Termo geral da PG':'Do 1º ao n-ésimo termo, multiplicou-se por q exatamente (n − 1) vezes.',
+'Combinação':'n! ordena todos; divide-se pelas ordens que não importam: p! e (n − p)!.'
+};
+const PFX=['quilo: 1.000 vezes a unidade base','hecto: 100 vezes a unidade base','deca: 10 vezes a unidade base','é a própria unidade base','deci: a décima parte da base','centi: a centésima parte da base','mili: a milésima parte da base'];
+const CRW=['1 dam³ = 1.000 m³, e cada m³ tem 1.000 L','1 m³ = 1.000 dm³, e cada dm³ tem 1 L','Um cubo de 10 cm de aresta (1 dm³) comporta 1 L','1 cm³ é um cubinho de 1 cm de lado: cabe 1 mL','1 mm³ é a milésima parte de 1 cm³'];
+const CRK=['1.000.000 L de água pesam 1.000.000 kg','1.000 L de água pesam 1.000 kg (1 tonelada)','1 L de água pesa 1 kg','1 mL de água pesa 1 g','0,001 mL de água pesa 0,001 g'];
+
+function hint(){
+  if(hintOpen)return;
+  let intro='',rows='',hh=250;
+  if(t0){clearInterval(tick);hintT=performance.now()}else hintT=0;
+  if(kind==='tab'||kind==='clash'||kind==='cores'){
+    hh=kind==='tab'?hue(cur):250;
+    intro=`<b>Truque:</b> a × b = a × (b − 1) + a. Ou seja, parta do resultado anterior e some o número.`+(kind==='cores'?' A cor da conta é a mesma do resultado.':'');
+    rows=curRows.slice().sort((x,y)=>x.a-y.a||x.b-y.b).map(r=>{const v=r.a*r.b;
+      return hrow((kind==='cores'?`<i class="dot" style="background:hsl(${r.h} 62% 50%)"></i>`:'')+`${r.a} × ${r.b} = ${v}`,mulWhy(r.a,r.b),isOk('r',v))}).join('');
+  }else if(kind==='unit'){
+    const T=UT[uType],X=UX[uType],N=nmOf(uType),f=T.f;hh=T.h;
+    const dim=f===100?' (em área, são 2 dimensões)':f===1000?' (em volume, são 3 dimensões)':'';
+    if(placed<uN){
+      intro=`<b>Ordem:</b> da maior para a menor unidade: quilo, hecto, deca, a base, deci, centi, mili. Cada passo para a direita é uma unidade menor.`;
+      rows=T.u.map((u,i)=>hrow(u,PFX[i],isOk('u',u))).join('');
+    }else if(placed<2*uN){
+      intro=`<b>Os nomes</b> vêm dos prefixos, que dizem o tamanho de cada unidade em relação à base.`+(uType==='a'||uType==='v'?` Aqui vale o nome da unidade de comprimento, mais "${X.suf.trim()}".`:'');
+      rows=T.u.map((u,i)=>hrow(`${u} = ${N[i]}`,PFX[i],isOk('n',N[i]))).join('');
+    }else if(placed<3*uN){
+      intro=`<b>Cada casa vale ${f.toLocaleString('pt-BR')} vezes a vizinha</b>${dim}. Por isso os valores crescem ou diminuem de ${f.toLocaleString('pt-BR')} em ${f.toLocaleString('pt-BR')}.`;
+      rows=T.u.map((u,i)=>hrow(`1 ${u} = ${X.eq[i]} ${X.b}`,i<3?'Unidade maior que a base: vale mais que 1.':i===3?'É a própria unidade base: vale 1.':'Unidade menor que a base: vale menos que 1.',isOk('e',X.eq[i]))).join('');
+    }else{
+      const F=f.toLocaleString('pt-BR');
+      intro=`<b>Cada casa muda o número por ${F}</b>${dim}.`;
+      rows=hrow(`→ ×${F}`,'Indo para a direita a unidade fica menor, então cabem mais dela: multiplica.',isOk('o','×'+f))+hrow(`← ÷${F}`,'Indo para a esquerda a unidade fica maior, então precisa de menos: divide.',isOk('o','÷'+f));
+    }
+  }else if(kind==='corr'){
+    if(placed<5){
+      intro=`<b>Base:</b> 1 dm³ é um cubo de 10 cm de aresta, que comporta exatamente 1 litro. Cada degrau de volume muda por 1.000.`;
+      rows=CR.map((r,i)=>hrow(`${r[0]} = ${r[1]}`,CRW[i],isOk('l',r[1]))).join('');
+    }else{
+      intro=`<b>Na água,</b> 1 L pesa 1 kg. Então o número é o mesmo do litro, só muda a unidade.`;
+      rows=CR.map((r,i)=>hrow(`${r[0]} = ${r[2]}`,CRK[i],isOk('k',r[2]))).join('');
+    }
+  }else if(kind==='form'){
+    const T=FM[fType];hh=T.h;
+    if(fMode==='build'){
+      const f=T.f[fIdx];
+      intro=`<b>${f[0]}:</b> monte as peças nesta ordem.`;
+      rows=hrow(f[1],FW[f[0]]||'',false);
+    }else{
+      intro=`<b>${T.n}:</b> entender de onde a fórmula vem ajuda a lembrar dela.`;
+      rows=T.f.map(f=>hrow(`${f[1]}`,`<span style="color:var(--ink);font-weight:800">${f[0]}.</span> ${FW[f[0]]||''}`,isOk('f',f[1]))).join('');
+    }
+  }else if(kind==='rule'){
+    const Q=RS[rIdx],bl=Q.b[rb];hh=Q.h;intro=bl.t;
+    if(bl.r){
+      rows=[...bl.r].map(c=>hrow(`${c} ${'AT'.includes(c)?'=':'≡'} ${CP[c]}`,`${c} pareia sempre com ${CP[c]}, com ${'AT'.includes(c)?'2':'3'} pontes de hidrogênio.`,false)).join('');
+    }else{
+      rows=hrow(bl.q.join(' '),'Monte as peças nesta ordem.',false);
+    }
+  }
+  hintOpen=true;
+  $('#box').style.setProperty('--h',hh);
+  $('#box').innerHTML=`<div class="stars" style="letter-spacing:0">${bulb().replace('class="bulb"','class="bulb" style="width:38px;height:38px;margin:auto"')}</div><h2>Solução</h2><p class="hx">${intro}</p><div class="hl">${rows}</div><button class="btn" onclick="closeHint()">Entendi</button>`;
+  $('#ov').classList.add('show');
+}
+function closeHint(){
+  if(!hintOpen)return;hintOpen=false;$('#ov').classList.remove('show');
+  if(hintT){t0+=performance.now()-hintT;tick=setInterval(upd,100)}
+}
+$('#ov').addEventListener('click',e=>{if(e.target===e.currentTarget)closeHint()});
+
+function begin(){if(!t0){t0=performance.now();tick=setInterval(upd,100)}}
+function upd(){
+  const e=performance.now()-t0,el=$('#tm');if(!el)return;el.textContent=fmt(e);
+  const b=store.best[bk];el.className='tm';
+  if(b&&placed>0)el.classList.add(e/placed*total<=b?'g':'o');
+}
+
+function wire(p){
+  let sx,sy,moved=false,id=null;
+  p.onpointerdown=e=>{begin();try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume()}catch(_){}id=e.pointerId;p.setPointerCapture(id);sx=e.clientX;sy=e.clientY;moved=false};
+  p.onpointermove=e=>{
+    if(id==null||!p.hasPointerCapture(id))return;
+    const dx=e.clientX-sx,dy=e.clientY-sy;
+    if(!moved&&Math.hypot(dx,dy)>6){moved=true;p.classList.add('drag')}
+    if(moved){p.style.transform=`translate(${dx}px,${dy}px) scale(1.08)`;if(e.clientY<120)window.scrollBy(0,-14)}
+  };
+  p.onpointerup=e=>{
+    if(id==null)return;try{p.releasePointerCapture(id)}catch(_){}id=null;
+    p.classList.remove('drag');p.style.transform='';
+    if(moved){
+      let best=null,bd=60;
+      document.querySelectorAll('.sl:not(.ok):not(.off)').forEach(s=>{const r=s.getBoundingClientRect(),d=Math.hypot(e.clientX-(r.left+r.width/2),e.clientY-(r.top+r.height/2));if(d<bd){bd=d;best=s}});
+      if(best)tryPlace(p,best);
+    }else{
+      document.querySelectorAll('.pc.sel').forEach(x=>x!==p&&x.classList.remove('sel'));
+      p.classList.toggle('sel');sel=p.classList.contains('sel')?p:null;
+    }
+  };
+  p.onpointercancel=()=>{p.classList.remove('drag');p.style.transform='';id=null};
+}
+
+function tryPlace(p,s){
+  if(s.classList.contains('ok'))return;
+  if(p.dataset.t===s.dataset.t&&p.dataset.v===s.dataset.v){
+    s.classList.add('ok');
+    s.textContent=p.dataset.v;
+    p.remove();sel=null;snd('ok',placed);placed++;
+    if(kind==='unit'){const nx={[uN]:phaseN,[2*uN]:phaseE,[3*uN]:phase2}[placed];if(nx){nx();return}}
+    if(kind==='corr'&&placed===5){phaseK();return}
+    if(kind==='rule'&&placed<total&&placed===rcum[rb]){rb++;showB();return}
+    if(placed===total)done();
+  }else{
+    miss++;snd('bad');s.classList.remove('bad');void s.offsetWidth;s.classList.add('bad');
+    p.classList.remove('sel');sel=null;
+  }
+}
+
+function done(){
+  clearInterval(tick);const e=performance.now()-t0;
+  const old=store.best[bk],rec=!old||e<old;
+  if(rec)store.best[bk]=Math.round(e);
+  if(kind==='tab'&&!store.done.includes(cur))store.done.push(cur);
+  if(kind==='form'&&fMode==='build'){const a=store.fb[fType]=store.fb[fType]||[];if(!a.includes(fIdx))a.push(fIdx)}
+  if(kind==='rule'){const k=rk+'d';store[k]=store[k]||[];if(!store[k].includes(rIdx))store[k].push(rIdx)}
+  save();
+  setTimeout(()=>{
+    snd('win');const st=miss===0?3:miss<=3?2:1;
+    const nxt=kind==='tab'&&mode==='lin'&&cur<9,rn=kind==='rule'&&rIdx<RS.length-1,fb=kind==='form'&&fMode==='build',fl=fb?FM[fType].f.findIndex((_,i)=>!(store.fb[fType]||[]).includes(i)):-1;
+    $('#box').style.setProperty('--h',kind==='tab'?hue(cur):250);
+    $('#box').innerHTML=`<div class="stars">${'★'.repeat(st)}${'☆'.repeat(3-st)}</div><h2>${ttl}: pronto!</h2>
+    <div class="big">${fmt(e)}</div><p>${miss?miss+' encaixe'+(miss>1?'s':'')+' errado'+(miss>1?'s':''):'Nenhum erro'}</p>
+    <p>${rec?(old?'Novo recorde! Antes: '+fmt(old):'Primeiro tempo registrado'):'Seu recorde: '+fmt(old)}</p>
+    ${rn?`<button class="btn" onclick="startR(${rIdx+1})">Próximo módulo</button>`:fb?(fl>=0?`<button class="btn" onclick="startB('${fType}',${fl})">Próxima fórmula</button>`:`<button class="btn" onclick="startF('${fType}')">Ligar nomes e fórmulas</button>`):nxt?`<button class="btn" onclick="start(${cur+1})">Tabuada do ${cur+1}</button>`:`<button class="btn" onclick="again()">${kind==='tab'?'Jogar de novo':'Novo desafio'}</button>`}
+    <button class="btn alt" onclick="back()">Voltar</button>`;
+    $('#ov').classList.add('show');
+  },350);
+}
+addEventListener('pointerdown',()=>{if(mus!=='off'&&!mTimer)musicStart()});
+home();
+</script>
+</body>
+</html>
