@@ -28,6 +28,16 @@ h1{font-size:28px;margin:8px 0 2px;letter-spacing:-.5px}
 .m{display:block;width:100%;border:0;text-align:left;font:inherit;color:#fff;border-radius:20px;padding:18px 20px;margin-bottom:12px;cursor:pointer;background:hsl(var(--h) 62% 50%);box-shadow:var(--sh);transition:transform .15s}
 .m b{font-size:22px;display:block}
 .m small{display:block;margin-top:4px;opacity:.92;font-weight:700;font-size:14px}
+.ar{margin:22px 0 10px;padding:9px 14px;border-radius:12px;color:#fff;font-weight:900;font-size:14px;line-height:1.25;background:hsl(var(--h) 55% 36%)}
+.mol{width:100%;max-height:150px;height:auto;display:block;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;fill:none;color:var(--ink)}
+.mol text{fill:currentColor;stroke:none;font:700 14px system-ui,sans-serif;text-anchor:middle;dominant-baseline:central}
+.mb{fill:var(--card);stroke:none}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fig{display:block;width:100%;background:var(--card);border:2px solid var(--line);border-radius:16px;padding:8px;color:var(--ink);cursor:pointer}
+.fig.sel{border-color:#3b82f6}.fig.ok{border-color:#1e9e5a;opacity:.7}
+.nmw{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.nmb{flex:1 1 40%;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:800;border-radius:14px;padding:12px 8px;cursor:pointer}
+.nmb.ok{border-color:#1e9e5a;background:#1e9e5a22}.nmb.bad{border-color:#e5484d;background:#e5484d22}
 .top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .ib{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;width:42px;height:42px;font-size:18px;cursor:pointer}
 .ttl{flex:1;font-weight:900;font-size:20px}
@@ -182,16 +192,22 @@ function snd(type,k){
 
 function home(){
   clearInterval(tick);$('#ov').classList.remove('show');
-  $('#app').innerHTML=`<h1>Tabuada de Encaixe</h1><p class="sub">Escolha a área.</p>`+musUI()+
-  `<button class="m" style="--h:250" onclick="menu()"><b style="font-size:22px">Matemática</b><small>Tabuadas, unidades, regras e fórmulas</small></button><button class="m" style="--h:150" onclick="chemMenu()"><b style="font-size:22px">Química</b><small>Ciclo do carbono e estrutura da célula</small></button><button class="m" style="--h:300" onclick="phMenu()"><b style="font-size:22px">Filosofia</b><small>Arché, filósofos, escolas e áreas</small></button><button class="m" style="--h:40" onclick="hisMenu()"><b style="font-size:22px">História</b><small>Linha do tempo: ordem e duração (Enem)</small></button><button class="m" style="--h:0" onclick="vfFrom='h';vfMenu()"><b style="font-size:22px">Verdadeiro ou falso</b><small>Matemática, Química, Filosofia e História</small></button>`;
+  const B=(f,n,d,h)=>`<button class="m" style="--h:${h}" onclick="${f}"><b style="font-size:22px">${n}</b><small>${d}</small></button>`;
+  const S=(n,h,x)=>`<div class="ar" style="--h:${h}">${n}</div>`+x;
+  $('#app').innerHTML=`<h1>Tabuada de Encaixe</h1><p class="sub">Escolha a área do Enem.</p>`+musUI()+
+  S('Linguagens, Códigos e suas Tecnologias',330,B('artMenu()','Artes','Vanguardas, Modernismo, arte contemporânea e cultura popular',330))+
+  S('Ciências Humanas e suas Tecnologias',30,B('hisMenu()','História','Linha do tempo: ordem e duração',30)+B('phMenu()','Filosofia','Arché, filósofos, escolas e áreas',30))+
+  S('Ciências da Natureza e suas Tecnologias',145,B('chemMenu()','Química e Biologia','Ciclo do carbono e estrutura da célula',145)+B('orgMenu()','Química orgânica','Figuras, nomes e moléculas',145)+B('fisMenu()','Física','Resistores, Lei de Ohm e energia elétrica',145))+
+  S('Matemática e suas Tecnologias',215,B('menu()','Matemática','Tabuadas, unidades, fórmulas, estatística, funções e porcentagem',215))+
+  S('Treino misto',270,B("vfFrom='h';vfMenu()",'Verdadeiro ou falso','Todas as áreas em uma só rodada',270));
 }
 function menu(){
   clearInterval(tick);$('#ov').classList.remove('show');
-  const M=[['lin','Em sequência','Do 3 ao 9, uma tabuada de cada vez',210],['pick','Escolher tabuada','Monte a que você quiser, na hora',150],['clash','Clash','Contas de 3 a 5 tabuadas misturadas',340],['cores','Liga das cores','Conta e resultado com a mesma cor se encaixam',28],['unid','Unidades de medida','Tabelas de comprimento, área, volume, massa e capacidade (litros)',270],['corr','Correlações','Volume, litros e quilos: 1 dm³ = 1 L = 1 kg (na água)',250],['regras','Regras','Expoente, mover da vírgula e regra de 3: monte cada regra em blocos',95],['geo','Figuras e ângulos','Triângulos, polígonos (até 12 lados), quadriláteros e ângulos',200],['vf','Verdadeiro ou falso','Uma afirmação por vez: está certa ou errada?',0],['form','Fórmulas','Monte cada fórmula peça por peça e, no final, ligue os nomes',175]];
+  const M=[['lin','Em sequência','Do 3 ao 9, uma tabuada de cada vez',210],['pick','Escolher tabuada','Monte a que você quiser, na hora',150],['clash','Clash','Contas de 3 a 5 tabuadas misturadas',340],['cores','Liga das cores','Conta e resultado com a mesma cor se encaixam',28],['unid','Unidades de medida','Tabelas de comprimento, área, volume, massa e capacidade (litros)',270],['corr','Correlações','Volume, litros e quilos: 1 dm³ = 1 L = 1 kg (na água)',250],['regras','Regras','Expoente, mover da vírgula e regra de 3: monte cada regra em blocos',95],['geo','Figuras e ângulos','Triângulos, polígonos (até 12 lados), quadriláteros e ângulos',200],['vf','Verdadeiro ou falso','Uma afirmação por vez: está certa ou errada?',0],['form','Fórmulas','Monte cada fórmula peça por peça e, no final, ligue os nomes',175],['est','Estatística básica','Média, moda e mediana: monte as regras e aplique',265],['fun','Funções','1º e 2º grau: coeficientes, parábola, vértice e raízes',190],['pct','Porcentagem e proporção','Fatores, aumentos sucessivos e grandezas proporcionais',10]];
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Matemática</div></div><p class="sub">Escolha como quer jogar.</p>`+M.map(m=>`<button class="m" style="--h:${m[3]}" onclick="go('${m[0]}')"><b>${m[1]}</b><small>${m[2]}${store.best[m[0]]?' · Melhor '+fmt(store.best[m[0]]):''}</small></button>`).join('');
 }
-function go(m){if(m==='geo')return geoMenu();if(m==='vf'){vfFrom='m';return vfMenu()}if(m==='regras')return rulesMenu();if(m==='form')return formMenu();if(m==='corr')return startC();if(m==='unid')return unitsMenu();if(m==='clash')return startClash();if(m==='cores')return startCores();mode=m;tabs()}
-function back(){kind==='rule'?(rk==='r'?rulesMenu():rk==='g'?geoMenu():rk==='p'?phMenu():rk==='h'?hisMenu():chemMenu()):kind==='tab'?tabs():kind==='unit'?unitsMenu():kind==='form'?fSection(fType):menu()}
+function go(m){if(m==='est')return estMenu();if(m==='fun')return funMenu();if(m==='pct')return pcMenu();if(m==='geo')return geoMenu();if(m==='vf'){vfFrom='m';return vfMenu()}if(m==='regras')return rulesMenu();if(m==='form')return formMenu();if(m==='corr')return startC();if(m==='unid')return unitsMenu();if(m==='clash')return startClash();if(m==='cores')return startCores();mode=m;tabs()}
+function back(){kind==='rule'?(rk==='r'?rulesMenu():rk==='g'?geoMenu():rk==='p'?phMenu():rk==='h'?hisMenu():rk==='a'?artMenu():rk==='f'?fisMenu():rk==='es'?estMenu():rk==='fu'?funMenu():rk==='pc'?pcMenu():chemMenu()):kind==='tab'?tabs():kind==='unit'?unitsMenu():kind==='form'?fSection(fType):menu()}
 function again(){kind==='rule'?startR(rIdx):kind==='tab'?start(cur):kind==='unit'?startU(uType):kind==='corr'?startC():kind==='form'?(fMode==='build'?startB(fType,fIdx):startF(fType)):kind==='clash'?startClash():startCores()}
 function tabs(){
   clearInterval(tick);$('#ov').classList.remove('show');
@@ -249,6 +265,7 @@ g:{n:'Geometria plana',s:'Áreas, polígonos e Pitágoras',h:170,f:[['Área do q
 e:{n:'Geometria espacial',s:'Volumes e superfície',h:300,f:[['Cubo','V = a³'],['Paralelepípedo','V = a × b × c'],['Prisma','V = Ab × h'],['Cilindro','V = π × r² × h'],['Cone','V = π × r² × h ÷ 3'],['Pirâmide','V = Ab × h ÷ 3'],['Esfera','V = 4 × π × r³ ÷ 3'],['Superfície da esfera','A = 4 × π × r²']]},
 f:{n:'Física',s:'Sorvete, velocidade, Ohm...',h:20,f:[['Sorvete (posição no MU)','S = S₀ + v × t'],['Velocidade média','Vm = ΔS ÷ Δt'],['Densidade','d = m ÷ V'],['Pressão','p = F ÷ A'],['2ª Lei de Newton','F = m × a'],['1ª Lei de Ohm','U = R × i'],['Potência elétrica','P = U × i'],['Energia elétrica consumida','E = P × Δt'],['Calor sensível','Q = m × c × ΔT']]},
 m:{n:'Matemática',s:'Bhaskara, juros, PA, PG...',h:230,f:[['Fórmula de Bhaskara','x = (−b ± √Δ) ÷ (2 × a)'],['Delta (discriminante)','Δ = b² − 4 × a × c'],['Probabilidade','P = favoráveis ÷ possíveis'],['Escala','E = desenho ÷ real'],['Juros simples','J = C × i × t'],['Juros compostos','M = C × (1 + i)^t'],['Termo geral da PA','an = a1 + (n − 1) × r'],['Termo geral da PG','an = a1 × q^(n − 1)'],['Combinação','C = n! ÷ (p! × (n − p)!)'],['Regra de 3 direta','x = b × c ÷ a'],['Regra de 3 inversa','x = a × b ÷ c']]}};
+FM.n={n:'Matemática do ENEM',s:'Preço, %, média, escala, vértice',h:120,f:[['Preço por unidade','p = preço ÷ quantidade'],['Variação percentual','v = (final − inicial) ÷ inicial'],['Aumento e desconto','Vf = Vi × (1 ± i)'],['Média aritmética','M = soma ÷ quantidade'],['Média ponderada','Mp = (v1 × p1 + v2 × p2) ÷ (p1 + p2)'],['Escala em área','Areal = Adesenho × k²'],['Escala em volume','Vreal = Vdesenho × k³'],['Vértice da parábola (x)','xv = −b ÷ (2 × a)'],['Vértice da parábola (y)','yv = −Δ ÷ (4 × a)']]};
 function formMenu(){
   clearInterval(tick);$('#ov').classList.remove('show');kind='form';
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">Fórmulas</div></div><div class="grid">`+Object.keys(FM).map(k=>`<button class="t" style="--h:${FM[k].h}" onclick="fSection('${k}')"><b style="font-size:22px">${FM[k].n}</b><small>${(store.fb[k]||[]).length}/${FM[k].f.length} montadas · ${FM[k].s}</small></button>`).join('')+'</div>';
@@ -259,12 +276,19 @@ const RU=[
 {t:'Cuidado: <b>100 tem 2 zeros, mas 3 algarismos</b>. O 3 é o lugar do número (centena), não a quantidade de zeros. Algarismos = zeros + 1.',v:'1 0 0 = centena',q:['2','zeros','+','1','=','3','algarismos']},
 {t:'Mesma ideia: <b>10³</b> tem 3 zeros (milhar). O 1 pode aparecer multiplicando.',v:'1 × 10³ = 1000',q:['1','×','10³','=','1','0','0','0']},
 {t:'Expoente <b>zero</b>: não há zeros para colocar, sobra só o 1.',v:'10⁰ = 1',q:['10⁰','=','1','e','0','zeros']}]},
-{n:'O sinal manda a vírgula',s:'+ direita, − esquerda, em saltos',h:95,b:[
+{n:'O sinal manda a vírgula',s:'+ direita, − esquerda, × e ÷ por 10, 100...',h:95,b:[
 {t:'Expoente <b>positivo (+)</b>: a vírgula anda para a <b>direita</b>, um salto para cada unidade do expoente.',v:'→ → direita',q:['3,5','×','10²','=','350']},
 {t:'Expoente <b>negativo (−)</b>: a vírgula anda para a <b>esquerda</b>.',v:'← ← esquerda',q:['3,5','×','10⁻²','=','0,035']},
 {t:'Os saltos <b>partem de onde a vírgula está</b>: o 1º salto sai da posição atual, para o lado do sinal. Em 10³ são 3 saltos. Casas vazias viram zero.',v:'4,2 →1→ 42 →2→ 420 →3→ 4200',q:['4,2','→','42','→','420','→','4200']},
 {t:'Para a esquerda é igual. Em <b>52 × 10⁻²</b> a vírgula está no fim do 52. 1º salto: 5,2. 2º salto: 0,52.',v:'52 ←1← 5,2 ←2← 0,52',q:['52','←','5,2','←','0,52']},
-{t:'<b>Dividir</b> por 10ⁿ é o mesmo que expoente negativo: a vírgula anda para a <b>esquerda</b>.',v:'7,5 ÷ 10² ← ←',q:['7,5','÷','10²','=','0,075']}]}];
+{t:'Não é só o expoente: <b>multiplicar</b> e <b>dividir</b> por 10, 100, 1000... também mexem na vírgula. <b>Cada zero</b> do número é <b>um salto</b>. Multiplicar: vírgula para a <b>direita</b>. Dividir: para a <b>esquerda</b>.',v:'× 10, 100, 1000 → direita · ÷ 10, 100, 1000 ← esquerda',q:['7,5','÷','100','=','0,075']},
+{t:'<b>Dividir</b> por 10ⁿ é o mesmo que expoente negativo: a vírgula anda para a <b>esquerda</b>. Como 100 = 10², dividir por 100 é igual a × 10⁻².',v:'7,5 ÷ 10² ← ←',q:['7,5','÷','10²','=','0,075']},
+{t:'E se o número <b>não tem vírgula</b>? Todo número inteiro tem uma <b>vírgula escondida no final</b>. 52 é o mesmo que 52,0. Os saltos sempre saem dela.',v:'52 = 52, = 52,0',q:['52','=','52,','=','52,0']},
+{t:'Dividir 52 por <b>10</b>: 1 zero, 1 salto para a esquerda. A vírgula escondida aparece no meio do número.',v:'52, ←1← 5,2',q:['52','÷','10','=','5,2']},
+{t:'Por <b>100</b>: 2 zeros, 2 saltos. O 2º salto passa do começo do número, onde não há algarismo. Casa vazia vira <b>zero</b>.',v:'52 → 5,2 → 0,52',q:['52','÷','100','=','0,52']},
+{t:'Por <b>1000</b>: 3 saltos, e entram 2 zeros na frente. Sempre um zero antes da vírgula (0,052) e os outros logo depois.',v:'52 → 5,2 → 0,52 → 0,052',q:['52','÷','1000','=','0,052']},
+{t:'Multiplicar é o caminho de volta: a vírgula escondida anda para a <b>direita</b> e as casas vazias viram zeros.',v:'52, →1→ 520 →2→ 5200',q:['52','×','100','=','5200']},
+{t:'<b>Resumo</b>: dividir por 10, 100, 1000 é o mesmo que multiplicar por 10⁻¹, 10⁻², 10⁻³. Os zeros contam os saltos e o sinal diz o lado.',v:'÷ 100 = × 10⁻² (← 2 saltos)',q:['÷','100','=','×','10⁻²']}]}];
 const BC={A:'hsl(145 62% 40%)',T:'hsl(5 62% 45%)',G:'hsl(40 80% 42%)',C:'hsl(215 62% 48%)'},CP={A:'T',T:'A',G:'C',C:'G'},BH={A:145,T:5,G:40,C:215};
 const lad=s=>({r:s,q:[...s].map(c=>CP[c])});
 const f1=n=>(+n).toFixed(1),ad=(p,v)=>[p[0]+v[0],p[1]+v[1]];
@@ -383,11 +407,13 @@ function fSection(k){
 function startB(k,i){
   kind='form';fType=k;fIdx=i;fMode='build';const T=FM[k],f=T.f[i];bk='fb'+k+i;ttl=f[0];
   const tk=f[1].split(/(\s+|[()=×÷+−±^])/).filter(x=>x&&!/^\s+$/.test(x));
-  placed=0;miss=0;t0=0;sel=null;total=tk.length+(SY[f[0]]||[]).length;fTk=tk.length;clearInterval(tick);$('#ov').classList.remove('show');
+  placed=0;miss=0;t0=0;sel=null;total=tk.length+(SY[f[0]]||[]).length+(CM[f[0]]?1:0);fTk=tk.length;clearInterval(tick);$('#ov').classList.remove('show');
   $('#app').innerHTML=`<div><div class="top"><button class="ib" onclick="back()" aria-label="Voltar">←</button><div class="ttl">${T.n}</div>${hintBtn()}<button class="ib" onclick="cycleMus(this)" aria-label="Música">${musIc()}</button><div class="tm" id="tm">0:00.0</div></div>
   <div class="best">${store.best[bk]?'Seu melhor: '+fmt(store.best[bk]):'Primeira vez nesta fórmula'}</div><div class="board"><div class="fh" style="--h:${T.h}">${f[0]}</div><p class="sub" style="margin:2px 0">Monte a fórmula com as peças.</p>
   <div class="eqw">${tk.map(v=>`<div class="sl tk" style="--h:${T.h}" data-t="q" data-v="${v}"></div>`).join('')}</div></div>
   <div class="tray">${rnd(tk.slice()).map(v=>`<div class="pc tp" style="--h:${T.h}" data-t="q" data-v="${v}">${v}</div>`).join('')}</div></div>`;
+  fTok=tk;fC=CM[f[0]]?1:0;
+  if(fC){$('.board .sub').remove();$('.board .eqw').remove();$('.tray').innerHTML='';phaseC();return}
   $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
   document.querySelectorAll('.pc').forEach(wire);
   document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
@@ -556,7 +582,8 @@ function hint(){
     const T=FM[fType];hh=T.h;
     if(fMode==='build'){
       const f=T.f[fIdx];
-      if(placed>=fTk&&SY[f[0]]){intro=`<b>${f[0]}:</b> o que cada letra significa.`;rows=SY[f[0]].map(x=>hrow(x[0],x[1],isOk('s',x[1]))).join('')}
+      if(fC&&placed<1){intro=`<b>${f[0]}:</b> o comando do enunciado aponta para esta ação.`;rows=hrow('“'+CM[f[0]][0]+'”',CM[f[0]][1],false)}
+      else if(placed>=fC+fTk&&SY[f[0]]){intro=`<b>${f[0]}:</b> o que cada letra significa.`;rows=SY[f[0]].map(x=>hrow(x[0],x[1],isOk('s',x[1]))).join('')}
       else{intro=`<b>${f[0]}:</b> monte as peças nesta ordem.`;rows=hrow(f[1],FW[f[0]]||'',false)}
     }else{
       intro=`<b>${T.n}:</b> entender de onde a fórmula vem ajuda a lembrar dela.`;
@@ -567,7 +594,7 @@ function hint(){
     if(bl.r){
       rows=[...bl.r].map(c=>hrow(`${c} ${'AT'.includes(c)?'=':'≡'} ${CP[c]}`,`${c} pareia sempre com ${CP[c]}, com ${'AT'.includes(c)?'2':'3'} pontes de hidrogênio.`,false)).join('');
     }else{
-      rows=hrow(bl.q.join(' '),'Monte as peças nesta ordem.',false);
+      rows=(bl.x?bl.x.map(r=>hrow(r[0],r[1],false)).join(''):'')+hrow(bl.q.join(' '),'Monte as peças nesta ordem.',false);
     }
   }
   hintOpen=true;
@@ -621,7 +648,8 @@ function tryPlace(p,s){
     if(kind==='unit'){const nx={[uN]:phaseN,[2*uN]:phaseE,[3*uN]:phase2}[placed];if(nx){nx();return}}
     if(kind==='corr'&&placed===5){phaseK();return}
     if(kind==='rule'&&placed<total&&placed===rcum[rb]){rb++;showB();return}
-    if(kind==='form'&&fMode==='build'&&placed===fTk&&placed<total){phaseS();return}
+    if(kind==='form'&&fMode==='build'&&fC&&placed===1&&placed<total){phaseT();return}
+    if(kind==='form'&&fMode==='build'&&placed===fC+fTk&&placed<total){phaseS();return}
     if(placed===total)done();
   }else{
     miss++;snd('bad');s.classList.remove('bad');void s.offsetWidth;s.classList.add('bad');
@@ -657,7 +685,7 @@ RU.push({n:'O expoente vem primeiro',s:'4² = 4 × 4, e antes de multiplicar o r
 {t:'Cuidado: o expoente só vale para o que está colado nele. Com parênteses, a conta muda.',v:'3 × 4² = 48 · (3 × 4)² = 144',q:['3','×','4²','=','48','e','(3','×','4)²','=','144']}]});
 const PK=a=>a[ri(a.length)],nf=x=>(+x.toFixed(6)).toLocaleString('pt-BR',{maximumFractionDigits:6});
 
-let fTk=0;
+let fTk=0,fC=0,fTok=[];
 const PI='pi (≈ 3,14)',AR='área',AH='altura',SY={
 'Área do quadrado':[['A',AR],['l','lado']],
 'Área do retângulo':[['A',AR],['b','base'],['h',AH]],
@@ -698,6 +726,95 @@ const PI='pi (≈ 3,14)',AR='área',AH='altura',SY={
 'Regra de 3 direta':[['x','valor que falta'],['a','1ª linha, 1ª grandeza'],['b','1ª linha, 2ª grandeza'],['c','2ª linha, 1ª grandeza']],
 'Regra de 3 inversa':[['x','valor que falta'],['a','1ª linha, 1ª grandeza'],['b','1ª linha, 2ª grandeza'],['c','2ª linha, 1ª grandeza']],
 'Combinação':[['C','número de combinações'],['n','total de elementos'],['p','elementos escolhidos']]};
+Object.assign(SY,{
+'Preço por unidade':[['p','preço por unidade'],['preço','valor pago'],['quantidade','litros, gramas ou unidades']],
+'Variação percentual':[['v','variação (× 100 vira %)'],['final','valor depois'],['inicial','valor antes']],
+'Aumento e desconto':[['Vf','valor final'],['Vi','valor inicial'],['i','taxa em decimal (10% = 0,1)']],
+'Média aritmética':[['M','média'],['soma','soma de todos os valores'],['quantidade','quantos valores foram somados']],
+'Média ponderada':[['Mp','média ponderada'],['v1','valor 1'],['p1','peso do valor 1'],['v2','valor 2'],['p2','peso do valor 2']],
+'Escala em área':[['Areal','área real'],['Adesenho','área no desenho'],['k','quantas vezes o real é maior (1 : k)']],
+'Escala em volume':[['Vreal','volume real'],['Vdesenho','volume no modelo'],['k','quantas vezes o real é maior (1 : k)']],
+'Vértice da parábola (x)':[['xv','posição do vértice no eixo x'],['b','coeficiente de x'],['a','coeficiente de x²']],
+'Vértice da parábola (y)':[['yv','valor do vértice no eixo y'],['Δ','delta'],['a','coeficiente de x²']]});
+Object.assign(FW,{
+'Preço por unidade':'Dividir o preço pela quantidade leva tudo para 1 unidade, e aí dá para comparar.',
+'Variação percentual':'A diferença entre os valores, comparada com o valor de onde se partiu (o inicial).',
+'Aumento e desconto':'Aumento de 10% vira × 1,10 e desconto de 10% vira × 0,90: um só fator faz tudo.',
+'Média aritmética':'Soma tudo e reparte igualmente pela quantidade de valores.',
+'Média ponderada':'Cada valor conta tantas vezes quanto o seu peso; depois divide pela soma dos pesos.',
+'Escala em área':'Área tem duas dimensões, então o fator da escala entra duas vezes: k².',
+'Escala em volume':'Volume tem três dimensões, então o fator da escala entra três vezes: k³.',
+'Vértice da parábola (x)':'O vértice fica no meio das raízes, em x = −b ÷ 2a: é onde está o mínimo ou o máximo.',
+'Vértice da parábola (y)':'Colocando xv na função, o valor dá −Δ ÷ 4a: o custo mínimo ou o lucro máximo.'});
+const CM={
+'Área do quadrado':['Área de um piso, terreno ou lajota quadrada','Multiplicar o lado por ele mesmo: l²'],
+'Área do retângulo':['Área de uma sala, parede ou campo retangular','Multiplicar a base pela altura'],
+'Área do triângulo':['Área de um telhado, vela ou terreno triangular','Multiplicar base por altura e dividir por 2'],
+'Área do trapézio':['Área de uma figura com duas bases paralelas diferentes','Somar as bases, multiplicar pela altura e dividir por 2'],
+'Área do losango':['Área de uma pipa ou figura com duas diagonais','Multiplicar as diagonais e dividir por 2'],
+'Área do círculo':['Área de uma pizza, praça ou mesa redonda','Elevar o raio ao quadrado e multiplicar por π'],
+'Comprimento da circunferência':['Comprimento da borda, volta da roda ou cerca circular','Multiplicar 2 × π pelo raio'],
+'Teorema de Pitágoras':['Triângulo retângulo: rampa, escada ou distância em linha reta','Somar os quadrados dos catetos para achar o quadrado da hipotenusa'],
+'Soma dos ângulos internos':['Soma dos ângulos internos de um polígono','Subtrair 2 do número de lados e multiplicar por 180°'],
+'Número de diagonais':['Quantas diagonais tem o polígono?','Multiplicar n por (n − 3) e dividir por 2'],
+'Ângulo interno do polígono regular':['Medida de cada ângulo de um polígono regular','Dividir a soma dos ângulos internos pelo número de lados'],
+'Cubo':['Volume de um dado, caixa ou reservatório cúbico','Elevar a aresta ao cubo'],
+'Paralelepípedo':['Volume de uma caixa, piscina ou caixa d’água retangular','Multiplicar as três dimensões'],
+'Prisma':['Volume de um sólido com a mesma base em toda a altura','Multiplicar a área da base pela altura'],
+'Cilindro':['Volume de uma lata, tubo ou tanque redondo','Calcular a área do círculo da base e multiplicar pela altura'],
+'Cone':['Volume de um funil ou casquinha de sorvete','Calcular o volume do cilindro e dividir por 3'],
+'Pirâmide':['Volume de uma pirâmide ou telhado em ponta','Multiplicar área da base por altura e dividir por 3'],
+'Esfera':['Volume de uma bola ou tanque esférico','Multiplicar 4 × π × r³ e dividir por 3'],
+'Superfície da esfera':['Quantidade de tinta ou tecido para cobrir uma bola','Multiplicar 4 × π pelo raio ao quadrado'],
+'Sorvete (posição no MU)':['Posição de um móvel com velocidade constante','Somar à posição inicial a velocidade vezes o tempo'],
+'Velocidade média':['Velocidade média de uma viagem','Dividir a distância percorrida pelo tempo gasto'],
+'Densidade':['Quanto de massa existe em cada unidade de volume','Dividir a massa pelo volume'],
+'Pressão':['Força espalhada sobre uma superfície','Dividir a força pela área'],
+'2ª Lei de Newton':['Força necessária para acelerar um corpo','Multiplicar a massa pela aceleração'],
+'1ª Lei de Ohm':['Tensão, resistência e corrente em um fio','Multiplicar a resistência pela corrente'],
+'Potência elétrica':['Potência de um aparelho ligado na tomada','Multiplicar a tensão pela corrente'],
+'Energia elétrica consumida':['Consumo na conta de luz (kWh)','Multiplicar a potência pelo tempo ligado'],
+'Calor sensível':['Calor para esquentar ou esfriar uma substância','Multiplicar massa, calor específico e variação de temperatura'],
+'Fórmula de Bhaskara':['Encontre as raízes ou os zeros da função do 2º grau','Calcular o delta e aplicar Bhaskara'],
+'Delta (discriminante)':['Quantas raízes reais a equação do 2º grau tem?','Calcular b² − 4ac e olhar o sinal'],
+'Probabilidade':['Qual a chance de o evento ocorrer?','Dividir os casos favoráveis pelos casos possíveis'],
+'Escala':['Escala de 1 : X, mapa ou maquete','Dividir a medida do desenho pela medida real, na mesma unidade'],
+'Juros simples':['Juros calculados sempre sobre o valor inicial','Multiplicar capital, taxa e tempo'],
+'Juros compostos':['Juros sobre juros, montante após t meses','Multiplicar o capital pelo fator (1 + i) elevado a t'],
+'Termo geral da PA':['Mantido o padrão: soma-se o mesmo valor a cada mês','Somar ao 1º termo (n − 1) vezes a razão'],
+'Termo geral da PG':['Mantido o padrão: multiplica-se pelo mesmo fator a cada mês','Multiplicar o 1º termo pela razão elevada a (n − 1)'],
+'Combinação':['Quantos grupos de p pessoas podem ser formados? (ordem não importa)','Dividir n! por p! vezes (n − p)!'],
+'Regra de 3 direta':['Mantida a mesma proporção; quanto mais, mais','Montar a igualdade de frações e multiplicar em cruz'],
+'Regra de 3 inversa':['Mais de uma grandeza, menos da outra (mais operários, menos dias)','Inverter uma das razões e depois multiplicar'],
+'Preço por unidade':['Qual a opção mais vantajosa? Menor preço por litro, grama ou unidade','Dividir o preço pela quantidade e comparar os resultados'],
+'Variação percentual':['Qual foi o percentual de crescimento? Em relação ao valor inicial','Dividir a diferença entre os valores pelo valor inicial'],
+'Aumento e desconto':['Teve um aumento ou desconto de X%','Multiplicar pelo fator 1 + i (aumento) ou 1 − i (desconto)'],
+'Média aritmética':['Em média; valor médio por habitante; distribuição uniforme','Somar todos os valores e dividir pela quantidade'],
+'Média ponderada':['Média ponderada pelo peso ou pela frequência','Multiplicar cada valor pelo seu peso, somar e dividir pela soma dos pesos'],
+'Escala em área':['A representação no mapa; resultado em metros quadrados','Elevar o fator da escala ao quadrado antes de converter a área'],
+'Escala em volume':['Maquete ou modelo; resultado em litros ou m³','Elevar o fator da escala ao cubo antes de converter o volume'],
+'Vértice da parábola (x)':['Em que quantidade ou tempo o custo é mínimo ou o lucro é máximo?','Calcular −b ÷ 2a, o x do vértice da parábola'],
+'Vértice da parábola (y)':['Qual é o custo mínimo ou o lucro máximo?','Calcular −Δ ÷ 4a, o y do vértice da parábola']};
+function phaseC(){
+  const T=FM[fType],f=T.f[fIdx],c=CM[f[0]];
+  const pool=T.f.map(x=>x[0]).filter(k=>k!==f[0]&&CM[k]).map(k=>CM[k][1]);
+  const opts=rnd([c[1],...rnd(pool.slice()).slice(0,3)]);
+  $('.board').insertAdjacentHTML('beforeend',`<div id="ac"><p class="sub" style="margin-top:10px">Primeiro: quando o enunciado diz isto, qual ação usar?</p><div class="row" style="--h:${T.h}"><div class="ex ux" style="flex:1;font-size:16px;line-height:1.3">“${c[0]}”</div><div class="sl nm" style="--h:${T.h};font-size:15px" data-t="c" data-v="${c[1]}"></div></div></div>`);
+  $('.tray').innerHTML=opts.map(v=>`<div class="pc pt" style="--h:${T.h};font-size:15px" data-t="c" data-v="${v}">${v}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  $('#ac').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function phaseT(){
+  const T=FM[fType];
+  $('.board').insertAdjacentHTML('beforeend',`<div id="at"><p class="sub" style="margin:22px 0 2px">Agora monte a fórmula dessa ação com as peças.</p><div class="eqw">${fTok.map(v=>`<div class="sl tk" style="--h:${T.h}" data-t="q" data-v="${v}"></div>`).join('')}</div></div>`);
+  $('.tray').innerHTML=rnd(fTok.slice()).map(v=>`<div class="pc tp" style="--h:${T.h}" data-t="q" data-v="${v}">${v}</div>`).join('');
+  document.querySelectorAll('.tray .pc').forEach(wire);
+  document.querySelectorAll('.sl').forEach(s=>s.onclick=()=>{if(sel)tryPlace(sel,s)});
+  $('.board').style.paddingBottom=($('.tray').offsetHeight+24)+'px';
+  $('#at').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function phaseS(){
   const T=FM[fType],S=SY[T.f[fIdx][0]];
   $('.board').insertAdjacentHTML('beforeend',`<div id="ar"><p class="sub" style="margin-top:22px">Agora o que cada letra significa.</p><div style="display:grid;gap:10px">${S.map(x=>`<div class="row" style="--h:${T.h}"><div class="ex ux" style="flex:.6;font-size:20px">${x[0]}</div><div class="sl nm" style="--h:${T.h}" data-t="s" data-v="${x[1]}"></div></div>`).join('')}</div></div>`);
@@ -777,7 +894,7 @@ RU.push({n:'Regra de 3 com tempo',s:'Uma sobe, a outra desce (inversa)',h:340,b:
 {t:'Outro exemplo: 3 operários fazem uma obra em 12 dias. Com 6 operários, em quantos dias? Mais operários, <b>menos</b> dias: inversa.',v:'3 × 12 = 6 × x',q:['Mais','operários','=','menos','dias','x','=','3','×','12','÷','6','=','6']},
 {t:'A <b>fórmula</b> da inversa. Compare com a direta: o que muda é <b>quem divide</b>.',v:'direta: ÷ a · inversa: ÷ c',q:['Direta','=','b','×','c','÷','a','Inversa','=','a','×','b','÷','c']}]});
 let VQ=[],vi=0,vok=0,vid='';
-const VN={tm:'Tabuadas misturadas',u:'Unidades de medida',c:'Correlações',f:'Fórmulas',r:'Expoente e vírgula',g:'Figuras e ângulos',q:'Química',p:'Filosofia',h:'História'};
+const VN={tm:'Tabuadas misturadas',u:'Unidades de medida',c:'Correlações',f:'Fórmulas',r:'Expoente e vírgula',g:'Figuras e ângulos',q:'Química',p:'Filosofia',h:'História',a:'Artes',o:'Química orgânica',v:'Física',es:'Estatística',gt:'Gráficos e tabelas',fp:'Funções e porcentagem'};
 const vfT=a=>rnd([...Array(10)].map((_,i)=>i+1)).map(b=>{const A=a||3+ri(7),p=A*b,t=Math.random()<.5,w=PK([p-A,p+A,p+1,p-1,p+10,p-10].filter(x=>x>0&&x!==p));return{c:a?'Tabuada do '+a:'Tabuada de multiplicação',q:'Esta conta está certa?',s:`${A} × ${b} = ${t?p:w}`,v:t,w:`${A} × ${b} = ${p}. `+mulWhy(A,b)}});
 const vfU=()=>{const R=[];while(R.length<10){const k=PK(Object.keys(UT)),T=UT[k],X=UX[k],i=PK([0,1,2,4,5,6]),j=PK([0,1,2,3,4,5,6].filter(x=>x!==i)),t=Math.random()<.5;
   if(Math.random()<.5)R.push({c:'Unidades de '+T.n.toLowerCase(),q:'Esta equivalência está certa?',s:`1 ${T.u[i]} = ${X.eq[t?i:j]} ${T.u[3]}`,v:t,w:`1 ${T.u[i]} = ${X.eq[i]} ${T.u[3]}. ${PFX[i]}.`});
@@ -795,11 +912,11 @@ function vfMenu(){
   const B=(id,n,sb,h)=>`<button class="m" style="--h:${h}" onclick="vfStart('${id}')"><b>${n}</b><small>${sb}</small></button>`;
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="vfFrom==='h'?home():menu()" aria-label="Voltar">←</button><div class="ttl">Verdadeiro ou falso</div></div><p class="sub">Aparece uma afirmação. Ela está certa ou errada? Escolha o assunto.</p><div class="grid">`
   +[3,4,5,6,7,8,9].map(n=>`<button class="t" style="--h:${hue(n)}" onclick="vfStart('t${n}')"><b>${n}</b><small>Tabuada</small></button>`).join('')+`</div><div style="margin-top:14px">`
-  +B('tm','Tabuadas misturadas','Contas de todas as tabuadas',340)+B('u','Unidades de medida','Valores e nomes das unidades',270)+B('c','Correlações','Volume, litros e quilos',250)+B('f','Fórmulas','Nome e fórmula combinam?',175)+B('g','Figuras e ângulos','Triângulos, polígonos e ângulos',200)+B('r','Expoente e vírgula','Regras de potência e de mover a vírgula',25)+B('q','Química','Ciclo do carbono, célula e DNA',150)+B('p','Filosofia','Arché, ideias, áreas e períodos',300)+B('h','História','Ordem, duração e datas do Enem',40)+`</div>`;
+  +B('tm','Tabuadas misturadas','Contas de todas as tabuadas',340)+B('u','Unidades de medida','Valores e nomes das unidades',270)+B('c','Correlações','Volume, litros e quilos',250)+B('f','Fórmulas','Nome e fórmula combinam?',175)+B('g','Figuras e ângulos','Triângulos, polígonos e ângulos',200)+B('r','Expoente e vírgula','Regras de potência e de mover a vírgula',25)+B('q','Química','Ciclo do carbono, célula e DNA',150)+B('p','Filosofia','Arché, ideias, áreas e períodos',300)+B('h','História','Ordem, duração e datas do Enem',40)+B('a','Artes','Vanguardas, Modernismo e contemporânea',330)+B('o','Química orgânica','Este é o nome certo da figura?',160)+B('v','Física','Ohm, resistores e energia',200)+B('es','Estatística','Pegadinhas de média, moda e mediana',265)+B('gt','Gráficos e tabelas','Ler e interpretar dados',215)+B('fp','Funções e porcentagem','Funções, fatores e proporção',10)+`</div>`;
 }
-function vfStart(id){vid=id;VQ=({tm:()=>vfT(0),u:vfU,c:vfC,f:vfF,r:vfR,g:vfG,q:vfQ,p:vfP,h:vfH}[id]||(()=>vfT(+id.slice(1))))();vi=0;vok=0;vfShow()}
+function vfStart(id){vid=id;VQ=({tm:()=>vfT(0),u:vfU,c:vfC,f:vfF,r:vfR,g:vfG,q:vfQ,p:vfP,h:vfH,a:vfA,o:vfO,v:vfV,es:vfE,gt:vfGT,fp:vfFP}[id]||(()=>vfT(+id.slice(1))))();vi=0;vok=0;vfShow()}
 function vfShow(){
-  const q=VQ[vi],h=/^t\d$/.test(vid)?hue(+vid[1]):VN[vid]?({tm:340,u:270,c:250,f:175,r:25,g:200,q:150,p:300,h:40})[vid]:250;
+  const q=VQ[vi],h=/^t\d$/.test(vid)?hue(+vid[1]):VN[vid]?({tm:340,u:270,c:250,f:175,r:25,g:200,q:150,p:300,h:40,a:330,o:160,v:200,es:265,gt:215,fp:10})[vid]:250;
   $('#app').innerHTML=`<div class="top"><button class="ib" onclick="vfMenu()" aria-label="Voltar">←</button><div class="ttl">${VN[vid]||'Tabuada do '+vid[1]}</div><div class="tm">${vi+1}/${VQ.length}</div></div>
   <div class="rb" style="--h:${h}"><div class="rt"><b>${q.c||VN[vid]||''}</b><br>${q.q||'Está certo ou errado?'}</div><div class="rv" id="vs" style="font-size:24px">${q.s}</div><div id="vx"></div></div>
   <div id="vb" style="display:flex;gap:12px;margin-top:14px"><button class="m" style="--h:150;margin:0;flex:1;text-align:center" onclick="vfAns(true)"><b>Verdadeiro</b></button><button class="m" style="--h:5;margin:0;flex:1;text-align:center" onclick="vfAns(false)"><b>Falso</b></button></div>`;
@@ -918,6 +1035,254 @@ const HDU=[['A Paleolítico','c. 2,5 milhões – 10.000 a.C.'],['O Neolítico',
 const HEV=[['A Reforma Protestante','1517'],['A chegada de Cabral ao Brasil','1500'],['A Independência dos EUA','1776'],['A Revolução Russa','1917'],['A Crise de 1929','1929'],['A queda do Muro de Berlim','1989'],['A queda de Constantinopla','1453'],['A queda do Império Romano do Ocidente','476 d.C.'],['A Independência do Brasil','1822'],['A Proclamação da República','1889'],['A Constituição Cidadã','1988'],['A chegada de Colombo à América','1492']];
 const HOR=[['A Pré-História vem','antes da Antiguidade'],['A Idade Média vem','depois da Antiguidade e antes da Moderna'],['A Idade Moderna vem','depois da Idade Média e antes da Contemporânea'],['O Neolítico vem','depois do Paleolítico'],['A Era Vargas vem','depois da República Velha'],['A Ditadura Militar vem','depois da República Populista'],['O Segundo Reinado vem','depois das Regências']];
 const vfH=()=>rnd([...vfMk('Duração','Este período durou esse intervalo?',HDU,(a,b)=>`${a}: ${b}`),...vfMk('Datas do Enem','Este fato aconteceu nesse ano?',HEV,(a,b)=>`${a} foi em ${b}`),...vfMk('Ordem na história','Esta ordem está certa?',HOR,(a,b)=>`${a} ${b}`)]).slice(0,10);
+
+/* ===== ARTES ===== */
+const ART=[
+{n:'Vanguardas europeias',s:'Entender a intenção de cada movimento',h:330,b:[
+{t:'<b>Não decore o conceito: entenda a intenção.</b> O <b>Cubismo</b> geometriza a realidade e quebra a perspectiva tradicional. O <b>Dadaísmo</b> quer romper com a lógica e com a arte «séria».',v:'🔷 · 🎭',q:['Cubismo','→','geometriza a realidade','Dadaísmo','→','rompe com a lógica']},
+{t:'O <b>Surrealismo</b> mergulha no sonho e no inconsciente. O <b>Futurismo</b> celebra a velocidade, a máquina e a vida moderna. O <b>Expressionismo</b> deforma a forma para mostrar a emoção.',v:'💭 · 🚗 · 😱',q:['Surrealismo','→','sonho e inconsciente','Futurismo','→','velocidade e máquina','Expressionismo','→','emoção e deformação']},
+{t:'<b>Quem é de quem.</b> Picasso (Guernica, crítica à guerra) é do Cubismo. Duchamp (A Fonte, um objeto comum exposto como arte) é do Dadaísmo.',v:'🎨',q:['Picasso','→','Cubismo','Duchamp','→','Dadaísmo']},
+{t:'Dalí (relógios derretidos) é do Surrealismo. Marinetti escreveu o manifesto do Futurismo. Munch (O Grito) é do Expressionismo.',v:'🎨',q:['Dalí','→','Surrealismo','Marinetti','→','Futurismo','Munch','→','Expressionismo']}]},
+{n:'Modernismo brasileiro',s:'Semana de 22, Tarsila, Oswald, Portinari, Di Cavalcanti',h:140,b:[
+{t:'A <b>Semana de Arte Moderna</b> foi em <b>São Paulo, em 1922</b>. Buscou uma <b>identidade nacional</b>, misturando a cultura popular com as vanguardas europeias.',v:'🇧🇷 1922',q:['Semana de Arte Moderna','→','1922','→','identidade nacional']},
+{t:'<b>Tarsila do Amaral</b> pintou o <b>Abaporu</b> (1928), que inspirou a <b>Antropofagia</b>. <b>Oswald de Andrade</b> escreveu o <b>Manifesto Antropófago</b>: devorar a cultura estrangeira e transformá-la em algo brasileiro.',v:'🌵 Abaporu',q:['Tarsila do Amaral','→','Abaporu','Oswald de Andrade','→','Manifesto Antropófago']},
+{t:'<b>Portinari</b> fez a crítica social: Retirantes e os trabalhadores do café. <b>Di Cavalcanti</b> pintou o povo e o cotidiano brasileiro, com o samba e as mulatas.',v:'🖌️',q:['Portinari','→','crítica social','Di Cavalcanti','→','povo e cotidiano']},
+{t:'Anita Malfatti (exposição de 1917, de influência expressionista, criticada por Monteiro Lobato) e Mário de Andrade (<b>Macunaíma</b>) completam o grupo.',v:'📖',q:['Anita Malfatti','→','1917','Mário de Andrade','→','Macunaíma']},
+{t:'<b>As fases.</b> A 1ª (1922 a 1930) rompe com o passado. A 2ª (1930 a 1945) traz o regionalismo e o romance social. A 3ª, a geração de 45.',v:'📅',q:['1ª fase','→','1922 – 1930','2ª fase','→','1930 – 1945','3ª fase','→','a partir de 1945']}]},
+{n:'Arte contemporânea',s:'Performance, instalação, grafite e body art',h:275,b:[
+{t:'<b>O campeão de cobrança.</b> A arte contemporânea provoca, faz refletir e derruba a barreira entre o público e a obra. Ela pergunta: <b>o que é arte?</b>',v:'❓',q:['Performance','→','o corpo em ação','Instalação','→','ocupa o espaço']},
+{t:'O <b>grafite</b> leva a arte à rua, de forma urbana e muitas vezes crítica. A <b>body art</b> usa o corpo como suporte. A <b>arte conceitual</b> valoriza a ideia mais que o objeto.',v:'🏙️ · 🧍 · 💡',q:['Grafite','→','arte urbana','Body art','→','corpo como suporte','Arte conceitual','→','a ideia vale mais']},
+{t:'<b>Materiais não convencionais.</b> <b>Vik Muniz</b> fez retratos com lixo reciclável. <b>Banksy</b> usa o grafite para a crítica social. <b>Warhol</b> (Pop Art) usou a cultura de massa.',v:'♻️',q:['Vik Muniz','→','lixo reciclável','Banksy','→','grafite crítico','Warhol','→','Pop Art']},
+{t:'<b>Quebra da barreira com o público.</b> Os <b>Parangolés</b>, de <b>Hélio Oiticica</b>, são vestidos por quem participa. Os <b>Bichos</b>, de <b>Lygia Clark</b>, são manipulados pelo público. <b>Marina Abramović</b> é referência em performance.',v:'🤝',q:['Hélio Oiticica','→','Parangolés','Lygia Clark','→','Bichos','Marina Abramović','→','performance']}]},
+{n:'Patrimônio e arte popular',s:'Maracatu, cordel, barroco mineiro, arte indígena e afro',h:25,b:[
+{t:'<b>Preservar a memória.</b> O <b>patrimônio cultural</b> pode ser <b>material</b> (prédios, igrejas, cidades) ou <b>imaterial</b> (festas, saberes, danças). Quem protege no Brasil é o <b>IPHAN</b>.',v:'🏛️',q:['Material','→','prédios e cidades','Imaterial','→','festas e saberes']},
+{t:'O <b>Maracatu</b> é de Pernambuco, com origem afro-brasileira e cortejo com reis e rainhas. O <b>Cordel</b> é literatura em folhetos, do Nordeste, com capa de xilogravura. O <b>Frevo</b> é de Recife.',v:'🥁 · 📰',q:['Maracatu','→','Pernambuco','Cordel','→','folhetos do Nordeste','Frevo','→','Recife']},
+{t:'O <b>Barroco mineiro</b> tem o <b>Aleijadinho</b> como grande nome, com os Profetas de Congonhas. Ouro Preto é a cidade-símbolo da arquitetura colonial.',v:'⛪',q:['Barroco mineiro','→','Aleijadinho','Ouro Preto','→','arquitetura colonial']},
+{t:'<b>Festas populares.</b> O Bumba meu boi é do Maranhão. O Círio de Nazaré é em Belém, no Pará. O Carnaval mistura matrizes indígenas, africanas e europeias.',v:'🎉',q:['Bumba meu boi','→','Maranhão','Círio de Nazaré','→','Belém']},
+{t:'<b>Arte indígena</b>: grafismo, pintura corporal, cestaria e a cerâmica marajoara. <b>Arte afro-brasileira</b>: ligada à religiosidade, à capoeira e ao candomblé, símbolos de resistência e identidade.',v:'🪶',q:['Arte indígena','→','pintura corporal','Marajoara','→','cerâmica','Afro-brasileira','→','resistência']}]},
+{n:'Linha do tempo da arte',s:'Do Renascimento à contemporânea: ordem e período',h:200,b:[
+{t:'<b>Primeiro a ordem.</b> Os grandes movimentos, do mais antigo ao mais recente.',v:'🕰️',q:['Renascimento','→','Barroco','→','Romantismo','→','Impressionismo','→','Vanguardas']},
+{t:'<b>Agora o período.</b> O Barroco é dramático e religioso, cheio de contrastes. O Romantismo valoriza a emoção. O Impressionismo captura a luz e o instante, e começa em 1874.',v:'📅',q:['Renascimento','→','séc. XIV – XVI','Barroco','→','séc. XVII – XVIII','Romantismo','→','séc. XIX','Impressionismo','→','a partir de 1874']},
+{t:'<b>Fim da linha.</b> As Vanguardas europeias vêm no início do século XX, o Modernismo brasileiro em 1922 e a arte contemporânea depois da metade do século.',v:'📅',q:['Vanguardas','→','início do séc. XX','Modernismo brasileiro','→','1922','Arte contemporânea','→','pós-1950']}]}
+];
+function artMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=ART;rk='a';const dn=store.ad||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Artes</div></div><p class="sub">Linguagens, Códigos e suas Tecnologias.</p>`+ART.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${r.n}</b><small>${store.best['a'+i]?'Melhor '+fmt(store.best['a'+i]):r.s}</small></button>`).join('');
+}
+const ARV=[['O Cubismo','geometriza a realidade'],['O Dadaísmo','rompe com a lógica'],['O Surrealismo','explora o sonho e o inconsciente'],['O Futurismo','celebra a velocidade e a máquina'],['O Expressionismo','mostra a emoção com formas deformadas']];
+const ARM=[['Tarsila do Amaral','pintou o Abaporu'],['Oswald de Andrade','escreveu o Manifesto Antropófago'],['Portinari','fez a crítica social dos retirantes'],['Di Cavalcanti','retratou o povo e o cotidiano brasileiro'],['Mário de Andrade','escreveu Macunaíma'],['A Semana de Arte Moderna','foi em São Paulo, em 1922'].concat([])];
+const ARC=[['A performance','usa o corpo do artista em ação'],['A instalação','ocupa o espaço e envolve o público'],['O grafite','é arte urbana, feita na rua'],['A body art','usa o corpo como suporte'],['Vik Muniz','faz arte com lixo reciclável'],['Os Parangolés de Oiticica','são vestidos pelo público'],['A arte conceitual','valoriza a ideia mais que o objeto']];
+const ARP=[['O Maracatu','é de Pernambuco'],['O Cordel','é literatura em folhetos do Nordeste'],['O Bumba meu boi','é do Maranhão'],['O Círio de Nazaré','é em Belém, no Pará'],['O Aleijadinho','é o grande nome do Barroco mineiro'],['O IPHAN','protege o patrimônio cultural brasileiro']];
+const vfA=()=>rnd([...vfMk('Vanguardas','Este movimento tem essa intenção?',ARV,(a,b)=>`${a} ${b}`),...vfMk('Modernismo brasileiro','Esta afirmação está certa?',ARM,(a,b)=>`${a} ${b}`),...vfMk('Arte contemporânea','Esta afirmação está certa?',ARC,(a,b)=>`${a} ${b}`),...vfMk('Patrimônio e cultura popular','Esta afirmação está certa?',ARP,(a,b)=>`${a} ${b}`)]).slice(0,10);
+
+/* ===== QUÍMICA ORGÂNICA ===== */
+const S1=n=>Array(n-1).fill(1);
+const O=(nm,n,b,g,x)=>Object.assign({nm,n,b,g:g||''},x||{});
+const ORG=[O('Etano',2,S1(2)),O('Propano',3,S1(3)),O('Butano',4,S1(4)),O('Pentano',5,S1(5)),O('Hexano',6,S1(6)),
+O('Eteno',2,[2]),O('Propeno',3,[2,1]),O('Etino',2,[3]),O('Propino',3,[3,1]),
+O('Etanol',2,[1],'OH'),O('Propan-1-ol',3,[1,1],'OH',{loc:1}),O('Butan-1-ol',4,[1,1,1],'OH',{loc:1}),
+O('Etanal',2,[1],'CHO'),O('Propanal',3,[1,1],'CHO'),
+O('Propanona',3,[1,1],'CETONA'),O('Butanona',4,[1,1,1],'CETONA'),
+O('Ácido etanoico',2,[1],'COOH'),O('Ácido propanoico',3,[1,1],'COOH'),
+O('Cloroetano',2,[1],'Cl'),O('Etanamina',2,[1],'NH₂'),
+O('Benzeno',0,[],'',{ring:'b'}),O('Ciclohexano',0,[],'',{ring:'c'})];
+function molSVG(m){
+  if(m.ring){const P=[0,1,2,3,4,5].map(k=>[50+30*Math.cos((k*60-90)*Math.PI/180),50+30*Math.sin((k*60-90)*Math.PI/180)]);let d='';
+    for(let k=0;k<6;k++){const a=P[k],b=P[(k+1)%6];d+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`;
+      if(m.ring==='b'&&k%2===0){const f=(p,q)=>[p[0]+(50-p[0])*.17+(q[0]-p[0])*.14,p[1]+(50-p[1])*.17+(q[1]-p[1])*.14],g=(p,q)=>[q[0]+(50-q[0])*.17+(p[0]-q[0])*.14,q[1]+(50-q[1])*.17+(p[1]-q[1])*.14],u=f(a,b),v=g(a,b);d+=`<line x1="${u[0]}" y1="${u[1]}" x2="${v[0]}" y2="${v[1]}"/>`}}
+    return `<svg viewBox="0 0 100 100" class="mol">${d}</svg>`}
+  const n=m.n,X=i=>26+i*34,Y=i=>i%2?34:58,A=[],Bn=[];
+  for(let i=0;i<n;i++)A.push({x:X(i),y:Y(i)});
+  for(let i=0;i<n-1;i++)Bn.push([i,i+1,m.b[i]]);
+  const br=i=>Y(i)>46?84:8,add=(x,y,l)=>{A.push({x,y,l});return A.length-1};
+  if(['OH','NH₂','Cl'].includes(m.g))Bn.push([n-1,add(X(n),Y(n),m.g),1]);
+  if(m.g==='CHO')Bn.push([n-1,add(X(n-1),br(n-1),'O'),2]);
+  if(m.g==='CETONA')Bn.push([1,add(X(1),br(1),'O'),2]);
+  if(m.g==='COOH'){Bn.push([n-1,add(X(n-1),br(n-1),'O'),2]);Bn.push([n-1,add(X(n),Y(n),'OH'),1])}
+  const W=26*2+(n+(m.g==='OH'||m.g==='NH₂'||m.g==='Cl'||m.g==='COOH'?1:0))*34;let d='';
+  Bn.forEach(([a,b,o])=>{const p=A[a],q=A[b],dx=q.x-p.x,dy=q.y-p.y,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L,offs=o===1?[0]:o===2?[-2.8,2.8]:[-4.5,0,4.5];
+    offs.forEach(k=>d+=`<line x1="${p.x+nx*k}" y1="${p.y+ny*k}" x2="${q.x+nx*k}" y2="${q.y+ny*k}"/>`)});
+  A.forEach(a=>{if(a.l)d+=`<circle cx="${a.x}" cy="${a.y}" r="${a.l.length>1?13:9}" class="mb"/><text x="${a.x}" y="${a.y}">${a.l}</text>`});
+  return `<svg viewBox="0 0 ${W} 92" class="mol">${d}</svg>`;
+}
+const orgWhy=m=>m.ring==='b'?'O benzeno é um anel de 6 carbonos com ligações duplas alternadas.':m.ring==='c'?'O ciclohexano é um anel de 6 carbonos só com ligações simples.':`${['','met','et','prop','but','pent','hex'][m.n]}- indica ${m.n} carbono${m.n>1?'s':''}. ${m.g==='OH'?'-ol é álcool.':m.g==='CHO'?'-al é aldeído.':m.g==='CETONA'?'-ona é cetona.':m.g==='COOH'?'Ácido -óico é ácido carboxílico.':m.g==='Cl'?'Cloro- indica um átomo de cloro.':m.g==='NH₂'?'-amina é amina.':m.b.includes(3)?'-ino indica ligação tripla.':m.b.includes(2)?'-eno indica ligação dupla.':'-ano indica só ligações simples.'}`;
+function orgMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='org';
+  const M=[['orgMatch()','Figura ↔ nome','Ligue cada figura ao seu nome',160],['orgBuild()','Nome → figura','Receba o nome e monte a molécula',185],['orgName()','Figura → nome','Receba a figura e monte o nome em pedaços',135],["vfFrom='h';vfStart('o')",'Verdadeiro ou falso','Este é o nome certo desta figura?',150]];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Química orgânica</div></div><p class="sub">Ciências da Natureza. Cai muito no Enem: funções orgânicas e nomenclatura.</p>`+M.map(m=>`<button class="m" style="--h:${m[3]}" onclick="${m[0]}"><b>${m[1]}</b><small>${m[2]}</small></button>`).join('');
+}
+const orgEnd=(err,tot,again)=>{const st=err===0?3:err<=tot/2?2:1;snd('win');$('#box').style.setProperty('--h',160);$('#box').innerHTML=`<div class="stars">${'★'.repeat(st)}${'☆'.repeat(3-st)}</div><h2>${err===0?'Sem erros!':err+' erro'+(err>1?'s':'')}</h2><button class="btn" onclick="${again}">Jogar de novo</button><button class="btn alt" onclick="orgMenu()">Voltar</button>`;$('#ov').classList.add('show')};
+/* Figura <-> nome (ligar) */
+let MT;
+function orgMatch(){MT={rd:0,err:0};mtRound()}
+function mtRound(){
+  $('#ov').classList.remove('show');
+  MT.set=rnd(ORG.slice()).slice(0,4);MT.nm=rnd([0,1,2,3]);MT.sel=null;MT.done=0;MT.ok=[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="orgMenu()" aria-label="Voltar">←</button><div class="ttl">Figura ↔ nome</div><div class="tm">${MT.rd+1}/3</div></div><p class="sub">Toque na figura e depois no nome dela.</p><div class="fg">`+MT.set.map((m,i)=>`<button class="fig" id="mf${i}" onclick="mtF(${i})">${molSVG(m)}</button>`).join('')+`</div><div class="nmw">`+MT.nm.map((k,j)=>`<button class="nmb" id="mn${k}" onclick="mtN(${k})">${MT.set[k].nm}</button>`).join('')+`</div><p class="hx" id="mh"></p>`;
+}
+function mtF(i){if(MT.ok.includes(i))return;MT.sel=i;MT.set.forEach((_,k)=>{const e=$('#mf'+k);e.classList.toggle('sel',k===i)})}
+function mtN(k){
+  if(MT.sel===null||MT.ok.includes(k))return;const i=MT.sel;
+  if(i===k){MT.ok.push(k);snd('ok',MT.ok.length);$('#mf'+k).classList.remove('sel');$('#mf'+k).classList.add('ok');$('#mn'+k).classList.add('ok');MT.sel=null;$('#mh').innerHTML=`<b>${MT.set[k].nm}.</b> ${orgWhy(MT.set[k])}`;
+    if(MT.ok.length===4)setTimeout(()=>{if(++MT.rd<3)mtRound();else orgEnd(MT.err,12,'orgMatch()')},900)}
+  else{MT.err++;snd('bad');const e=$('#mn'+k);e.classList.add('bad');setTimeout(()=>e.classList.remove('bad'),500)}
+}
+/* Nome -> figura (montar) */
+let OB;
+const ORB=ORG.filter(m=>!m.ring),GR=[['','Nenhum'],['OH','OH álcool'],['CHO','CHO aldeído'],['CETONA','C=O cetona'],['COOH','COOH ácido'],['NH₂','NH₂ amina'],['Cl','Cl cloro']];
+function orgBuild(){OB={i:0,ok:0,q:rnd(ORB.slice()).slice(0,5)};obNew()}
+function obNew(){OB.n=2;OB.b=[1];OB.g='';obShow()}
+function obShow(){
+  $('#ov').classList.remove('show');const t=OB.q[OB.i],cur={n:OB.n,b:OB.b,g:OB.g};
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="orgMenu()" aria-label="Voltar">←</button><div class="ttl">Nome → figura</div><div class="tm">${OB.i+1}/5</div></div>
+  <div class="rb" style="--h:185"><div class="rt">Monte esta molécula:</div><div class="rv" style="font-size:28px">${t.nm}</div></div>
+  <div class="fig" style="margin:12px 0;cursor:default">${molSVG(cur)}</div>
+  <p class="sub" style="margin:6px 0">Carbonos na cadeia</p><div class="nmw"><button class="nmb" onclick="obN(-1)">−</button><button class="nmb" style="flex:0 0 60px;cursor:default">${OB.n}</button><button class="nmb" onclick="obN(1)">+</button></div>
+  <p class="sub" style="margin:10px 0 6px">Ligações (toque para trocar)</p><div class="nmw">`+OB.b.map((o,k)=>`<button class="nmb" onclick="obB(${k})">C${k+1}–C${k+2}: ${['','simples','dupla','tripla'][o]}</button>`).join('')+`</div>
+  <p class="sub" style="margin:10px 0 6px">Grupo funcional</p><div class="nmw">`+GR.map(([v,l])=>`<button class="nmb${OB.g===v?' ok':''}" onclick="obG('${v}')">${l}</button>`).join('')+`</div>
+  <div id="vx"></div><button class="btn" style="--h:185" id="obc" onclick="obCheck()">Conferir</button>`;
+}
+function obN(d){OB.n=Math.max(2,Math.min(6,OB.n+d));OB.b=Array.from({length:OB.n-1},(_,k)=>OB.b[k]||1);obShow()}
+function obB(k){OB.b[k]=OB.b[k]%3+1;obShow()}
+function obG(v){OB.g=v;obShow()}
+function obCheck(){
+  const t=OB.q[OB.i],ok=t.n===OB.n&&t.g===OB.g&&t.b.join()===OB.b.join();OB.ok+=ok;snd(ok?'ok':'bad',OB.ok);
+  $('#obc').outerHTML=`<p class="hx"><b>${ok?'Certo!':'Ainda não.'}</b> ${ok?'':'O certo é esta figura: '}${orgWhy(t)}</p>${ok?'':`<div class="fig" style="cursor:default">${molSVG(t)}</div>`}<button class="btn" style="--h:${ok?150:5}" onclick="obNext()">${OB.i<4?'Próxima':'Ver resultado'}</button>`;
+}
+function obNext(){if(++OB.i<5)return obNew();orgEnd(5-OB.ok,5,'orgBuild()')}
+/* Figura -> nome (montar o nome) */
+let ON;
+const PRE=['met','et','prop','but','pent','hex'],END=['ano','eno','ino','anol','anal','anona','anoico','anamina'];
+const ORN=ORG.filter(m=>!m.ring&&!m.loc);
+function orgName(){ON={i:0,ok:0,q:rnd(ORN.slice()).slice(0,5)};onNew()}
+function onNew(){ON.ac=0;ON.cl=0;ON.p='';ON.e='';onShow()}
+const onName=()=>(ON.ac?'ácido ':'')+(ON.cl?'cloro':'')+ON.p+ON.e;
+function onShow(){
+  $('#ov').classList.remove('show');const t=ON.q[ON.i],nm=onName();
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="orgMenu()" aria-label="Voltar">←</button><div class="ttl">Figura → nome</div><div class="tm">${ON.i+1}/5</div></div>
+  <div class="rb" style="--h:135"><div class="rt">Qual é o nome desta figura?</div></div><div class="fig" style="margin:12px 0;cursor:default">${molSVG(t)}</div>
+  <div class="rv" style="font-size:26px;text-align:center;min-height:40px">${nm?nm[0].toUpperCase()+nm.slice(1):'…'}</div>
+  <p class="sub" style="margin:10px 0 6px">Começo</p><div class="nmw"><button class="nmb${ON.ac?' ok':''}" onclick="ON.ac=!ON.ac;onShow()">Ácido</button><button class="nmb${ON.cl?' ok':''}" onclick="ON.cl=!ON.cl;onShow()">Cloro</button></div>
+  <p class="sub" style="margin:10px 0 6px">Quantos carbonos</p><div class="nmw">`+PRE.map((p,k)=>`<button class="nmb${ON.p===p?' ok':''}" onclick="ON.p='${p}';onShow()">${p}- (${k+1})</button>`).join('')+`</div>
+  <p class="sub" style="margin:10px 0 6px">Terminação</p><div class="nmw">`+END.map(e=>`<button class="nmb${ON.e===e?' ok':''}" onclick="ON.e='${e}';onShow()">-${e}</button>`).join('')+`</div>
+  <div id="vx"></div><button class="btn" style="--h:135" id="onc" onclick="onCheck()">Conferir</button>`;
+}
+function onCheck(){
+  const t=ON.q[ON.i],ok=onName()===t.nm.toLowerCase();ON.ok+=ok;snd(ok?'ok':'bad',ON.ok);
+  $('#onc').outerHTML=`<p class="hx"><b>${ok?'Certo!':'Não foi desta vez.'}</b> O nome é <b>${t.nm}</b>. ${orgWhy(t)}</p><button class="btn" style="--h:${ok?150:5}" onclick="onNext()">${ON.i<4?'Próxima':'Ver resultado'}</button>`;
+}
+function onNext(){if(++ON.i<5)return onNew();orgEnd(5-ON.ok,5,'orgName()')}
+const vfO=()=>rnd(ORG.slice()).slice(0,10).map(m=>{const t=Math.random()<.5,o=PK(ORG.filter(x=>x.nm!==m.nm)),nm=t?m.nm:o.nm;return{c:'Química orgânica',q:'O nome desta figura está certo?',s:`<div style="max-width:230px;margin:0 auto">${molSVG(m)}</div><div style="margin-top:6px">É o <b>${nm}</b>?</div>`,v:t,w:`A figura é ${m.nm}. ${orgWhy(m)}`}});
+/* ===== FÍSICA ===== */
+const FIS=[
+{n:'Lei de Ohm e potência',s:'U, R, i e P',h:200,b:[
+{t:'<b>Lei de Ohm</b>: a tensão U (volts) é a resistência R (ohms) vezes a corrente i (ampères).',v:'⚡ U',q:['U','=','R','×','i']},
+{t:'<b>Potência elétrica</b> (watts): quanta energia por segundo.',v:'P',q:['P','=','U','×','i']},
+{t:'Juntando a Lei de Ohm com a potência saem mais duas formas. Use a que tiver os dados do problema.',v:'P em R e U',q:['P','=','R','×','i²','P','=','U²','÷','R']},
+{t:'<b>Corrente elétrica</b>: carga (coulombs) que passa por segundo.',v:'i = Q ÷ Δt',q:['i','=','Q','÷','Δt']}]},
+{n:'Grandezas e unidades',s:'Volt, ampère, ohm, watt e joule',h:230,b:[
+{t:'Cada grandeza tem sua unidade no SI.',v:'📏',q:['Tensão','→','volt (V)','Corrente','→','ampère (A)','Resistência','→','ohm (Ω)']},
+{t:'Potência em watts. Energia em joules, ou em <b>quilowatt-hora</b> na conta de luz. Carga em coulombs.',v:'🔌',q:['Potência','→','watt (W)','Energia','→','joule (J)','Carga','→','coulomb (C)']}]},
+{n:'Resistores em série',s:'Mesma corrente, tensão dividida',h:25,b:[
+{t:'<b>Em série</b> há um só caminho: a <b>corrente é a mesma</b> e a tensão se divide. A resistência equivalente é a <b>soma</b>.',v:'➕',q:['Rₜ','=','R₁','+','R₂','+','R₃']},
+{t:'Fato importante: se um resistor queima, o circuito inteiro abre. É assim que as lâmpadas de pisca-pisca antigas apagavam todas.',v:'💡',q:['Série','→','mesma corrente','Série','→','tensão se divide']}]},
+{n:'Resistores em paralelo',s:'Mesma tensão, corrente dividida',h:150,b:[
+{t:'<b>Em paralelo</b> há vários caminhos: a <b>tensão é a mesma</b> e a corrente se divide. O inverso da resistência equivalente é a soma dos inversos.',v:'⑂',q:['1÷Rₜ','=','1÷R₁','+','1÷R₂']},
+{t:'Para <b>dois</b> resistores, vale produto sobre soma. Para <b>n resistores iguais</b>, a equivalente é R dividida por n, e é sempre menor que a menor resistência.',v:'✖️÷➕',q:['Rₜ','=','R₁×R₂','÷','R₁+R₂','Rₜ','=','R','÷','n']},
+{t:'<b>Paralelo</b>: é a ligação das tomadas de casa.',v:'🏠',q:['Paralelo','→','mesma tensão','Paralelo','→','corrente se divide']}]},
+{n:'Energia, consumo e chuveiro',s:'kWh, conta de luz e efeito Joule',h:340,b:[
+{t:'<b>Energia elétrica</b> é potência vezes o tempo. Na conta de luz, a potência vai em <b>kW</b> e o tempo em <b>horas</b>, e a energia sai em <b>kWh</b>.',v:'🧾',q:['E','=','P','×','Δt']},
+{t:'<b>Custo</b> do consumo: energia em kWh vezes a tarifa (preço do kWh).',v:'💲',q:['Custo','=','E','×','tarifa']},
+{t:'<b>Efeito Joule</b>: a energia elétrica vira calor em um resistor. É o princípio do chuveiro, do ferro e do ferro de solda.',v:'🔥',q:['Q','=','R','×','i²','×','Δt']},
+{t:'<b>Chuveiro elétrico</b> (tensão fixa). Potência maior esquenta mais, e como P = U² ÷ R, a potência maior vem de uma resistência <b>menor</b>.',v:'🚿',q:['Inverno','→','resistência menor','Verão','→','resistência maior']}]}
+];
+function fisMenu(){
+  clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=FIS;rk='f';const dn=store.fd||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="home()" aria-label="Voltar">←</button><div class="ttl">Física</div></div><p class="sub">Eletricidade: cai no Enem (circuitos, resistores e consumo de energia).</p>`+FIS.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${r.n}</b><small>${store.best['f'+i]?'Melhor '+fmt(store.best['f'+i]):r.s}</small></button>`).join('');
+}
+const FQ=[['A Lei de Ohm','U = R × i'],['A potência elétrica','P = U × i'],['A potência em função de R e i','P = R × i²'],['A potência em função de U e R','P = U² ÷ R'],['A corrente elétrica','i = Q ÷ Δt'],['A energia elétrica','E = P × Δt'],['A resistência equivalente em série','Rₜ = R₁ + R₂'],['A resistência equivalente de n resistores iguais em paralelo','Rₜ = R ÷ n'],['A resistência equivalente de dois resistores em paralelo','Rₜ = R₁×R₂ ÷ (R₁+R₂)']];
+const FU=[['A unidade de tensão','o volt (V)'],['A unidade de corrente','o ampère (A)'],['A unidade de resistência','o ohm (Ω)'],['A unidade de potência','o watt (W)'],['A unidade de carga','o coulomb (C)'],['Na conta de luz, a energia é medida em','quilowatt-hora (kWh)']];
+const FR=[['Em série','a corrente é a mesma em todos os resistores'],['Em paralelo','a tensão é a mesma em todos os resistores'],['As tomadas de casa','são ligadas em paralelo'],['Num chuveiro, esquentar mais pede','uma resistência menor']];
+const vfV=()=>rnd([...vfMk('Fórmulas de eletricidade','Esta fórmula está certa?',FQ,(a,b)=>`${a} é ${b}`),...vfMk('Unidades','Esta unidade está certa?',FU,(a,b)=>`${a} é ${b}`),...vfMk('Circuitos','Esta afirmação está certa?',FR,(a,b)=>`${a}: ${b}`)]).slice(0,10);
+
+/* ===== MATEMÁTICA: ESTATÍSTICA, FUNÇÕES, PORCENTAGEM ===== */
+const EST=[
+{n:'Média aritmética e ponderada',s:'Somar e dividir, com ou sem pesos',h:265,b:[
+{t:'<b>Média aritmética</b>: some todos os valores e divida pela <b>quantidade</b> de valores.',v:'soma ÷ quantidade',q:['Média','=','soma','÷','quantidade'],x:[['Quando usar','Todos os valores têm a mesma importância.'],['Atenção','Divida pela quantidade de valores, contando os repetidos.']]},
+{t:'Aplicando: notas 4, 6 e 8.',v:'18 ÷ 3 = 6',q:['(4+6+8)','÷','3','=','6'],x:[['4 + 6 + 8 = 18','Três valores, então divide por 3.']]},
+{t:'<b>Média ponderada</b>: cada valor é multiplicado pelo seu <b>peso</b>. Divide-se pela <b>soma dos pesos</b>, não pela quantidade de valores.',v:'Σ(valor × peso) ÷ Σ pesos',q:['Mp','=','Σ(valor×peso)','÷','Σ pesos'],x:[['Peso maior','O valor com mais peso puxa mais a média.'],['Cuidado','A média aritmética é o caso em que todos os pesos são iguais.']]},
+{t:'Aplicando: nota 6 com peso 2 e nota 9 com peso 3.',v:'(12 + 27) ÷ 5 = 7,8',q:['6×2','+','9×3','=','39','÷','5','=','7,8'],x:[['Pesos','2 + 3 = 5, e é por 5 que se divide (não por 2).']]}]},
+{n:'Moda',s:'O valor que mais se repete',h:285,b:[
+{t:'<b>Moda</b> é o valor que <b>mais se repete</b>. Não precisa de conta: é só contar as repetições.',v:'a mais frequente',q:['Moda','→','valor que mais se repete'],x:[['Dica','Em tabelas, é o valor de maior frequência.']]},
+{t:'Em 2, 3, 3, 5, 3, 7 o número 3 aparece três vezes.',v:'moda = 3',q:['3','aparece','3','vezes','→','moda','=','3'],x:[['Atenção','A moda é o valor (3), não a quantidade de vezes (3 vezes).']]},
+{t:'Pode haver <b>duas modas</b> (bimodal) ou <b>nenhuma</b> (todos aparecem o mesmo número de vezes).',v:'2, 2, 5, 5, 8',q:['2','e','5','→','duas modas','1, 2, 3','→','sem moda']}]},
+{n:'Mediana',s:'Ordenar primeiro, depois o termo central',h:305,b:[
+{t:'<b>Regra de ouro</b>: antes de qualquer coisa, coloque os números em <b>ordem crescente</b>.',v:'1º ordenar, 2º achar o centro',q:['1º','ordenar','em ordem crescente','2º','achar o termo central'],x:[['Erro comum','Pegar o termo do meio da lista desordenada.']]},
+{t:'Quantidade <b>ímpar</b>: a mediana é o termo central. Dados 9, 2, 7.',v:'2, 7, 9 → 7',q:['9, 2, 7','→','2, 7, 9','→','Md','=','7'],x:[['Posição','Com n ímpar, o centro está na posição (n + 1) ÷ 2.']]},
+{t:'Quantidade <b>par</b>: a mediana é a <b>média dos dois termos centrais</b>. Dados 8, 3, 5, 10.',v:'3, 5, 8, 10 → (5 + 8) ÷ 2',q:['3, 5, 8, 10','→','(5+8)','÷','2','=','6,5'],x:[['Detalhe','Com n par, a mediana pode não estar na lista.']]}]},
+{n:'Pegadinhas da média e da mediana',s:'Valores extremos e comparações',h:325,b:[
+{t:'Um valor muito grande ou muito pequeno (<b>extremo</b>) afeta a média, mas quase não afeta a mediana.',v:'média × mediana',q:['Média','sofre com','valores extremos','Mediana','resiste','a valores extremos'],x:[['Exemplo','1, 2, 3, 4, 100: média 22, mediana 3.']]},
+{t:'Somar um número a todos os valores soma o mesmo número à média e à mediana. Multiplicar multiplica as duas.',v:'+ k e × k',q:['Somar k','→','média + k','Multiplicar por k','→','média × k']}]}];
+const FUN=[
+{n:'Função do 1º grau',s:'f(x) = ax + b, coeficientes e raiz',h:190,b:[
+{t:'A <b>função do 1º grau</b> tem gráfico em forma de <b>reta</b>.',v:'f(x) = ax + b',q:['f(x)','=','a','×','x','+','b'],x:[['a ≠ 0','Se a = 0, a função vira constante.']]},
+{t:'<b>a</b> é o coeficiente <b>angular</b> (inclinação). <b>b</b> é o coeficiente <b>linear</b> (onde a reta corta o eixo y).',v:'a inclina · b corta o eixo y',q:['a','→','coeficiente angular','b','→','coeficiente linear'],x:[['Ponto fixo','A reta passa por (0, b).']]},
+{t:'O sinal de <b>a</b> diz se a função cresce ou decresce.',v:'a > 0 ↗ · a < 0 ↘',q:['a > 0','→','cresce','a < 0','→','decresce']},
+{t:'A <b>raiz</b> é o x que zera a função. Em f(x) = 2x − 6, a raiz é 3.',v:'ax + b = 0',q:['f(x)','=','0','→','x','=','−b','÷','a'],x:[['Conferindo','2 × 3 − 6 = 0.']]}]},
+{n:'Função do 2º grau',s:'Parábola, vértice e raízes',h:210,b:[
+{t:'A <b>função quadrática</b> tem gráfico em forma de <b>parábola</b>.',v:'f(x) = ax² + bx + c',q:['f(x)','=','a','×','x²','+','b','×','x','+','c'],x:[['a ≠ 0','Se a = 0, vira função do 1º grau.'],['c','É onde a parábola corta o eixo y: ponto (0, c).']]},
+{t:'O sinal de <b>a</b> define a <b>concavidade</b>, e o vértice é o ponto mínimo ou máximo.',v:'😀 a > 0 · ☹ a < 0',q:['a > 0','→','concavidade para cima','vértice','→','ponto mínimo','a < 0','→','concavidade para baixo','vértice','→','ponto máximo']},
+{t:'O discriminante <b>Δ</b> diz quantas raízes reais existem.',v:'Δ = b² − 4ac',q:['Δ','=','b²','−','4','×','a','×','c','Δ > 0','→','duas raízes','Δ = 0','→','uma raiz','Δ < 0','→','nenhuma raiz real']},
+{t:'<b>Raízes</b> (Bhaskara) e <b>soma e produto</b> das raízes.',v:'x = (−b ± √Δ) ÷ 2a',q:['x','=','(−b ± √Δ)','÷','2×a','S','=','−b÷a','P','=','c÷a']},
+{t:'<b>Vértice</b>: Xv fica no meio das raízes, e Yv é o valor da função no vértice.',v:'Xv = −b ÷ 2a · Yv = −Δ ÷ 4a',q:['Xv','=','−b','÷','2×a','Yv','=','−Δ','÷','4×a'],x:[['Exemplo','f(x) = x² − 4x + 3: Xv = 2, Δ = 4, Yv = −1, raízes 1 e 3.']]}]},
+{n:'Montando funções com blocos',s:'Da reta e da parábola até a lei',h:230,b:[
+{t:'Reta com a = 2 que corta o eixo y em 3: monte a lei.',v:'a = 2 e b = 3',q:['a','=','2','b','=','3','→','f(x)','=','2x','+','3']},
+{t:'Parábola com raízes 1 e 3 e a = 1: use a <b>forma fatorada</b>.',v:'f(x) = a(x − x₁)(x − x₂)',q:['f(x)','=','a','(x − x₁)','(x − x₂)'],x:[['Desenvolvendo','(x − 1)(x − 3) = x² − 4x + 3.']]},
+{t:'Para achar uma raiz a partir do vértice, use a simetria: as raízes ficam à mesma distância de Xv.',v:'x₁ + x₂ = 2 × Xv',q:['x₁','+','x₂','=','2','×','Xv']}]}];
+const PCT=[
+{n:'Fator multiplicativo',s:'+20% é × 1,20 · −20% é × 0,80',h:10,b:[
+{t:'Um <b>aumento</b> de i% vira a multiplicação por <b>1 + i</b>.',v:'+20% → × 1,20',q:['+20%','→','×','1,20','+5%','→','×','1,05'],x:[['Por quê','100% + 20% = 120% = 1,20.']]},
+{t:'Um <b>desconto</b> de i% vira a multiplicação por <b>1 − i</b>.',v:'−20% → × 0,80',q:['−20%','→','×','0,80','−15%','→','×','0,85'],x:[['Por quê','100% − 20% = 80% = 0,80.']]},
+{t:'Para saber <b>quantos por cento</b> uma parte é do total.',v:'parte ÷ total × 100',q:['%','=','parte','÷','total','×','100']}]},
+{n:'Aumentos e descontos sucessivos',s:'Os fatores se multiplicam, não se somam',h:30,b:[
+{t:'Dois aumentos de 10% <b>não</b> dão 20%: multiplique os fatores.',v:'1,10 × 1,10 = 1,21',q:['1,10','×','1,10','=','1,21','→','+21%'],x:[['Erro comum','Somar os percentuais.']]},
+{t:'Aumento de 20% seguido de desconto de 20% <b>não volta</b> ao preço inicial.',v:'1,20 × 0,80 = 0,96',q:['1,20','×','0,80','=','0,96','→','−4%'],x:[['Por quê','O desconto incide sobre um valor maior que o original.']]}]},
+{n:'Razão e proporção',s:'Diretas e inversas em problemas do Enem',h:50,b:[
+{t:'<b>Razão</b> é a divisão de duas grandezas; <b>proporção</b> é a igualdade de duas razões.',v:'a ÷ b = c ÷ d',q:['Razão','=','a','÷','b','Proporção','→','a÷b','=','c÷d']},
+{t:'<b>Diretas</b>: uma sobe, a outra sobe. <b>Inversas</b>: uma sobe, a outra desce.',v:'⬆⬆ · ⬆⬇',q:['Diretas','→','uma sobe','a outra sobe','Inversas','→','uma sobe','a outra desce'],x:[['Regra de 3','Direta: x = b × c ÷ a. Inversa: x = a × b ÷ c.']]},
+{t:'Classifique situações típicas do Enem.',v:'direta ou inversa?',q:['Litros','↔','km rodados','→','direta','Velocidade','↔','tempo','→','inversa','Operários','↔','dias','→','inversa'],x:[['Teste','Dobrando uma, a outra dobra (direta) ou cai pela metade (inversa).']]}]}];
+const rMenu=(k,t,sb,A)=>{clearInterval(tick);$('#ov').classList.remove('show');kind='rule';RS=A;rk=k;const dn=store[k+'d']||[];
+  $('#app').innerHTML=`<div class="top"><button class="ib" onclick="menu()" aria-label="Voltar">←</button><div class="ttl">${t}</div></div><p class="sub">${sb}</p>`+A.map((r,i)=>`<button class="m" style="--h:${r.h}" onclick="startR(${i})"><b>${dn.includes(i)?'✓ ':''}${i+1}. ${r.n}</b><small>${store.best[k+i]?'Melhor '+fmt(store.best[k+i]):r.s}</small></button>`).join('')};
+const estMenu=()=>rMenu('es','Estatística','Média, moda e mediana: monte e aplique.',EST),funMenu=()=>rMenu('fu','Funções','1º e 2º grau: caem muito no Enem.',FUN),pcMenu=()=>rMenu('pc','Porcentagem e proporção','Fatores, sucessivos e grandezas proporcionais.',PCT);
+/* V/F: estatística, gráficos e funções */
+const srt=a=>a.slice().sort((x,y)=>x-y),sm=a=>a.reduce((x,y)=>x+y,0),avg=a=>sm(a)/a.length;
+const med=a=>{const s=srt(a),n=s.length;return n%2?s[(n-1)/2]:(s[n/2-1]+s[n/2])/2};
+const mo=a=>{const c={};a.forEach(x=>c[x]=(c[x]||0)+1);const m=Math.max(...Object.values(c));return Object.keys(c).filter(k=>c[k]===m).map(Number)};
+const dsx=n=>Array.from({length:n},()=>1+ri(12));
+const ESF=[['Um valor extremo muito grande altera bastante a média',true,'A média soma todos os valores, então um extremo a puxa.'],['Um valor extremo muito grande altera bastante a mediana',false,'A mediana depende da posição central e resiste a extremos.'],['Um conjunto pode ter mais de uma moda',true,'Se dois valores empatam como mais frequentes, são duas modas.'],['A moda é sempre o maior valor do conjunto',false,'A moda é o valor que mais se repete, seja grande ou pequeno.'],['Com quantidade par de dados, a mediana é sempre um valor da lista',false,'É a média dos dois centrais: de 2 e 5 sai 3,5, que não está na lista.'],['A média aritmética é sempre um dos valores da lista',false,'A média de 2 e 5 é 3,5.'],['Somar 10 a todos os valores soma 10 à média',true,'Todos andam 10, então a média também.'],['Multiplicar todos os valores por 2 dobra a mediana',true,'A ordem se mantém e o termo central dobra.'],['Na média ponderada, todos os valores têm o mesmo peso',false,'É a aritmética que tem pesos iguais.'],['Se todos os valores são iguais, média, moda e mediana coincidem',true,'Não há variação: as três valem o mesmo número.']];
+const vfE=()=>{const R=[];for(let i=0;i<10;i++){const t=Math.random()<.5,k=i%5;let a;
+  if(k===0){a=dsx(4);a[3]+=(4-sm(a)%4)%4;const m=avg(a);R.push({c:'Média aritmética',q:'Este valor está certo?',s:`Dados: ${a.join(', ')}. Média = ${nf(t?m:m+PK([-2,-1,1,2]))}`,v:t,w:`Soma ${sm(a)} ÷ 4 valores = ${nf(m)}.`})}
+  else if(k===1){do a=dsx(5);while(a[2]===med(a));const m=med(a);R.push({c:'Mediana: ordenar primeiro',q:'Este valor está certo?',s:`Dados: ${a.join(', ')}. Mediana = ${t?m:a[2]}`,v:t,w:`Ordenando: ${srt(a).join(', ')}. O termo central é ${m}. O do meio da lista desordenada (${a[2]}) engana.`})}
+  else if(k===2){do a=dsx(4);while(srt(a)[1]===srt(a)[2]);const s=srt(a),m=med(a);R.push({c:'Mediana com quantidade par',q:'Este valor está certo?',s:`Dados: ${a.join(', ')}. Mediana = ${nf(t?m:s[1])}`,v:t,w:`Ordenando: ${s.join(', ')}. É a média dos centrais: (${s[1]} + ${s[2]}) ÷ 2 = ${nf(m)}.`})}
+  else if(k===3){do a=dsx(7);while(mo(a).length>1||a.filter(x=>x===mo(a)[0]).length<2);const m=mo(a)[0],o=PK(a.filter(x=>x!==m));R.push({c:'Moda',q:'Este valor está certo?',s:`Dados: ${a.join(', ')}. Moda = ${t?m:o}`,v:t,w:`O ${m} aparece ${a.filter(x=>x===m).length} vezes, mais que os outros.`})}
+  else{const e=PK(ESF);R.push({c:'Pegadinha de estatística',q:'Esta afirmação está certa?',s:e[0],v:e[1],w:e[2]})}}
+  return R};
+const bars=(l,v)=>{const M=Math.max(...v);return `<div style="font-size:15px;text-align:left;font-weight:700;display:grid;gap:4px">`+l.map((x,i)=>`<div style="display:flex;align-items:center;gap:8px"><span style="width:44px">${x}</span><span style="flex:1;background:var(--line);border-radius:6px;height:14px"><i style="display:block;height:14px;border-radius:6px;background:hsl(215 62% 50%);width:${v[i]/M*100}%"></i></span><span style="width:34px;text-align:right">${v[i]}</span></div>`).join('')+'</div>'};
+const vfGT=()=>{const R=[];for(let i=0;i<10;i++){const t=Math.random()<.5,L=['Jan','Fev','Mar','Abr','Mai'],v=rnd([20,30,40,50,60,70,80,90]).slice(0,5),g=bars(L,v),k=i%4,a=ri(5),b=(a+1+ri(4))%5,M=Math.max(...v);
+  if(k===0){const o=PK(L.filter((_,j)=>v[j]!==M));R.push({c:'Lendo o gráfico: maior valor',q:'Esta leitura está certa?',s:g+`<div style="margin-top:8px">O maior valor foi em <b>${t?L[v.indexOf(M)]:o}</b></div>`,v:t,w:`A maior barra é ${L[v.indexOf(M)]}, com ${M}.`})}
+  else if(k===1){const d=Math.abs(v[a]-v[b]);R.push({c:'Lendo a tabela: diferença',q:'Esta conta está certa?',s:g+`<div style="margin-top:8px">${L[a]} e ${L[b]} diferem em <b>${t?d:d+10}</b></div>`,v:t,w:`${Math.max(v[a],v[b])} − ${Math.min(v[a],v[b])} = ${d}.`})}
+  else if(k===2){const up=v[b]>v[a];R.push({c:'Lendo o gráfico: crescimento',q:'Esta leitura está certa?',s:g+`<div style="margin-top:8px">De ${L[a]} para ${L[b]} o valor <b>${(t?up:!up)?'aumentou':'diminuiu'}</b></div>`,v:t,w:`${L[a]} = ${v[a]} e ${L[b]} = ${v[b]}: ${up?'aumentou':'diminuiu'}.`})}
+  else{const m=avg(v);R.push({c:'Lendo a tabela: média',q:'Esta média está certa?',s:g+`<div style="margin-top:8px">A média dos cinco meses é <b>${nf(t?m:m+10)}</b></div>`,v:t,w:`Soma ${sm(v)} ÷ 5 = ${nf(m)}.`})}}
+  return R};
+const DP=[['Velocidade e tempo (mesmo trajeto)',false],['Litros de combustível e km rodados',true],['Operários e dias para terminar a obra',false],['Quantidade de produtos e valor a pagar',true],['Torneiras iguais abertas e tempo para encher o tanque',false],['Ingredientes da receita e porções',true]];
+const vfFP=()=>{const R=[],sg=n=>n<0?'− '+(-n):'+ '+n;for(let i=0;i<10;i++){const t=Math.random()<.5,k=i%6;
+  if(k===0){const a=PK([-3,-2,2,3,4]),b=ri(11)-5,x=1+ri(4),f=a*x+b;R.push({c:'Função do 1º grau',q:'Este valor está certo?',s:`f(x) = ${a}x ${sg(b)}. Então f(${x}) = ${t?f:f+PK([-2,2])}`,v:t,w:`f(${x}) = ${a}·${x} ${sg(b)} = ${f}.`})}
+  else if(k===1){const a=PK([2,3,-2,-4]),r=PK([-3,-2,2,3,4]),b=-a*r;R.push({c:'Raiz da função do 1º grau',q:'Esta raiz está certa?',s:`f(x) = ${a}x ${sg(b)} tem raiz x = ${t?r:-r}`,v:t,w:`ax + b = 0 → x = −b ÷ a = ${-b} ÷ ${a} = ${r}.`})}
+  else if(k===2){const a=PK([-3,-2,-1,1,2,3]),b=ri(7)-3,c=ri(7)-3,up=a>0;R.push({c:'Concavidade da parábola',q:'Esta afirmação está certa?',s:`f(x) = ${a}x² ${sg(b)}x ${sg(c)}: concavidade para ${(t?up:!up)?'cima':'baixo'}`,v:t,w:`Só o sinal de a conta: a ${up?'> 0, para cima':'< 0, para baixo'}.`})}
+  else if(k===3){const a=PK([-2,-1,1,2]),x=PK([-3,-2,-1,1,2,3,4]),b=-2*a*x,c=ri(7)-3;R.push({c:'Vértice da parábola',q:'Este Xv está certo?',s:`f(x) = ${a}x² ${sg(b)}x ${sg(c)} tem Xv = ${t?x:-x}`,v:t,w:`Xv = −b ÷ 2a = ${-b} ÷ ${2*a} = ${x}.`})}
+  else if(k===4){const p=PK([10,20,25,50]),q=PK([10,20,40]),up=Math.random()<.5,f=(1+p/100)*(up?1+q/100:1-q/100),ex=Math.round((f-1)*1e4)/100,nv=up?p+q:p-q;R.push({c:'Porcentagem sucessiva',q:'Esta variação total está certa?',s:`Aumento de ${p}% e depois ${up?'aumento':'desconto'} de ${q}%: variação total de ${nf(t?ex:nv)}%`,v:t,w:`Multiplique os fatores: 1,${p<100?String(p).padStart(2,'0'):p} × ${up?'1,':'0,'}${String(up?q:100-q).padStart(2,'0')} = ${nf(f)}, ou seja, ${nf(ex)}%. Somar os percentuais engana.`})}
+  else{const d=PK(DP);R.push({c:'Grandezas proporcionais',q:'Esta classificação está certa?',s:`${d[0]} são grandezas ${(t?d[1]:!d[1])?'diretamente':'inversamente'} proporcionais`,v:t,w:`${d[0]}: ${d[1]?'se uma dobra, a outra dobra (direta)':'se uma dobra, a outra cai pela metade (inversa)'}.`})}}
+  return R};
 
 home();
 </script>
